@@ -136,8 +136,8 @@ export const sectors = [
   {
     id: "hosteleria",
     title: "Hostelería",
-    body: "TPV, cartas digitales y comanderos — conectables a tu Odoo.",
-    highlight: true,
+    body: "TPV, cartas digitales y comanderos, conectable a Odoo.",
+    highlight: false,
   },
 ] as const;
 
