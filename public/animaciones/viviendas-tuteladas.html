@@ -398,7 +398,12 @@ let S=1;
 function fit(){S=Math.min(innerWidth/1600,innerHeight/900);stage.style.transform=`translate(-50%,-50%) scale(${S})`;}
 addEventListener('resize',fit);fit();
 
-const wait=ms=>new Promise(r=>setTimeout(r,ms));
+// Control desde la página que la incrusta (postMessage, mismo origen): etapas, pausa y salto.
+// Las esperas avanzan solo sin pausa y se cortan (ABORT) al saltar a otra etapa.
+const ABORT=Symbol('abort');
+let gen=0,paused=false;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function wait(ms){const g=gen;let left=ms;while(left>0){const st=Math.min(40,left);await sleep(st);if(g!==gen)throw ABORT;if(!paused)left-=st;}}
 let cx=1400,cy=820;
 function place(x,y,d){cx=x;cy=y;cur.style.transition=d?`transform ${d}ms cubic-bezier(.65,0,.35,1)`:'none';cur.style.transform=`translate(${x}px,${y}px)`;}
 async function moveTo(el,dx=.5,dy=.5,d=850){
@@ -430,32 +435,47 @@ function reset(){
 }
 $$('.paper .p').forEach(p=>p.dataset.orig=p.textContent);
 
-async function run(){
-  while(true){
-    reset();setNav(null);$('#htitle').textContent='Inicio';show('inicio');
-    cur.classList.remove('hide');place(1380,760,0);
-    $('#end').classList.remove('on');
-    await wait(1900);
+// Estado de partida de cada etapa (para poder saltar directamente a ella).
+function base(nav,t,view){
+  reset();setNav(nav);$('#htitle').textContent=t;$('#htitle').style.opacity=1;show(view);
+  $('#end').classList.remove('on');cur.classList.remove('hide');place(1380,760,0);
+}
 
-    // Inicio
+const STAGES=[
+  // Inicio
+  async()=>{
+    base(null,'Inicio','inicio');
+    await wait(1900);
     const vi=$('#vitem');await moveTo(vi,.45,.5,1000);vi.classList.add('hov');await wait(700);vi.classList.remove('hov');
     await moveTo($('#tabRec'),.5,.5,750);await click();$('#tabAll').classList.remove('on');$('#tabRec').classList.add('on');await wait(550);
     await moveTo($('#tabAll'),.5,.5,420);await click();$('#tabRec').classList.remove('on');$('#tabAll').classList.add('on');await wait(350);
+  },
 
-    // Entidades
+  // Entidades
+  async(seek)=>{
+    if(seek){base(null,'Inicio','inicio');await wait(500);}
     await moveTo($('.nav[data-n="Entidades"]'),.3,.5,950);await click();setNav('Entidades');title('Entidades');show('entidades');
     await wait(1250);const e2=$('#ent2');await moveTo(e2,.5,.35,800);e2.classList.add('hov');await wait(850);e2.classList.remove('hov');
+  },
 
-    // Empresas
+  // Empresas
+  async(seek)=>{
+    if(seek){base('Entidades','Entidades','entidades');await wait(700);}
     await moveTo($('.nav[data-n="Empresas"]'),.3,.5,900);await click();setNav('Empresas');title('Empresas');show('empresas');
     await wait(1150);const em=$('#emp1');await moveTo(em.querySelector('.ct'),.55,.5,800);em.classList.add('hov');await wait(350);await click();em.classList.remove('hov');
     show('docs');await wait(1500);
+  },
 
-    // Documentos
+  // Documentos
+  async(seek)=>{
+    if(seek){base('Empresas','Empresas','docs');await wait(700);}
     const f1=$('#fold1');await moveTo(f1,.35,.5,800);f1.classList.add('hov');await wait(300);await click();f1.classList.remove('hov');
     $('#back').classList.add('on');$('#modal').classList.add('on');await wait(900);
+  },
 
-    // Certificado
+  // Certificado
+  async(seek)=>{
+    if(seek){base('Empresas','Empresas','docs');$('#back').classList.add('on');$('#modal').classList.add('on');await wait(700);}
     await fill('dnir','12345678A');
     await fill('dom','Gandia (València), C/ Sant Rafael 12',null,24);
     const vv=$('[data-k="viv"]');await moveTo(vv.querySelector('.inp'),.4,.5,520);await click();vv.classList.add('focus');$('#ddviv').classList.add('on');await wait(350);
@@ -476,6 +496,52 @@ async function run(){
 
     // Cierre
     cur.classList.add('hide');$('#end').classList.add('on');await wait(3000);
+  },
+];
+const NAMES=['Inicio','Entidades','Empresas','Documentos','Certificado'];
+// Duración aproximada de cada etapa (ms), para la barra de progreso de la página.
+const DUR=[7300,4850,6100,2600,25900];
+
+let etapa=0,stageElapsed=0,next=0,seeking=false;
+const send=m=>{if(parent!==window)parent.postMessage({source:'vt-demo',...m},location.origin);};
+const sendState=()=>send({type:'state',stage:etapa,progress:Math.min(1,stageElapsed/DUR[etapa]),paused});
+setInterval(()=>{
+  if(!paused)stageElapsed+=100;
+  sendState();
+},100);
+
+function setPaused(p){
+  paused=p;
+  // Congela también las transiciones y animaciones CSS en curso.
+  document.getAnimations().forEach(a=>{if(p)a.pause();else if(a.playState==='paused')a.play();});
+  sendState();
+}
+function goTo(i){
+  if(!(i>=0&&i<STAGES.length))return;
+  next=i;seeking=true;gen++;
+  if(paused)setPaused(false);
+}
+addEventListener('message',e=>{
+  if(e.origin!==location.origin||e.source!==parent||e.data?.target!=='vt-demo')return;
+  if(e.data.cmd==='pause')setPaused(true);
+  else if(e.data.cmd==='play')setPaused(false);
+  else if(e.data.cmd==='goto')goTo(Number(e.data.stage));
+});
+
+async function run(){
+  send({type:'ready',stages:NAMES,durations:DUR});
+  while(true){
+    try{
+      for(let i=next;i<STAGES.length;i++){
+        etapa=i;stageElapsed=0;
+        const s=seeking;seeking=false;
+        await STAGES[i](s);
+      }
+      next=0;
+    }catch(err){
+      if(err!==ABORT)throw err;
+      $$('.rip').forEach(r=>r.remove());
+    }
   }
 }
 run();

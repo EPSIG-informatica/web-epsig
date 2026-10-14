@@ -5,6 +5,7 @@ import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
 import CtaBand from "@/components/sections/cta-band";
 import IndexMark from "@/components/index-mark";
+import ViviendasAppDemo from "@/components/software/viviendas-app-demo";
 
 export const metadata: Metadata = {
   title: "Software de gestión de viviendas tuteladas",
@@ -68,12 +69,12 @@ export default function ViviendasTuteladasPage() {
           aria-hidden
         />
         <div
-          className="blob-drift pointer-events-none absolute -left-32 -top-40 h-[520px] w-[520px] rounded-full blur-[10px]"
+          className="blob-drift pointer-events-none absolute -right-32 -top-40 h-[520px] w-[520px] rounded-full blur-[10px]"
           style={{ background: "radial-gradient(circle, rgba(42,107,165,.45), transparent 70%)" }}
           aria-hidden
         />
-        <div className="relative mx-auto max-w-6xl px-6 pb-20 sm:pb-24">
-          <div className="hero-in mx-auto max-w-3xl text-center">
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 pb-20 sm:pb-24 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="hero-in">
             <div className="inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-mist-accent">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
               Software propio · Viviendas tuteladas
@@ -81,12 +82,12 @@ export default function ViviendasTuteladasPage() {
             <h1 className="mt-5 mb-5.5 text-[36px] leading-[1.12] text-white sm:text-[46px]">
               Cada vivienda, cada residente, <em className="text-accent not-italic">en orden.</em>
             </h1>
-            <p className="mx-auto mb-8 max-w-[56ch] text-base leading-relaxed text-mist-soft sm:text-[17px]">
+            <p className="mb-8 max-w-[48ch] text-base leading-relaxed text-mist-soft sm:text-[17px]">
               El software para entidades que gestionan viviendas tuteladas: empresas, viviendas,
               residentes, tareas y documentación en un solo panel, con los certificados listos
               en PDF.
             </p>
-            <div className="flex flex-wrap justify-center gap-3.5">
+            <div className="flex flex-wrap gap-3.5">
               <Link
                 href="/contacto#diagnostico"
                 className="inline-block rounded-full bg-accent-strong px-6.5 py-3.5 text-[14.5px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(90,169,230,.6)] transition-transform hover:scale-[1.04] active:scale-[0.96]"
@@ -103,18 +104,8 @@ export default function ViviendasTuteladasPage() {
           </div>
 
           {/* Animación completa del programa (16:9, se escala sola al ancho disponible). */}
-          <div className="hero-in mt-14" style={{ animationDelay: "120ms" }}>
-            <div className="overflow-hidden rounded-panel border border-white/10 bg-[#05070b] shadow-[0_30px_80px_-30px_rgba(0,0,0,.8)]">
-              <iframe
-                src="/animaciones/viviendas-tuteladas.html"
-                title="Demostración animada del software de gestión de viviendas tuteladas: inicio, entidades, empresas, documentación y generación de un certificado en PDF"
-                className="block aspect-video w-full border-0"
-              />
-            </div>
-            <p className="mt-5 text-center text-[13.5px] text-mist-soft">
-              <strong className="font-semibold text-white">Del inicio al certificado en PDF:</strong>{" "}
-              así se recorre el programa, con datos de prueba.
-            </p>
+          <div className="hero-in" style={{ animationDelay: "120ms" }}>
+            <ViviendasAppDemo />
           </div>
         </div>
       </header>
