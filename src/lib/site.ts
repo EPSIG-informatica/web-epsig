@@ -99,7 +99,7 @@ export const pillars = [
     color: "var(--color-accent-strong)",
     title: "Protección del Negocio",
     summary:
-      "Ciberseguridad gestionada en tres paquetes mensuales para servidores, webs y equipos de trabajo, con ESET.",
+      "Ciberseguridad gestionada a medida para servidores, webs y equipos de trabajo, con ESET: por paquetes o servicio a servicio.",
   },
 ] as const;
 

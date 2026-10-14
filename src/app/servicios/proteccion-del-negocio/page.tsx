@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import PageHero from "@/components/page-hero";
 import Reveal from "@/components/reveal";
 import SectionHeading from "@/components/section-heading";
@@ -8,7 +9,7 @@ import CtaBand from "@/components/sections/cta-band";
 export const metadata: Metadata = {
   title: "Protección del Negocio",
   description:
-    "Ciberseguridad gestionada en tres paquetes mensuales (Básico, Profesional y Avanzado) para servidores Windows, Ubuntu, Plesk/web y equipos de trabajo. Partner oficial de ESET.",
+    "Ciberseguridad gestionada a medida para servidores Windows, Ubuntu, Plesk/web y equipos de trabajo: paquetes orientativos o servicios por separado, con presupuesto personalizado. Partner oficial de ESET.",
 };
 
 const certifications = [
@@ -22,11 +23,6 @@ const plans = [
   {
     name: "Básico",
     tagline: "Lo esencial, bien mantenido.",
-    prices: [
-      { label: "Servidor Windows/Ubuntu", value: "60–90 €" },
-      { label: "Servidor Plesk/web", value: "50–80 €" },
-      { label: "Equipo con ESET", value: "5–8 €" },
-    ],
     specs: [
       { label: "Actualizaciones y parches", value: "Mensual" },
       { label: "Monitorización", value: "Revisión mensual de logs" },
@@ -40,11 +36,6 @@ const plans = [
     name: "Profesional",
     tagline: "Vigilancia activa y backups probados.",
     featured: true,
-    prices: [
-      { label: "Servidor Windows/Ubuntu", value: "120–180 €" },
-      { label: "Servidor Plesk/web", value: "100–160 €" },
-      { label: "Equipo con ESET", value: "10–15 €" },
-    ],
     specs: [
       { label: "Actualizaciones y parches", value: "Semanal" },
       { label: "Monitorización", value: "Alertas automáticas en horario laboral" },
@@ -57,11 +48,6 @@ const plans = [
   {
     name: "Avanzado",
     tagline: "Protección 24/7 para lo crítico.",
-    prices: [
-      { label: "Servidor Windows/Ubuntu", value: "220–350 €" },
-      { label: "Servidor Plesk/web", value: "200–300 €" },
-      { label: "Equipo con ESET", value: "18–25 €" },
-    ],
     specs: [
       { label: "Actualizaciones y parches", value: "Semanal + urgentes en 24 h" },
       { label: "Monitorización", value: "SIEM con alertas 24/7" },
@@ -157,43 +143,25 @@ const environments = [
   },
 ];
 
-const extras = [
-  { title: "Auditoría de seguridad inicial con informe de riesgos", price: "600–2.000 €" },
-  {
-    title: "Escaneo de vulnerabilidades periódico (Nessus, OpenVAS)",
-    price: "300–900 € por escaneo",
-    included: "todos los paquetes",
-  },
-  { title: "Test de intrusión (pentesting) interno y externo", price: "2.500–8.000 €" },
-  {
-    title: "Monitorización 24/7 y alertas (SOC básico con Wazuh o similar)",
-    price: "150–400 €/mes por servidor",
-    included: "Avanzado",
-  },
-  {
-    title: "Plan de copias de seguridad 3-2-1 con copia inmutable u offline",
-    price: "400–1.200 € diseño + almacenamiento",
-    included: "Avanzado",
-  },
-  { title: "Plan de respuesta ante incidentes y recuperación ante desastres", price: "800–2.500 €" },
-  {
-    title: "Formación y concienciación a empleados, con simulaciones de phishing",
-    price: "400–1.200 € por sesión",
-  },
-  { title: "Segmentación de red, VPN y revisión del firewall perimetral", price: "400–1.500 €" },
-  { title: "Gestor de contraseñas corporativo", price: "3–6 €/mes por usuario" },
-  { title: "Adecuación normativa: RGPD, ENS y NIS2", price: "1.500–10.000 €" },
-  {
-    title: "Informes periódicos mensuales para el cliente",
-    price: "50–100 €/mes",
-    included: "Avanzado",
-  },
+const extras: { title: string; included?: string }[] = [
+  { title: "Auditoría de seguridad inicial con informe de riesgos" },
+  { title: "Escaneo de vulnerabilidades periódico (Nessus, OpenVAS)", included: "todos los paquetes" },
+  { title: "Test de intrusión (pentesting) interno y externo" },
+  { title: "Monitorización 24/7 y alertas (SOC básico con Wazuh o similar)", included: "Avanzado" },
+  { title: "Plan de copias de seguridad 3-2-1 con copia inmutable u offline", included: "Avanzado" },
+  { title: "Plan de respuesta ante incidentes y recuperación ante desastres" },
+  { title: "Formación y concienciación a empleados, con simulaciones de phishing" },
+  { title: "Segmentación de red, VPN y revisión del firewall perimetral" },
+  { title: "Gestor de contraseñas corporativo" },
+  { title: "Adecuación normativa: RGPD, ENS y NIS2" },
+  { title: "Informes periódicos mensuales para el cliente", included: "Avanzado" },
 ];
 
 const conditions = [
-  "Todo cliente nuevo empieza con una auditoría inicial, que se descuenta del primer año si contrata un paquete.",
-  "10 % de descuento a partir de 5 servidores o 25 equipos, y 15 % con permanencia de 12 meses.",
-  "Las horas fuera del alcance del paquete se facturan según la tarifa horaria acordada.",
+  "No tenemos tarifas cerradas: cada presupuesto es personalizado según el número de servidores y equipos, su estado y el nivel de protección que necesites.",
+  "Los paquetes son orientativos. Los ajustamos a tu caso y cualquier servicio de esta página se puede contratar por separado.",
+  "Lo habitual es empezar con una auditoría inicial para conocer tu situación; si después contratas un paquete, se descuenta del primer año.",
+  "Las horas fuera de lo contratado se facturan según la tarifa horaria acordada.",
 ];
 
 export default function ProteccionDelNegocioPage() {
@@ -216,10 +184,11 @@ export default function ProteccionDelNegocioPage() {
               PN
             </div>
             <p className="text-base leading-relaxed text-ink-soft">
-              Tres paquetes mensuales — Básico, Profesional y Avanzado — para servidores Windows,
-              Ubuntu, Plesk/web y equipos de trabajo. Cada paquete se contrata por servidor o por
-              equipo, y se completa con servicios puntuales (auditorías, pentesting, formación o
-              adecuación normativa) cuando los necesites.
+              Protegemos servidores Windows, Ubuntu, Plesk/web y equipos de trabajo. Para orientarte
+              tenemos tres paquetes — Básico, Profesional y Avanzado —, pero no son cerrados: puedes
+              contratar cualquier servicio por separado y sumar servicios puntuales (auditorías,
+              pentesting, formación o adecuación normativa) cuando los necesites. Cada empresa es
+              distinta, así que el precio lo fijamos en un presupuesto personalizado.
             </p>
           </div>
 
@@ -241,9 +210,9 @@ export default function ProteccionDelNegocioPage() {
       <section className="bg-surface-alt py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <SectionHeading
-            eyebrow="Paquetes"
+            eyebrow="Paquetes orientativos"
             title="Elige el nivel de protección que necesita tu empresa"
-            body="Precios orientativos mensuales, sin IVA, pensados para pymes."
+            body="Son una referencia para orientarte, no una tarifa cerrada: ajustamos cada paquete a tus equipos y necesidades, y te damos el precio en un presupuesto personalizado."
           />
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             {plans.map((plan, index) => (
@@ -259,19 +228,7 @@ export default function ProteccionDelNegocioPage() {
                     </span>
                   )}
                   <h3 className="text-[22px]">{plan.name}</h3>
-                  <p className="mt-1 mb-5 text-[14px] text-ink-soft">{plan.tagline}</p>
-
-                  <dl className="mb-6 flex flex-col gap-2 rounded-xl bg-primary-pale p-4">
-                    {plan.prices.map((price) => (
-                      <div key={price.label} className="flex items-baseline justify-between gap-3">
-                        <dt className="text-[13px] text-ink-soft">{price.label}</dt>
-                        <dd className="shrink-0 font-mono text-[14px] font-semibold text-primary">
-                          {price.value}
-                          <span className="text-[11px] font-normal text-ink-soft">/mes</span>
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
+                  <p className="mt-1 mb-6 text-[14px] text-ink-soft">{plan.tagline}</p>
 
                   <dl className="flex flex-col gap-3.5">
                     {plan.specs.map((spec) => (
@@ -287,6 +244,25 @@ export default function ProteccionDelNegocioPage() {
               </Reveal>
             ))}
           </div>
+
+          <Reveal className="mt-8">
+            <div className="flex flex-col items-start gap-5 rounded-brand border border-line bg-surface p-6 sm:flex-row sm:items-center sm:justify-between sm:p-7">
+              <div>
+                <h3 className="text-[18px]">¿Solo necesitas una parte?</h3>
+                <p className="mt-1.5 max-w-[64ch] text-[14.5px] leading-relaxed text-ink-soft">
+                  Cualquier servicio se contrata también por separado: solo las copias de seguridad,
+                  solo el antivirus de los equipos o una auditoría puntual. Te hacemos el presupuesto
+                  con lo que de verdad necesitas.
+                </p>
+              </div>
+              <Link
+                href="/contacto#diagnostico"
+                className="inline-block shrink-0 rounded-full bg-accent-strong px-6 py-3 text-[14px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(16,185,129,.6)] transition-transform hover:scale-[1.04] active:scale-[0.96]"
+              >
+                Pedir presupuesto
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -348,24 +324,21 @@ export default function ProteccionDelNegocioPage() {
           <SectionHeading
             eyebrow="Servicios complementarios"
             title="Servicios puntuales, cuando los necesites"
-            body="Se contratan aparte o vienen incluidos en algunos paquetes. Precios orientativos sin IVA."
+            body="Se contratan por separado o vienen incluidos en algunos paquetes. Cada uno se presupuesta según tu caso."
             dark
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {extras.map((extra, index) => (
               <Reveal key={extra.title} delay={(index % 3) * 0.06}>
                 <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.04] p-5.5 transition-colors hover:border-accent hover:bg-white/[0.07]">
-                  <h3 className="mb-3 text-[15.5px] leading-snug text-white">{extra.title}</h3>
-                  <div className="mt-auto flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-mono text-[13px] font-semibold text-mist-accent">
-                      {extra.price}
-                    </span>
-                    {extra.included && (
-                      <span className="rounded-full bg-accent/15 px-2.5 py-1 text-[11px] font-semibold text-accent">
+                  <h3 className="text-[15.5px] leading-snug text-white">{extra.title}</h3>
+                  {extra.included && (
+                    <div className="mt-auto pt-3">
+                      <span className="inline-block rounded-full bg-accent/15 px-2.5 py-1 text-[11px] font-semibold text-accent">
                         Incluido en {extra.included}
                       </span>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </Reveal>
             ))}
@@ -376,7 +349,7 @@ export default function ProteccionDelNegocioPage() {
       {/* Condiciones */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-3xl px-6">
-          <SectionHeading eyebrow="Condiciones" title="Cómo trabajamos" />
+          <SectionHeading eyebrow="Precios" title="Un presupuesto a medida para cada empresa" />
           <Reveal>
             <ul className="flex flex-col gap-3">
               {conditions.map((condition) => (
@@ -390,9 +363,8 @@ export default function ProteccionDelNegocioPage() {
               ))}
             </ul>
             <p className="mt-5 text-center text-xs text-ink-soft">
-              Precios orientativos, IVA no incluido. Las licencias de antivirus/EDR, SIEM o
-              Imunify360 pueden ir incluidas o facturarse aparte según el caso. Consulta tu caso
-              concreto.
+              Las licencias de antivirus/EDR, SIEM o Imunify360 pueden ir incluidas en el
+              presupuesto o facturarse aparte, según el caso.
             </p>
           </Reveal>
         </div>
@@ -400,8 +372,8 @@ export default function ProteccionDelNegocioPage() {
 
       <CtaBand
         title="¿Sabes qué pasaría si hoy fallara tu sistema?"
-        body="Empezamos con una auditoría inicial para ver los puntos débiles de tu empresa y qué paquete encaja contigo."
-        ctaLabel="Solicitar auditoría"
+        body="Vemos los puntos débiles de tu empresa y te preparamos un presupuesto a medida: con un paquete o solo con los servicios que necesites."
+        ctaLabel="Pedir presupuesto"
       />
     </>
   );

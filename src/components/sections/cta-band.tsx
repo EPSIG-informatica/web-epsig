@@ -6,14 +6,17 @@ export default function CtaBand({
   body = "Una conversación de 30 minutos para ver qué necesita tu empresa primero.",
   ctaLabel = "Solicitar diagnóstico",
   ctaHref = "/contacto#diagnostico",
+  spaced = false,
 }: {
   title?: string;
   body?: string;
   ctaLabel?: string;
   ctaHref?: string;
+  /** Espacio también arriba: para cuando la sección anterior tiene fondo de color y la banda quedaría pegada. */
+  spaced?: boolean;
 }) {
   return (
-    <div className="px-6 pb-20 sm:pb-24">
+    <div className={`px-6 pb-20 sm:pb-24 ${spaced ? "pt-20 sm:pt-24" : ""}`}>
       <Reveal
         className="gradient-pan relative mx-auto max-w-6xl overflow-hidden rounded-[28px] px-8 py-14 text-center text-white sm:px-10 sm:py-[70px]"
         style={{

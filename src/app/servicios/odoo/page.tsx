@@ -44,7 +44,7 @@ export default function OdooPage() {
   return (
     <>
       <PageHero
-        eyebrow="Servicio estrella · Partner oficial Odoo"
+        eyebrow="Servicio · Partner oficial Odoo"
         title="Odoo ERP, implantado por quien entiende de empresa"
         lead="No nos limitamos a venderte licencias: acompañamos la implantación de principio a fin, desde el diagnóstico hasta el soporte del día a día."
       />
@@ -102,6 +102,7 @@ export default function OdooPage() {
         title="¿Empezamos con un diagnóstico gratuito de tu empresa?"
         body="En 30 minutos vemos qué módulos de Odoo necesitas y cómo implantarlos en tu empresa."
         ctaLabel="Habla con un consultor Odoo"
+        spaced
       />
     </>
   );

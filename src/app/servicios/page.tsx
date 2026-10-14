@@ -123,7 +123,7 @@ export default function ServiciosPage() {
         </div>
       </section>
 
-      <CtaBand />
+      <CtaBand spaced />
     </>
   );
 }
