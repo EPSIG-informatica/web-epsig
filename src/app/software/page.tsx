@@ -8,7 +8,7 @@ import { connectors, software } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Software",
   description:
-    "Software propio de EPSIG: gestión y control eléctrico para campings, y conectores que integran Forvenues, Ágora, Sage y FACe.",
+    "Software propio de EPSIG: gestión y control eléctrico para campings, gestión de viviendas tuteladas y conectores que integran Forvenues, Ágora, Sage y FACe.",
 };
 
 export default function SoftwarePage() {
@@ -17,11 +17,11 @@ export default function SoftwarePage() {
       <PageHero
         eyebrow="Software propio"
         title="Software que resuelve problemas reales"
-        lead="Desarrollamos herramientas para los problemas que vemos cada día en nuestros clientes: la luz que no se cobra en un camping o las ventas que se teclean tres veces."
+        lead="Desarrollamos herramientas para los problemas que vemos cada día en nuestros clientes: la luz que no se cobra en un camping, los certificados de una vivienda tutelada hechos a mano o las ventas que se teclean tres veces."
       />
 
       <section className="py-20 sm:py-24">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 lg:grid-cols-2">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 md:grid-cols-2 lg:grid-cols-3">
           <Reveal className="h-full">
             <Link
               href={software.camping.href}
@@ -58,10 +58,41 @@ export default function SoftwarePage() {
 
           <Reveal className="h-full">
             <Link
+              href={software.viviendas.href}
+              className="card-spotlight group flex h-full flex-col overflow-hidden rounded-panel border border-line bg-surface transition-colors hover:border-primary-light"
+            >
+              <div className="relative bg-surface-dark p-7" aria-hidden>
+                <div className="flex flex-col gap-1.5">
+                  {["1. Vivienda", "2. Residentes", "7. Protocolo VT"].map((folder, index) => (
+                    <span
+                      key={folder}
+                      className="flex h-7 items-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-2.5 font-mono text-[10.5px] text-mist"
+                    >
+                      <span className={`h-2.5 w-2.5 rounded-[3px] ${index === 2 ? "bg-accent" : "bg-[#d6a514]"}`} />
+                      {folder}
+                    </span>
+                  ))}
+                </div>
+                <span className="mt-4 block font-mono text-[11px] text-mist-soft">Certificado listo · PDF generado</span>
+              </div>
+              <div className="flex flex-1 flex-col p-7">
+                <span className="text-[11.5px] font-bold uppercase tracking-[0.12em] text-primary">Viviendas tuteladas</span>
+                <h2 className="mt-2 text-[24px] text-ink">{software.viviendas.title}</h2>
+                <p className="mt-2 flex-1 text-[15px] leading-relaxed text-ink-soft">
+                  Entidades, empresas, viviendas, residentes, planning de tareas y documentación
+                  ordenada en un solo panel, con el certificado de ingreso y coste de plaza en PDF.
+                </p>
+                <span className="mt-5 text-sm font-semibold text-primary">Ver el software →</span>
+              </div>
+            </Link>
+          </Reveal>
+
+          <Reveal className="h-full">
+            <Link
               href={software.conectores.href}
               className="card-spotlight group flex h-full flex-col overflow-hidden rounded-panel border border-line bg-surface transition-colors hover:border-primary-light"
             >
-              <div className="relative flex items-center justify-between gap-2 bg-surface-dark p-7" aria-hidden>
+              <div className="relative flex flex-wrap items-center gap-x-2 gap-y-2.5 bg-surface-dark p-7" aria-hidden>
                 {["Forvenues", "Ágora", "Sage", "FACe"].map((name, index) => (
                   <span key={name} className="flex items-center gap-2">
                     <span className="rounded-lg border border-white/15 bg-white/[0.06] px-2.5 py-2 font-mono text-[11px] font-semibold text-white">

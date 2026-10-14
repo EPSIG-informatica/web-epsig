@@ -4,6 +4,7 @@ import PageHero from "@/components/page-hero";
 import Reveal from "@/components/reveal";
 import TiltCard from "@/components/tilt-card";
 import CtaBand from "@/components/sections/cta-band";
+import IndexMark from "@/components/index-mark";
 import { pillars } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -30,12 +31,7 @@ export default function ServiciosPage() {
                   href={`/servicios/${pillar.slug}`}
                   className="group block h-full rounded-brand border border-line bg-surface p-8 transition-colors hover:border-primary-light"
                 >
-                  <div
-                    className="mb-5 flex h-11.5 w-11.5 items-center justify-center rounded-xl font-mono text-[13px] font-medium text-white"
-                    style={{ background: pillar.color }}
-                  >
-                    {pillar.code}
-                  </div>
+                  <IndexMark n={index + 1} />
                   <h2 className="mb-2.5 text-xl">{pillar.title}</h2>
                   <p className="text-[14.5px] leading-relaxed text-ink-soft">
                     {pillar.summary}

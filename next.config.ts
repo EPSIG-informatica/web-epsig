@@ -44,7 +44,8 @@ const contentSecurityPolicy = [
   `img-src 'self' data: blob: ${googleAnalytics.img}`,
   "font-src 'self'",
   `connect-src 'self' ${googleAnalytics.connect}`,
-  "frame-src 'none'",
+  // Solo iframes propios: las animaciones de producto de /animaciones/.
+  "frame-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -66,13 +67,27 @@ const securityHeaders = [
   { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
 ];
 
+// Las animaciones de /animaciones/ se incrustan en las páginas de la propia web:
+// pueden mostrarse dentro de un iframe del mismo dominio, pero de ningún otro.
+const embeddableHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value: contentSecurityPolicy.replace("frame-ancestors 'none'", "frame-ancestors 'self'"),
+  },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+];
+
 const nextConfig: NextConfig = {
   // Igual que WordPress: todas las URLs terminan en "/".
   trailingSlash: true,
   // No anunciar "X-Powered-By: Next.js".
   poweredByHeader: false,
   headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    // Si dos reglas fijan la misma cabecera, gana la última: la de /animaciones/ va después.
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      { source: "/animaciones/:path*", headers: embeddableHeaders },
+    ];
   },
   redirects() {
     return legacyRedirects.map(([source, destination]) => ({

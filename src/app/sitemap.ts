@@ -13,6 +13,7 @@ const routes = [
   "/fiscal-contable",
   "/software",
   "/software/control-electrico-camping",
+  "/software/viviendas-tuteladas",
   "/software/conectores",
   "/kit-digital",
   ...kitDigitalCategories.map((cat) => `/kit-digital/${cat.slug}`),

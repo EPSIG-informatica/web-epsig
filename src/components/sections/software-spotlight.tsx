@@ -13,7 +13,7 @@ export default function SoftwareSpotlight() {
           title="Herramientas que hemos creado para problemas reales"
           body="Además de implantar software, desarrollamos el nuestro cuando ningún programa resuelve bien el problema."
         />
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           <Reveal className="h-full">
             <Link
               href={software.camping.href}
@@ -33,15 +33,36 @@ export default function SoftwareSpotlight() {
           </Reveal>
           <Reveal className="h-full">
             <Link
+              href={software.viviendas.href}
+              className="card-spotlight flex h-full items-start gap-5 rounded-panel border border-line bg-surface p-7 transition-colors hover:border-primary-light"
+            >
+              <span className="flex shrink-0 flex-col gap-1" aria-hidden>
+                {["bg-[#d6a514]", "bg-[#d6a514]", "bg-accent"].map((color, index) => (
+                  <span key={index} className="flex items-center gap-1">
+                    <span className={`h-3 w-3 rounded-[3px] ${color}`} />
+                    <span className="h-1.5 w-6 rounded-full bg-line" />
+                  </span>
+                ))}
+              </span>
+              <span>
+                <span className="block text-[19px] font-semibold text-ink">{software.viviendas.title}</span>
+                <span className="mt-1.5 block text-[14.5px] leading-relaxed text-ink-soft">{software.viviendas.summary}</span>
+                <span className="mt-4 block text-sm font-semibold text-primary">Ver el software →</span>
+              </span>
+            </Link>
+          </Reveal>
+          <Reveal className="h-full">
+            <Link
               href={software.conectores.href}
               className="card-spotlight flex h-full items-start gap-5 rounded-panel border border-line bg-surface p-7 transition-colors hover:border-primary-light"
             >
-              <span className="flex shrink-0 flex-col items-center gap-1 font-mono text-[10px] font-semibold text-white" aria-hidden>
-                <span className="rounded-md bg-chip-blue px-1.5 py-1">FV</span>
-                <span className="text-accent-strong">↓</span>
-                <span className="rounded-md bg-primary px-1.5 py-1">ÁG</span>
-                <span className="text-accent-strong">↓</span>
-                <span className="rounded-md bg-accent-strong px-1.5 py-1">SG</span>
+              <span className="flex shrink-0 flex-col items-center py-1" aria-hidden>
+                {[0, 1, 2].map((index) => (
+                  <span key={index} className="flex flex-col items-center">
+                    {index > 0 && <span className="h-3.5 w-px bg-primary-light" />}
+                    <span className={`h-3 w-3 rounded-full border-2 ${index === 2 ? "border-primary bg-primary" : "border-primary bg-surface"}`} />
+                  </span>
+                ))}
               </span>
               <span>
                 <span className="block text-[19px] font-semibold text-ink">{software.conectores.title}</span>
