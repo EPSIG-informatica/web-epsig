@@ -14,8 +14,6 @@ export default function ConsultoriaEmpresarialPage() {
       eyebrow="Consultoría Empresarial"
       title="La asesoría de toda la vida, con la organización que necesita una empresa que crece"
       lead="Antes de digitalizar o proteger nada, hay que tener claro cómo está tu empresa hoy: sus cuentas, su personal y su cumplimiento normativo."
-      code="CE"
-      color="var(--color-primary)"
       features={asesoriaAreas.map((area) => ({
         title: area.title,
         body: area.body,

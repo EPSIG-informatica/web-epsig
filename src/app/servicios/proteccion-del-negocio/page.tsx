@@ -4,6 +4,7 @@ import PageHero from "@/components/page-hero";
 import Reveal from "@/components/reveal";
 import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
+import IndexMark from "@/components/index-mark";
 import CtaBand from "@/components/sections/cta-band";
 
 export const metadata: Metadata = {
@@ -63,7 +64,7 @@ const tierNames = ["Básico", "Profesional", "Avanzado"] as const;
 
 const environments = [
   {
-    code: "WS",
+    code: "Servidor",
     title: "Windows Server",
     tiers: [
       [
@@ -84,7 +85,7 @@ const environments = [
     ],
   },
   {
-    code: "UB",
+    code: "Servidor",
     title: "Ubuntu Server",
     tiers: [
       [
@@ -102,7 +103,7 @@ const environments = [
     ],
   },
   {
-    code: "WEB",
+    code: "Web",
     title: "Plesk y servidores web",
     tiers: [
       [
@@ -126,7 +127,7 @@ const environments = [
     ],
   },
   {
-    code: "PC",
+    code: "Puestos",
     title: "Equipos de trabajo",
     tiers: [
       [
@@ -177,12 +178,6 @@ export default function ProteccionDelNegocioPage() {
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto mb-12 max-w-2xl text-center">
-            <div
-              className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-xl font-mono text-sm font-medium text-white"
-              style={{ background: "var(--color-accent-strong)" }}
-            >
-              PN
-            </div>
             <p className="text-base leading-relaxed text-ink-soft">
               Protegemos servidores Windows, Ubuntu, Plesk/web y equipos de trabajo. Para orientarte
               tenemos tres paquetes — Básico, Profesional y Avanzado —, pero no son cerrados: puedes
@@ -219,7 +214,7 @@ export default function ProteccionDelNegocioPage() {
               <Reveal key={plan.name} delay={index * 0.08}>
                 <TiltCard
                   className={`relative flex h-full flex-col rounded-brand border bg-surface p-7 ${
-                    plan.featured ? "border-primary shadow-[0_20px_45px_-25px_rgba(34,73,199,.55)]" : "border-line"
+                    plan.featured ? "border-primary shadow-[0_20px_45px_-25px_rgba(42,107,165,.55)]" : "border-line"
                   }`}
                 >
                   {plan.featured && (
@@ -276,18 +271,11 @@ export default function ProteccionDelNegocioPage() {
             align="left"
           />
           <div className="flex flex-col gap-8">
-            {environments.map((env) => (
+            {environments.map((env, envIndex) => (
               <Reveal key={env.title}>
                 <div className="rounded-brand border border-line bg-surface p-6 sm:p-8">
-                  <div className="mb-6 flex items-center gap-3">
-                    <span
-                      className="flex h-10 w-10 items-center justify-center rounded-[10px] font-mono text-[12px] font-semibold text-white"
-                      style={{ background: "var(--color-accent-strong)" }}
-                    >
-                      {env.code}
-                    </span>
-                    <h3 className="text-[20px]">{env.title}</h3>
-                  </div>
+                  <IndexMark n={envIndex + 1} label={env.code} className="mb-3" />
+                  <h3 className="mb-6 text-[20px]">{env.title}</h3>
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                     {env.tiers.map((items, tierIndex) => (
                       <div key={tierNames[tierIndex]}>

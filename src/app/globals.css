@@ -10,27 +10,29 @@
   --color-surface-dark: #0a1428;
   --color-surface-dark-2: #0f1e3d;
 
-  --color-primary: #2249c7;
-  --color-primary-light: #6c8cea;
-  --color-primary-pale: #eaf0fe;
+  /* Azul corporativo EPSIG (logotipo). */
+  --color-primary: #2a6ba5;
+  --color-primary-light: #74a6d6;
+  --color-primary-pale: #e9f2fb;
 
-  --color-secondary: #1b2a6b;
+  --color-secondary: #1b3f66;
 
-  --color-accent: #10b981;
-  /* Verde oscuro para texto y botones sobre fondo claro (contraste AA con blanco). */
-  --color-accent-strong: #047857;
-  --color-accent-pale: #e1faf0;
+  /* Azul claro de la familia corporativa: destacados sobre fondo oscuro. */
+  --color-accent: #5aa9e6;
+  /* Azul corporativo oscuro para texto y botones (contraste AA con blanco). */
+  --color-accent-strong: #215a8f;
+  --color-accent-pale: #e4f0fa;
 
   --color-line: #e1e7f2;
 
   --color-mist: #e8eefc;
   --color-mist-soft: #b9c7e8;
   --color-mist-faint: #7c8aac;
-  --color-mist-accent: #8fb4ff;
+  --color-mist-accent: #8cc3ef;
 
   --color-chip-amber: #94600f;
   /* Azul para fichas con texto blanco (contraste AA). */
-  --color-chip-blue: #3f5fcc;
+  --color-chip-blue: #3474b0;
   --color-chip-slate: #334366;
   --color-chip-muted: #55617a;
 }
@@ -295,5 +297,16 @@ h3,
   .blob-drift-slow,
   .gradient-pan {
     animation: none !important;
+  }
+}
+
+/* La banda final no tiene margen superior propio (la sección blanca anterior ya lo aporta).
+   Si la sección anterior tiene fondo de color, se añade para que no quede pegada. */
+:is(.bg-surface-dark, .bg-surface-dark-2, .bg-surface-alt, .bg-primary-pale) + .cta-band {
+  padding-top: 5rem;
+}
+@media (min-width: 40rem) {
+  :is(.bg-surface-dark, .bg-surface-dark-2, .bg-surface-alt, .bg-primary-pale) + .cta-band {
+    padding-top: 6rem;
   }
 }

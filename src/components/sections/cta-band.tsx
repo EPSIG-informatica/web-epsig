@@ -28,7 +28,7 @@ export default function CtaBand({
         <p className="mb-7 text-white/90">{body}</p>
         <Link
           href={ctaHref}
-          className="inline-block rounded-full bg-accent-strong px-6.5 py-3.5 text-[14.5px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(16,185,129,.6)] transition-transform hover:scale-[1.05] active:scale-[0.96]"
+          className="inline-block rounded-full bg-accent-strong px-6.5 py-3.5 text-[14.5px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(90,169,230,.6)] transition-transform hover:scale-[1.05] active:scale-[0.96]"
         >
           {ctaLabel}
         </Link>

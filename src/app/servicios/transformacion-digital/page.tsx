@@ -13,8 +13,6 @@ export default function TransformacionDigitalPage() {
       eyebrow="Transformación Digital"
       title="Automatización e IA aplicadas a tu día a día, no a la teoría"
       lead="Digitalizamos los procesos que realmente te quitan tiempo — y, cuando aplica, te ayudamos a financiarlo."
-      code="TD"
-      color="var(--color-secondary)"
       intro="Diseñamos e implantamos proyectos de digitalización a medida, desde la automatización de tareas repetitivas hasta la implantación de Odoo ERP como núcleo del negocio. Como Agente Digitalizador Adherido y Asesor Digital, trabajamos también con los catálogos de Kit Digital y Kit Consulting."
       features={[
         {

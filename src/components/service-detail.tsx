@@ -2,14 +2,13 @@ import PageHero from "@/components/page-hero";
 import Reveal from "@/components/reveal";
 import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
+import IndexMark from "@/components/index-mark";
 import CtaBand from "@/components/sections/cta-band";
 
 export default function ServiceDetail({
   eyebrow,
   title,
   lead,
-  code,
-  color,
   intro,
   features,
   ctaTitle,
@@ -19,8 +18,6 @@ export default function ServiceDetail({
   eyebrow: string;
   title: string;
   lead: string;
-  code: string;
-  color: string;
   intro?: string;
   features: { title: string; body: string; href?: string }[];
   ctaTitle?: string;
@@ -34,12 +31,6 @@ export default function ServiceDetail({
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto mb-14 max-w-2xl text-center">
-            <div
-              className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-xl font-mono text-sm font-medium text-white"
-              style={{ background: color }}
-            >
-              {code}
-            </div>
             {intro && <p className="text-base leading-relaxed text-ink-soft">{intro}</p>}
           </div>
 
@@ -53,6 +44,7 @@ export default function ServiceDetail({
                     feature.href ? "group transition-colors hover:border-primary-light" : ""
                   }`}
                 >
+                  <IndexMark n={index + 1} className="mb-4" />
                   <h3 className="mb-2 text-[17px]">{feature.title}</h3>
                   <p className="text-[14.5px] leading-relaxed text-ink-soft">{feature.body}</p>
                   {feature.href && (

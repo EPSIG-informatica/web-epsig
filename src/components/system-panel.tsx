@@ -1,9 +1,10 @@
+// Nodos del diagrama: posición en % del lienzo (coinciden con los extremos de las líneas del SVG).
 const nodes = [
-  { key: "hub", label: "Núcleo ERP", code: "ODOO", color: "var(--color-primary)" },
-  { key: "n2", label: "Leads", code: "CRM", color: "var(--color-secondary)" },
-  { key: "n3", label: "Ventas", code: "€", color: "var(--color-accent-strong)" },
-  { key: "n4", label: "Inventario", code: "Inv", color: "var(--color-chip-slate)" },
-  { key: "n5", label: "Contabilidad", code: "Ct", color: "var(--color-chip-amber)" },
+  { key: "hub", label: "Odoo ERP", sub: "Núcleo", x: "50%", y: "22%" },
+  { key: "n2", label: "CRM", sub: "Leads", x: "19%", y: "51%" },
+  { key: "n3", label: "Ventas", sub: "Pedidos", x: "81%", y: "51%" },
+  { key: "n4", label: "Inventario", sub: "Stock", x: "24%", y: "85%" },
+  { key: "n5", label: "Contabilidad", sub: "Asientos", x: "76%", y: "85%" },
 ] as const;
 
 export default function SystemPanel() {
@@ -34,41 +35,38 @@ export default function SystemPanel() {
           <path d="M260,132 L242,220" stroke="rgba(255,255,255,.22)" strokeWidth="1.5" fill="none" />
         </svg>
 
-        <Node node={nodes[0]} className="left-1/2 top-0 -translate-x-1/2" big />
-        <Node node={nodes[1]} className="left-[-8px] top-24" />
-        <Node node={nodes[2]} className="right-[-8px] top-24" />
-        <Node node={nodes[3]} className="bottom-0 left-[22px]" />
-        <Node node={nodes[4]} className="bottom-0 right-[22px]" />
+        {nodes.map((node) => (
+          <Node key={node.key} node={node} hub={node.key === "hub"} />
+        ))}
       </div>
 
       <div className="mt-4 flex justify-between font-mono text-[11.5px] text-mist-faint">
-        <span>Estado: conectado</span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" aria-hidden />
+          Estado: conectado
+        </span>
         <span>5 módulos activos</span>
       </div>
     </div>
   );
 }
 
-function Node({
-  node,
-  className,
-  big,
-}: {
-  node: (typeof nodes)[number];
-  className: string;
-  big?: boolean;
-}) {
+function Node({ node, hub }: { node: (typeof nodes)[number]; hub?: boolean }) {
   return (
-    <div className={`absolute w-[100px] text-center ${className}`}>
-      <div
-        className={`mx-auto mb-2 flex items-center justify-center rounded-xl font-mono font-medium text-white shadow-[0_8px_20px_-8px_rgba(0,0,0,.6)] ${
-          big ? "h-16 w-16 text-xs" : "h-[54px] w-[54px] text-[11px]"
-        }`}
-        style={{ background: node.color }}
-      >
-        {node.code}
-      </div>
-      <span className="text-[11px] font-medium text-mist-soft">{node.label}</span>
+    <div
+      className={`absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 whitespace-nowrap rounded-full border px-3.5 py-2 shadow-[0_10px_24px_-12px_rgba(0,0,0,.7)] ${
+        hub
+          ? "border-primary-light/50 bg-primary text-white"
+          : "border-white/15 bg-surface-dark-2/90 text-white backdrop-blur-sm"
+      }`}
+      style={{ left: node.x, top: node.y }}
+    >
+      <span
+        className={`h-1.5 w-1.5 rounded-full ${hub ? "bg-white" : "bg-accent"}`}
+        aria-hidden
+      />
+      <span className={`font-semibold ${hub ? "text-[13px]" : "text-[12px]"}`}>{node.label}</span>
+      <span className={`hidden font-mono text-[10px] sm:inline ${hub ? "text-white/75" : "text-mist-soft"}`}>{node.sub}</span>
     </div>
   );
 }

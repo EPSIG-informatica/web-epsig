@@ -22,7 +22,7 @@ export default function PageHero({
       />
       <div
         className="blob-drift pointer-events-none absolute -left-24 -top-32 h-[380px] w-[380px] rounded-full blur-[10px]"
-        style={{ background: "radial-gradient(circle, rgba(34,73,199,.45), transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, rgba(42,107,165,.45), transparent 70%)" }}
         aria-hidden
       />
       <div className="hero-in relative mx-auto max-w-3xl px-6 text-center">

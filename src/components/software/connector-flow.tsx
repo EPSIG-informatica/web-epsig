@@ -1,9 +1,9 @@
 // Diagrama del recorrido de los datos entre programas. Solo CSS (línea animada con .flow-line-live).
 const nodes = [
-  { name: "Forvenues", role: "Venta de entradas", code: "FV", color: "var(--color-chip-blue)" },
-  { name: "Ágora", role: "TPV y ventas", code: "ÁG", color: "var(--color-primary)" },
-  { name: "Sage", role: "Contabilidad", code: "SG", color: "var(--color-accent-strong)" },
-  { name: "FACe", role: "Factura electrónica", code: "FE", color: "var(--color-chip-amber)" },
+  { name: "Forvenues", role: "Venta de entradas" },
+  { name: "Ágora", role: "TPV y ventas" },
+  { name: "Sage", role: "Contabilidad" },
+  { name: "FACe", role: "Factura electrónica" },
 ] as const;
 
 const links = ["Automático", "Cada día", "Automático"] as const;
@@ -19,12 +19,8 @@ export default function ConnectorFlow() {
         {nodes.map((node, index) => (
           <li key={node.name} className="flex flex-col items-center lg:flex-1 lg:flex-row">
             <div className="flex w-full items-center gap-4 rounded-brand border border-white/10 bg-white/[0.05] p-4 backdrop-blur-sm lg:flex-col lg:gap-3 lg:p-5 lg:text-center">
-              <span
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl font-mono text-sm font-semibold text-white shadow-[0_10px_24px_-10px_rgba(0,0,0,.7)]"
-                style={{ background: node.color }}
-                aria-hidden
-              >
-                {node.code}
+              <span className="font-mono text-[12px] font-medium text-accent" aria-hidden>
+                {String(index + 1).padStart(2, "0")}
               </span>
               <span>
                 <span className="block font-display text-[17px] font-semibold text-white">{node.name}</span>

@@ -113,7 +113,7 @@ export default function Nav() {
           </Link>
           <Link
             href="/contacto#diagnostico"
-            className="inline-block whitespace-nowrap rounded-full bg-ink px-5 py-3 text-[13.5px] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(34,73,199,.6)] transition hover:scale-[1.04] hover:bg-primary active:scale-[0.97]"
+            className="inline-block whitespace-nowrap rounded-full bg-ink px-5 py-3 text-[13.5px] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(42,107,165,.6)] transition hover:scale-[1.04] hover:bg-primary active:scale-[0.97]"
           >
             Diagnóstico gratuito
           </Link>

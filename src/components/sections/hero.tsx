@@ -19,14 +19,14 @@ export default function Hero() {
       <div
         className="blob-drift pointer-events-none absolute -right-30 -top-40 h-[520px] w-[520px] rounded-full blur-[10px]"
         style={{
-          background: "radial-gradient(circle, rgba(34,73,199,.55), transparent 70%)",
+          background: "radial-gradient(circle, rgba(42,107,165,.55), transparent 70%)",
         }}
         aria-hidden
       />
       <div
         className="blob-drift-slow pointer-events-none absolute -left-40 bottom-0 h-[420px] w-[420px] rounded-full blur-[10px]"
         style={{
-          background: "radial-gradient(circle, rgba(16,185,129,.28), transparent 70%)",
+          background: "radial-gradient(circle, rgba(90,169,230,.28), transparent 70%)",
         }}
         aria-hidden
       />
@@ -55,7 +55,7 @@ export default function Hero() {
           <div className="hero-in flex flex-wrap gap-3.5" style={{ animationDelay: "240ms" }}>
             <Link
               href="/contacto#diagnostico"
-              className="inline-block rounded-full bg-accent-strong px-6.5 py-3.5 text-[14.5px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(16,185,129,.6)] transition-transform hover:scale-[1.04] active:scale-[0.96]"
+              className="inline-block rounded-full bg-accent-strong px-6.5 py-3.5 text-[14.5px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(90,169,230,.6)] transition-transform hover:scale-[1.04] active:scale-[0.96]"
             >
               Solicita un diagnóstico gratuito
             </Link>

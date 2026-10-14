@@ -104,14 +104,14 @@ export const pillars = [
 ] as const;
 
 export const odooModules = [
-  { code: "CRM", label: "CRM", color: "var(--color-primary)" },
-  { code: "€", label: "Ventas", color: "var(--color-accent-strong)" },
-  { code: "Cp", label: "Compras", color: "var(--color-chip-amber)" },
-  { code: "Ct", label: "Contabilidad", color: "var(--color-chip-slate)" },
-  { code: "Inv", label: "Inventario", color: "var(--color-secondary)" },
-  { code: "Fb", label: "Fabricación", color: "var(--color-chip-blue)" },
-  { code: "RH", label: "RRHH", color: "var(--color-chip-amber)" },
-  { code: "POS", label: "TPV", color: "var(--color-accent-strong)" },
+  { label: "CRM", body: "Oportunidades y clientes" },
+  { label: "Ventas", body: "Presupuestos y pedidos" },
+  { label: "Compras", body: "Proveedores y pedidos" },
+  { label: "Contabilidad", body: "Facturas y asientos" },
+  { label: "Inventario", body: "Stock y almacenes" },
+  { label: "Fabricación", body: "Órdenes de producción" },
+  { label: "RRHH", body: "Empleados y ausencias" },
+  { label: "TPV", body: "Punto de venta" },
 ] as const;
 
 export const sectors = [
@@ -362,6 +362,11 @@ export const software = {
     title: "Control eléctrico para campings",
     summary: "Check-in, clientes, electricidad por parcela, tickets y caja en un solo panel.",
   },
+  viviendas: {
+    href: "/software/viviendas-tuteladas",
+    title: "Gestión de viviendas tuteladas",
+    summary: "Entidades, viviendas, residentes, tareas y documentación en un solo sitio, con certificados listos en PDF.",
+  },
   conectores: {
     href: "/software/conectores",
     title: "Conectores de software",
@@ -449,6 +454,7 @@ export const primaryNav: NavLink[] = [
     children: [
       { label: "Ver todo el software", href: "/software", description: "Software propio y conectores" },
       { label: software.camping.title, href: software.camping.href, description: "CRM para campings: parcelas, luz y caja" },
+      { label: software.viviendas.title, href: software.viviendas.href, description: "Entidades, residentes, tareas y certificados" },
       { label: software.conectores.title, href: software.conectores.href, description: "Forvenues · Ágora · Sage · FACe" },
     ],
   },
@@ -496,6 +502,7 @@ export const footerNav = {
   ],
   software: [
     { label: "Control eléctrico para campings", href: "/software/control-electrico-camping" },
+    { label: "Gestión de viviendas tuteladas", href: "/software/viviendas-tuteladas" },
     { label: "Conectores Forvenues · Ágora · Sage · FACe", href: "/software/conectores" },
   ],
   asesoria: [

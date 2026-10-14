@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Reveal from "@/components/reveal";
+import IndexMark from "@/components/index-mark";
 import SectionHeading from "@/components/section-heading";
 import { odooModules } from "@/lib/site";
 
@@ -17,20 +18,16 @@ export default function OdooSpotlight() {
         </Reveal>
 
         <Reveal className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
-          {odooModules.map((mod) => (
-            <div
-              key={mod.code}
-              className="rounded-2xl border border-white/10 bg-white/[0.04] px-3.5 py-5.5 text-center transition-colors hover:border-accent hover:bg-white/[0.07]"
-            >
+          {odooModules.map((mod, index) => (
               <div
-                className="mx-auto mb-2.5 flex h-9.5 w-9.5 items-center justify-center rounded-[10px] font-mono text-[12.5px] font-semibold text-white"
-                style={{ background: mod.color }}
+                key={mod.label}
+                className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition-colors hover:border-accent/60 hover:bg-white/[0.07]"
               >
-                {mod.code}
+                <IndexMark n={index + 1} dark className="mb-4" />
+                <span className="block text-[15px] font-semibold text-white">{mod.label}</span>
+                <span className="mt-1 block text-[12.5px] text-mist-soft">{mod.body}</span>
               </div>
-              <span className="text-[12.5px] font-semibold text-mist">{mod.label}</span>
-            </div>
-          ))}
+            ))}
         </Reveal>
 
         <div className="mt-9.5 text-center">

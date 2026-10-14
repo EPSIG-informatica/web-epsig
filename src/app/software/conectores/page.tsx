@@ -55,12 +55,12 @@ export default function ConectoresPage() {
         />
         <div
           className="blob-drift pointer-events-none absolute -left-32 -top-40 h-[480px] w-[480px] rounded-full blur-[10px]"
-          style={{ background: "radial-gradient(circle, rgba(34,73,199,.5), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, rgba(42,107,165,.5), transparent 70%)" }}
           aria-hidden
         />
         <div
           className="blob-drift-slow pointer-events-none absolute -right-40 bottom-[-160px] h-[420px] w-[420px] rounded-full blur-[10px]"
-          style={{ background: "radial-gradient(circle, rgba(16,185,129,.25), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, rgba(90,169,230,.25), transparent 70%)" }}
           aria-hidden
         />
         <div className="relative mx-auto max-w-6xl px-6">

@@ -9,12 +9,12 @@ export const metadata: Metadata = {
 };
 
 const shortcuts = [
-  { href: "/servicios", code: "SV", color: "var(--color-primary)", title: "Servicios", body: "Consultoría, digitalización y ciberseguridad" },
-  { href: "/servicios/odoo", code: "ERP", color: "var(--color-secondary)", title: "Odoo ERP", body: "Implantación completa de tu sistema de gestión" },
-  { href: "/kit-digital", code: "KD", color: "var(--color-accent-strong)", title: "Kit Digital", body: "Web, tienda online, CRM y ciberseguridad" },
-  { href: "/kit-consulting", code: "KC", color: "var(--color-chip-amber)", title: "Kit Consulting", body: "Asesoramiento en IA, datos y procesos" },
-  { href: "/servicios/consultoria-empresarial", code: "CE", color: "var(--color-chip-slate)", title: "Consultoría Empresarial", body: "Asesoría económico-financiera, laboral y fiscal" },
-  { href: "/nosotros", code: "EP", color: "var(--color-chip-blue)", title: "Nosotros", body: "Quiénes somos y cómo trabajamos" },
+  { href: "/servicios", title: "Servicios", body: "Consultoría, digitalización y ciberseguridad" },
+  { href: "/servicios/odoo", title: "Odoo ERP", body: "Implantación completa de tu sistema de gestión" },
+  { href: "/kit-digital", title: "Kit Digital", body: "Web, tienda online, CRM y ciberseguridad" },
+  { href: "/kit-consulting", title: "Kit Consulting", body: "Asesoramiento en IA, datos y procesos" },
+  { href: "/servicios/consultoria-empresarial", title: "Consultoría Empresarial", body: "Asesoría económico-financiera, laboral y fiscal" },
+  { href: "/nosotros", title: "Nosotros", body: "Quiénes somos y cómo trabajamos" },
 ];
 
 export default function NotFound() {
@@ -33,12 +33,12 @@ export default function NotFound() {
         />
         <div
           className="blob-drift pointer-events-none absolute -right-32 -top-40 h-[460px] w-[460px] rounded-full blur-[10px]"
-          style={{ background: "radial-gradient(circle, rgba(34,73,199,.5), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, rgba(42,107,165,.5), transparent 70%)" }}
           aria-hidden
         />
         <div
           className="blob-drift-slow pointer-events-none absolute -left-40 bottom-[-120px] h-[380px] w-[380px] rounded-full blur-[10px]"
-          style={{ background: "radial-gradient(circle, rgba(16,185,129,.25), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, rgba(90,169,230,.25), transparent 70%)" }}
           aria-hidden
         />
 
@@ -96,12 +96,8 @@ export default function NotFound() {
                   href={item.href}
                   className="group flex h-full items-start gap-4 rounded-brand border border-line bg-surface p-5 transition-all hover:-translate-y-0.5 hover:border-primary-light hover:shadow-[0_18px_36px_-22px_rgba(11,18,32,.35)]"
                 >
-                  <span
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] font-mono text-[12px] font-semibold text-white"
-                    style={{ background: item.color }}
-                    aria-hidden
-                  >
-                    {item.code}
+                  <span className="mt-0.5 shrink-0 font-mono text-[12px] font-medium text-primary" aria-hidden>
+                    {String(index + 1).padStart(2, "0")}
                   </span>
                   <span className="min-w-0">
                     <span className="flex items-center gap-1.5 text-[15px] font-semibold text-ink">

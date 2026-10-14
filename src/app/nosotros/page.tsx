@@ -5,6 +5,7 @@ import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
 import Zone from "@/components/sections/zone";
 import CtaBand from "@/components/sections/cta-band";
+import IndexMark from "@/components/index-mark";
 import { pillars, site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -49,12 +50,7 @@ export default function NosotrosPage() {
             {pillars.map((pillar, index) => (
               <Reveal key={pillar.slug} delay={index * 0.08}>
                 <TiltCard className="rounded-brand border border-line bg-surface p-7">
-                  <div
-                    className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl font-mono text-xs font-medium text-white"
-                    style={{ background: pillar.color }}
-                  >
-                    {pillar.code}
-                  </div>
+                  <IndexMark n={index + 1} className="mb-4" />
                   <h3 className="mb-2 text-[17px]">{pillar.title}</h3>
                   <p className="text-[14px] leading-relaxed text-ink-soft">{pillar.summary}</p>
                 </TiltCard>
