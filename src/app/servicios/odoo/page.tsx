@@ -54,8 +54,8 @@ export default function OdooPage() {
         <div className="mx-auto max-w-6xl px-6">
           <SectionHeading
             eyebrow="Cómo lo hacemos"
-            title="Un proceso pensado para pymes, no para multinacionales"
-            body="Cinco fases claras — sin sorpresas ni jerga técnica."
+            title="Un proceso pensado para pymes"
+            body=""
             align="left"
           />
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">

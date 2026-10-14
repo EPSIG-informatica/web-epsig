@@ -5,7 +5,7 @@ import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
 import CtaBand from "@/components/sections/cta-band";
 import IndexMark from "@/components/index-mark";
-import CampingDashboard from "@/components/software/camping-dashboard";
+import CampingAppVideo from "@/components/software/camping-app-video";
 
 export const metadata: Metadata = {
   title: "Software de control eléctrico para campings",
@@ -113,7 +113,7 @@ export default function CampingSoftwarePage() {
             </div>
           </div>
           <div className="hero-in" style={{ animationDelay: "120ms" }}>
-            <CampingDashboard />
+            <CampingAppVideo />
           </div>
         </div>
       </header>
