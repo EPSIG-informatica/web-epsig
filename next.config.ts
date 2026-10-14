@@ -23,6 +23,33 @@ const legacyRedirects: [source: string, destination: string][] = [
   ["/feed", "/"],
   ["/comments/feed", "/"],
   ["/category/:slug*", "/"],
+  ["/en-construccion", "/"],
+  ["/give/:slug*", "/"],
+  ["/donations/:slug*", "/"],
+  ["/legal", "/aviso-legal/"],
+  // Antigua estructura de servicios (Josep Pérez Barber). Las reglas concretas van antes que
+  // la genérica del final: gana la primera que coincide.
+  ["/consultoria-asesoria-josep-perez-barber-valencia/donde-encontrarnos", "/contacto/"],
+  ["/consultoria-asesoria-josep-perez-barber-valencia/fiscal/:cookies(politica-de-cookies|mas-informacion-sobre-las-cookies)", "/politica-de-cookies/"],
+  ["/consultoria-asesoria-josep-perez-barber-valencia/fiscal", "/fiscal-contable/"],
+  ["/consultoria-asesoria-josep-perez-barber-valencia/servicios-de-consultoria/:area(fiscal|contable)", "/fiscal-contable/"],
+  ["/consultoria-asesoria-josep-perez-barber-valencia/servicios-de-consultoria/:area(laboral|prevencion-laboral)", "/laboral/"],
+  ["/consultoria-asesoria-josep-perez-barber-valencia/servicios-de-consultoria/software", "/servicios/odoo/"],
+  ["/consultoria-asesoria-josep-perez-barber-valencia/servicios-de-consultoria/redes-sociales-y-seo", "/servicios/transformacion-digital/"],
+  ["/consultoria-asesoria-josep-perez-barber-valencia/servicios-de-consultoria/coaching-empresarial/:slug*", "/servicios/consultoria-empresarial/"],
+  ["/consultoria-asesoria-josep-perez-barber-valencia/:slug*", "/servicios/"],
+  // Kit Digital / Kit Consulting con URLs antiguas o mal escritas.
+  ["/kit%20digital/:slug", "/kit-digital/:slug/"],
+  ["/kitdigital", "/kit-digital/"],
+  ["/kit-consult", "/kit-consulting/"],
+  ["/ministerio-trans-digital", "/kit-digital/"],
+  ["/planr_acelerapyme_nuevo", "/kit-digital/"],
+  ["/power-bi", "/kit-digital/bi/"],
+  // Artículos antiguos con un servicio equivalente.
+  ["/suministro-inmediato-de-informacion-del-iva-sii", "/fiscal-contable/"],
+  ["/las-nuevas-retenciones-del-irpf-para-el-2015-y-2016", "/fiscal-contable/"],
+  ["/cumple-con-la-ley-de-prevencion-laboral-y-hazlo-tu-mismo", "/laboral/"],
+  ["/plan-de-marketing-se-realista-define-lo-que-quieres-hacer-y-si-no-sabes-innovar-copia", "/servicios/consultoria-empresarial/"],
 ];
 
 const isDev = process.env.NODE_ENV === "development";
@@ -90,11 +117,20 @@ const nextConfig: NextConfig = {
     ];
   },
   redirects() {
-    return legacyRedirects.map(([source, destination]) => ({
-      source,
-      destination,
-      permanent: true,
-    }));
+    return [
+      // Una sola versión del dominio para Google: www → sin www.
+      {
+        source: "/:path*",
+        has: [{ type: "host" as const, value: "www.epsigconsultores.com" }],
+        destination: "https://epsigconsultores.com/:path*",
+        permanent: true,
+      },
+      ...legacyRedirects.map(([source, destination]) => ({
+        source,
+        destination,
+        permanent: true,
+      })),
+    ];
   },
 };
 
