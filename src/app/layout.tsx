@@ -6,6 +6,7 @@ import Footer from "@/components/footer";
 import ScrollProgress from "@/components/scroll-progress";
 import CookieBanner from "@/components/cookie-banner";
 import GoogleAnalytics from "@/components/google-analytics";
+import AttributionTracker from "@/components/attribution-tracker";
 import StructuredData from "@/components/structured-data";
 import CardEffects from "@/components/card-effects";
 import { site } from "@/lib/site";
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <CookieBanner />
         <CardEffects />
         <GoogleAnalytics />
+        <AttributionTracker />
         <StructuredData />
       </body>
     </html>

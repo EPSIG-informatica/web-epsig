@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { sendContactConfirmation, sendContactEmail, type ContactRequest } from "@/lib/mailer";
+import { createLead, odooConfigured, type LeadOrigin } from "@/lib/odoo";
 import { clientIp, hit } from "@/lib/rate-limit";
 import { site } from "@/lib/site";
 
@@ -76,6 +77,20 @@ function optionalField(value: unknown, max: number) {
   return trimmed ? trimmed.slice(0, max) : undefined;
 }
 
+const ORIGIN_FIELDS = ["source", "medium", "campaign", "term", "content", "gclid", "referrer", "landing", "firstVisit", "formPage"] as const;
+
+// Origen de la visita enviado por el formulario: solo cadenas cortas de los campos conocidos.
+function parseOrigin(value: unknown): LeadOrigin {
+  if (!value || typeof value !== "object") return {};
+  const data = value as Record<string, unknown>;
+  const origin: LeadOrigin = {};
+  for (const field of ORIGIN_FIELDS) {
+    const v = data[field];
+    if (typeof v === "string" && v.trim()) origin[field] = v.trim().replace(/[\r\n]+/g, " ").slice(0, 300);
+  }
+  return origin;
+}
+
 function parseRequest(body: unknown): ContactRequest | string {
   if (!body || typeof body !== "object") return "Faltan campos obligatorios.";
   const data = body as Record<string, unknown>;
@@ -146,13 +161,20 @@ export async function POST(request: Request) {
     return reply(429, TOO_MANY);
   }
 
-  try {
-    await sendContactEmail(parsed);
-  } catch (err) {
-    // No se registran los datos del formulario (RGPD), solo el fallo técnico.
-    console.error("[contacto] Error enviando el correo:", err instanceof Error ? err.message : err);
-    return reply(500, SEND_FAILED);
+  // Aviso por correo y oportunidad en el CRM de Odoo, a la vez. Basta con que llegue por una vía.
+  const visitOrigin = parseOrigin((body as Record<string, unknown>).origin);
+  const [mail, lead] = await Promise.allSettled([
+    sendContactEmail(parsed),
+    odooConfigured() ? createLead({ ...parsed, origin: visitOrigin }) : Promise.reject(new Error("Odoo no configurado")),
+  ]);
+  // No se registran los datos del formulario (RGPD), solo el fallo técnico.
+  if (mail.status === "rejected") {
+    console.error("[contacto] Error enviando el correo:", mail.reason instanceof Error ? mail.reason.message : mail.reason);
   }
+  if (lead.status === "rejected" && odooConfigured()) {
+    console.error("[contacto] Error creando la oportunidad en Odoo:", lead.reason instanceof Error ? lead.reason.message : lead.reason);
+  }
+  if (mail.status === "rejected" && lead.status === "rejected") return reply(500, SEND_FAILED);
 
   // El acuse de recibo es secundario: si falla o se supera su tope, la solicitud ya ha llegado a info@.
   const recipient = parsed.email.toLowerCase();

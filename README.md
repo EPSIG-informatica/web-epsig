@@ -52,6 +52,7 @@ Se leen de `.env.local` en la raíz del proyecto (ver `.env.example`). **Nunca s
 | `GRAPH_TENANT_ID`, `GRAPH_CLIENT_ID`, `GRAPH_CERT_FILE` | Sí (o las SMTP) | Envío del formulario por Microsoft Graph (aplicación «Web EPSIG» de Entra ID con el permiso Mail.Send). Es el método en uso. `GRAPH_CERT_FILE` apunta a `graph-cert.pem` (clave privada + certificado, **fuera de git**, caduca en octubre de 2028: renovarlo antes subiendo un `.cer` nuevo a la aplicación). El inquilino no permite secretos de cliente (`GRAPH_CLIENT_SECRET`). |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | Alternativa | Envío por SMTP; solo se usan si `GRAPH_TENANT_ID` está vacío. |
 | `CONTACT_FROM`, `CONTACT_TO` | Sí | Remitente y buzón que recibe las solicitudes. |
+| `ODOO_URL`, `ODOO_API_KEY` | Recomendado | Cada envío del formulario crea una oportunidad en el CRM de Odoo (`epsig-consultores.odoo.com`, Odoo 19, API JSON-2) con la etiqueta «Web» y la fuente/medio/campaña de la visita (solo si el visitante aceptó las cookies de marketing; ver `src/lib/attribution.ts`). Comprobar con `test-odoo`. Si Odoo falla, el correo sigue llegando. |
 | `NEXT_PUBLIC_GA_ID` | No | Google Analytics 4 (`G-…`). Solo se carga si el usuario acepta las cookies analíticas. **Se aplica al compilar**: si la cambias, vuelve a compilar. |
 | `GOOGLE_SITE_VERIFICATION` | No | Verificación de Google Search Console por meta etiqueta. |
 
@@ -95,6 +96,7 @@ compilar.
 ### Comprobaciones tras publicar
 
 - [ ] *Ejecutar script* → `test-correo`: debe llegar un correo de prueba a `CONTACT_TO`.
+- [ ] *Ejecutar script* → `test-odoo`: crea una oportunidad de prueba en el CRM (bórrala después).
 - [ ] Enviar el formulario de `/contacto` y comprobar que llega el correo a `CONTACT_TO` y la
       confirmación al remitente.
 - [ ] Navegar por el menú, abrir el vídeo de `/software/control-electrico-camping` y aceptar /

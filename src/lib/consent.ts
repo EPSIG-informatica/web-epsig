@@ -19,7 +19,7 @@ export const consentCategories = [
   {
     id: "marketing",
     title: "Marketing",
-    body: "Permiten medir campañas y mostrarte publicidad relevante en otras plataformas.",
+    body: "Permiten medir campañas y saber por qué canal nos conociste si nos escribes por el formulario.",
     cookiePrefixes: ["_gcl", "_fbp", "_fbc"],
   },
 ] as const;
@@ -29,7 +29,8 @@ export type ConsentChoices = Record<ConsentCategory, boolean>;
 export type Consent = ConsentChoices & { version: number; date: string };
 
 // Subir la versión obliga a volver a pedir el consentimiento (p. ej. al añadir un proveedor nuevo).
-const CONSENT_VERSION = 1;
+// v2: la categoría de marketing también guarda el origen de la visita para el CRM.
+const CONSENT_VERSION = 2;
 // La AEPD recomienda renovar el consentimiento como máximo cada 24 meses.
 const MAX_AGE_MS = 1000 * 60 * 60 * 24 * 365;
 const STORAGE_KEY = "epsig-cookie-consent";

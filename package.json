@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "deploy": "npm ci --include=dev && next build",
-    "test-correo": "node --env-file=.env.local scripts/test-correo.mjs"
+    "test-correo": "node --env-file=.env.local scripts/test-correo.mjs",
+    "test-odoo": "node --env-file=.env.local scripts/test-odoo.mjs"
   },
   "engines": {
     "node": ">=20.9.0"

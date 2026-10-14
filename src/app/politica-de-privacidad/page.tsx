@@ -59,6 +59,10 @@ export default function PoliticaDePrivacidadPage() {
           </p>
           <ul className="mt-3 list-disc pl-5">
             <li>Microsoft (Microsoft 365), para el correo electrónico.</li>
+            <li>
+              Odoo S.A., para la gestión de clientes (CRM), donde registramos tu solicitud y,
+              si aceptaste las cookies de marketing, el canal por el que llegaste a la web.
+            </li>
             <li>IONOS, para el alojamiento del sitio web.</li>
             <li>Cloudflare, para la seguridad y la distribución del sitio web.</li>
           </ul>

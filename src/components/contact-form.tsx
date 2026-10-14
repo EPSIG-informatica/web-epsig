@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { site } from "@/lib/site";
+import { originForSubmit } from "@/lib/attribution";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -30,6 +31,7 @@ export default function ContactForm() {
     const data = {
       ...Object.fromEntries(new FormData(form).entries()),
       elapsed: startedAt.current ? Date.now() - startedAt.current : 0,
+      origin: originForSubmit(),
     };
 
     try {

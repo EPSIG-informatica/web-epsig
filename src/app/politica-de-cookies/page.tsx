@@ -40,6 +40,16 @@ const analyticsCookies: CookieRow[] = [
   },
 ];
 
+const marketingCookies: CookieRow[] = [
+  {
+    name: "epsig-origen",
+    provider: site.name,
+    purpose:
+      "Recuerda cómo llegaste a la web la primera vez (buscador, campaña o web de procedencia y primera página visitada), para asociarlo a tu solicitud si usas el formulario de contacto (almacenamiento local del navegador).",
+    duration: "90 días",
+  },
+];
+
 // La tabla de analítica solo aparece cuando Google Analytics está configurado.
 const analyticsEnabled = Boolean(process.env.NEXT_PUBLIC_GA_ID);
 
@@ -90,10 +100,18 @@ export default function PoliticaDeCookiesPage() {
             </>
           )}
 
+          <h3 className="mt-6 mb-2 text-base font-semibold text-ink">
+            Marketing (solo con tu consentimiento)
+          </h3>
+          <CookieTable rows={marketingCookies} />
+          <p className="mt-3">
+            Este dato no se comparte con terceros ni sirve para mostrarte publicidad: solo se
+            utiliza si nos escribes por el formulario de contacto, para saber por qué canal nos
+            has conocido. Si retiras el consentimiento de marketing, se borra.
+          </p>
+
           {!analyticsEnabled && (
-            <p className="mt-4">
-              Actualmente no utilizamos cookies funcionales, analíticas ni de marketing.
-            </p>
+            <p className="mt-4">Actualmente no utilizamos cookies funcionales ni analíticas.</p>
           )}
 
           <h2 className="mt-8 mb-3 text-xl text-ink">Cómo cambiar o retirar tu consentimiento</h2>
