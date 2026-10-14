@@ -442,9 +442,9 @@ export const primaryNav: NavLink[] = [
         description: "Automatización e IA",
       },
       {
-        label: "Protección del Negocio",
+        label: "Ciberseguridad gestionada",
         href: "/servicios/proteccion-del-negocio",
-        description: "Ciberseguridad gestionada",
+        description: "Protección del Negocio",
       },
     ],
   },

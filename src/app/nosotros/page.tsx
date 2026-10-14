@@ -35,8 +35,7 @@ export default function NosotrosPage() {
               <p>
                 EPSIG Consultores inició su actividad en {site.foundedYear} con la intención de
                 prestar un servicio integral de consultoría a empresas, especialmente en
-                digitalización. No nos limitamos a sugerir soluciones: nos implicamos
-                en su desarrollo hasta cumplir el objetivo.
+                digitalización. Nos implicamos en su desarrollo hasta cumplir el objetivo.
               </p>
             </Reveal>
           </div>

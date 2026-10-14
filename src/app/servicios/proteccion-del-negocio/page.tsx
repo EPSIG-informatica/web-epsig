@@ -169,8 +169,8 @@ export default function ProteccionDelNegocioPage() {
   return (
     <>
       <PageHero
-        eyebrow="Protección del Negocio · Partner oficial ESET"
-        title="Ciberseguridad gestionada, mes a mes"
+        eyebrow="Ciberseguridad · Partner oficial ESET"
+        title="Protección del Negocio"
         lead="La seguridad no es una instalación puntual: los ataques, las vulnerabilidades y las normativas cambian cada mes. Por eso la mantenemos, la revisamos y te la reportamos de forma continua."
       />
 
