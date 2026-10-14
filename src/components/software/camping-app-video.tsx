@@ -5,23 +5,21 @@ import { useEffect, useRef, useState } from "react";
 // Recorrido en vídeo por la app real de camping, grabado con un camping de demostración
 // (clientes y consumos inventados). Se reproduce en silencio y en bucle solo mientras está
 // en pantalla, y no arranca solo si el usuario ha pedido reducir el movimiento.
+// Un único MP4 (H.264, 1920×1080, ~26 s, <1 MB): se reproduce en todos los navegadores.
 const VIDEO = {
-  webm: "/software/camper-shelly-demo.webm",
-  mp4: "/software/camper-shelly-demo.mp4",
-  poster: "/software/camper-shelly-poster.jpg",
+  mp4: "/software/camper-shelly-demo-1080p.mp4",
+  poster: "/software/camper-shelly-poster-1080p.webp",
 };
 
-const DURACION = 55.6;
+const DURACION = 26.2;
 
 const capitulos = [
   { t: 0, titulo: "Acceso" },
-  { t: 7.18, titulo: "Parcelas en directo" },
-  { t: 14, titulo: "Check-in en segundos" },
-  { t: 25.07, titulo: "Consumo por parcela" },
-  { t: 34.28, titulo: "Check-ins y cobros" },
-  { t: 38.18, titulo: "Ficha de clientes" },
-  { t: 42.09, titulo: "Informes de caja" },
-  { t: 49.16, titulo: "Tarifas y ajustes" },
+  { t: 3.4, titulo: "Parcelas en directo" },
+  { t: 6.2, titulo: "Check-in en segundos" },
+  { t: 12.8, titulo: "Consumo por parcela" },
+  { t: 19, titulo: "Informes de caja" },
+  { t: 22.6, titulo: "Shelly y tarifas" },
 ];
 
 const finDe = (index: number, duracion: number) => capitulos[index + 1]?.t ?? duracion;
@@ -161,18 +159,16 @@ export default function CampingAppVideo() {
 
         <video
           ref={videoRef}
-          className="block aspect-[16/10] w-full cursor-pointer rounded-[14px] bg-surface-dark object-contain [:fullscreen_&]:mx-auto [:fullscreen_&]:max-h-[calc(100vh-8rem)] [:fullscreen_&]:w-auto"
+          className="block aspect-video w-full cursor-pointer rounded-[14px] bg-surface-dark object-contain [:fullscreen_&]:mx-auto [:fullscreen_&]:max-h-[calc(100vh-8rem)] [:fullscreen_&]:w-auto"
+          src={VIDEO.mp4}
           poster={VIDEO.poster}
           muted
           loop
           playsInline
           preload="metadata"
           onClick={alternar}
-          aria-label="Recorrido en vídeo por el software: acceso, panel de parcelas, check-in, consumo eléctrico de una parcela, check-ins, clientes, informes de caja y tarifas."
-        >
-          <source src={VIDEO.webm} type="video/webm" />
-          <source src={VIDEO.mp4} type="video/mp4" />
-        </video>
+          aria-label="Recorrido en vídeo por el software: acceso, panel de parcelas, check-in, consumo eléctrico de una parcela, informes de caja y ajustes de Shelly y tarifas."
+        />
 
         {/* Controles y capítulos */}
         <div className="px-1.5 pt-3 pb-1">
