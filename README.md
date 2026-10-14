@@ -7,7 +7,7 @@ Producción: [https://epsigconsultores.com](https://epsigconsultores.com) (servi
 
 ```bash
 npm install
-cp .env.example .env.local   # y rellena SMTP_PASS si quieres probar el envío de correo
+cp .env.example .env.local   # y rellena las variables de correo si quieres probar el formulario
 npm run dev
 ```
 
@@ -49,7 +49,8 @@ Se leen de `.env.local` en la raíz del proyecto (ver `.env.example`). **Nunca s
 
 | Variable | Obligatoria | Para qué |
 |---|---|---|
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | Sí | Envío del formulario de contacto (Office 365). Sin ellas el formulario falla. |
+| `GRAPH_TENANT_ID`, `GRAPH_CLIENT_ID`, `GRAPH_CERT_FILE` | Sí (o las SMTP) | Envío del formulario por Microsoft Graph (aplicación «Web EPSIG» de Entra ID con el permiso Mail.Send). Es el método en uso. `GRAPH_CERT_FILE` apunta a `graph-cert.pem` (clave privada + certificado, **fuera de git**, caduca en octubre de 2028: renovarlo antes subiendo un `.cer` nuevo a la aplicación). El inquilino no permite secretos de cliente (`GRAPH_CLIENT_SECRET`). |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | Alternativa | Envío por SMTP; solo se usan si `GRAPH_TENANT_ID` está vacío. |
 | `CONTACT_FROM`, `CONTACT_TO` | Sí | Remitente y buzón que recibe las solicitudes. |
 | `NEXT_PUBLIC_GA_ID` | No | Google Analytics 4 (`G-…`). Solo se carga si el usuario acepta las cookies analíticas. **Se aplica al compilar**: si la cambias, vuelve a compilar. |
 | `GOOGLE_SITE_VERIFICATION` | No | Verificación de Google Search Console por meta etiqueta. |
@@ -75,7 +76,7 @@ compilar.
      ruta de despliegue `httpdocs`.
    - **Sin Git:** sube un `.zip` del proyecto con el *Administrador de archivos* y extráelo.
 4. **Variables de entorno**: en el *Administrador de archivos* crea `httpdocs/.env.local`
-   copiando `.env.example` y rellena al menos `SMTP_PASS` (y `NEXT_PUBLIC_GA_ID` si usas
+   copiando `.env.example` y rellena las variables `GRAPH_*` (y `NEXT_PUBLIC_GA_ID` si usas
    Analytics).
 5. **Configurar Node.js** (*Sitios web y dominios* → *Node.js* → *Habilitar Node.js*):
    - Versión de Node.js: **22.x** (o 20.9+).
@@ -93,6 +94,7 @@ compilar.
 
 ### Comprobaciones tras publicar
 
+- [ ] *Ejecutar script* → `test-correo`: debe llegar un correo de prueba a `CONTACT_TO`.
 - [ ] Enviar el formulario de `/contacto` y comprobar que llega el correo a `CONTACT_TO` y la
       confirmación al remitente.
 - [ ] Navegar por el menú, abrir el vídeo de `/software/control-electrico-camping` y aceptar /

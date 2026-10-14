@@ -1,4 +1,6 @@
 import "server-only";
+import { createHash, createPrivateKey, createSign, randomUUID, X509Certificate } from "node:crypto";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import nodemailer, { type Transporter } from "nodemailer";
 import { site } from "@/lib/site";
@@ -32,6 +34,119 @@ function singleLine(value: string) {
   return value.replace(/[\r\n]+/g, " ").trim();
 }
 
+type Outgoing = {
+  fromName: string;
+  from: string;
+  to: string;
+  replyTo: { name?: string; address: string };
+  subject: string;
+  text: string;
+  html: string;
+  /** Cabeceras extra. Con Graph solo se admiten las que empiezan por "X-". */
+  headers?: Record<string, string>;
+  inlineImage?: { cid: string; filename: string; path: string; contentType: string };
+};
+
+// ───────────── Envío por Microsoft Graph (si están las variables GRAPH_*) ─────────────
+// Método recomendado por Microsoft 365: no usa contraseñas de buzón ni SMTP AUTH.
+// Requiere una aplicación registrada en Entra ID con el permiso de aplicación Mail.Send.
+
+const graphConfigured = () => Boolean(process.env.GRAPH_TENANT_ID);
+
+let graphToken: { value: string; expiresAt: number } | undefined;
+
+const base64url = (data: Buffer | string) => Buffer.from(data).toString("base64url");
+
+// Credencial de la aplicación: certificado (GRAPH_CERT_FILE, un .pem con la clave privada y el
+// certificado) o, si el inquilino lo permite, secreto de cliente (GRAPH_CLIENT_SECRET).
+async function graphCredentials(tokenUrl: string, clientId: string): Promise<Record<string, string>> {
+  const certFile = process.env.GRAPH_CERT_FILE;
+  if (!certFile) return { client_secret: requiredEnv("GRAPH_CLIENT_SECRET") };
+
+  const pem = await readFile(path.resolve(process.cwd(), certFile), "utf8");
+  const certPem = pem.match(/-----BEGIN CERTIFICATE-----[\s\S]+?-----END CERTIFICATE-----/)?.[0];
+  if (!certPem) throw new Error(`Graph: ${certFile} no contiene el certificado`);
+  const thumbprint = createHash("sha1").update(new X509Certificate(certPem).raw).digest();
+
+  const now = Math.floor(Date.now() / 1000);
+  const header = base64url(JSON.stringify({ alg: "RS256", typ: "JWT", x5t: base64url(thumbprint) }));
+  const payload = base64url(
+    JSON.stringify({ aud: tokenUrl, iss: clientId, sub: clientId, jti: randomUUID(), nbf: now, exp: now + 600 }),
+  );
+  const signature = createSign("RSA-SHA256").update(`${header}.${payload}`).sign(createPrivateKey(pem));
+  return {
+    client_assertion_type: "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+    client_assertion: `${header}.${payload}.${base64url(signature)}`,
+  };
+}
+
+async function getGraphToken() {
+  if (graphToken && Date.now() < graphToken.expiresAt) return graphToken.value;
+  const tenant = requiredEnv("GRAPH_TENANT_ID");
+  const clientId = requiredEnv("GRAPH_CLIENT_ID");
+  const tokenUrl = `https://login.microsoftonline.com/${encodeURIComponent(tenant)}/oauth2/v2.0/token`;
+  const res = await fetch(tokenUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      client_id: clientId,
+      ...(await graphCredentials(tokenUrl, clientId)),
+      scope: "https://graph.microsoft.com/.default",
+      grant_type: "client_credentials",
+    }),
+    signal: AbortSignal.timeout(15000),
+  });
+  const json = (await res.json().catch(() => ({}))) as { access_token?: string; expires_in?: number; error_description?: string };
+  if (!res.ok || !json.access_token) {
+    throw new Error(`Graph: no se pudo obtener el token (${res.status}) ${json.error_description ?? ""}`.trim());
+  }
+  // Se renueva un minuto antes de que caduque.
+  graphToken = { value: json.access_token, expiresAt: Date.now() + ((json.expires_in ?? 3600) - 60) * 1000 };
+  return graphToken.value;
+}
+
+async function sendWithGraph(mail: Outgoing) {
+  const attachments = mail.inlineImage
+    ? [
+        {
+          "@odata.type": "#microsoft.graph.fileAttachment",
+          name: mail.inlineImage.filename,
+          contentType: mail.inlineImage.contentType,
+          contentBytes: (await readFile(mail.inlineImage.path)).toString("base64"),
+          contentId: mail.inlineImage.cid,
+          isInline: true,
+        },
+      ]
+    : undefined;
+
+  const headers = Object.entries(mail.headers ?? {})
+    .filter(([name]) => /^x-/i.test(name))
+    .map(([name, value]) => ({ name, value }));
+
+  const res = await fetch(`https://graph.microsoft.com/v1.0/users/${encodeURIComponent(mail.from)}/sendMail`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${await getGraphToken()}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: {
+        subject: mail.subject,
+        body: { contentType: "HTML", content: mail.html },
+        toRecipients: [{ emailAddress: { address: mail.to } }],
+        replyTo: [{ emailAddress: mail.replyTo }],
+        ...(headers.length ? { internetMessageHeaders: headers } : {}),
+        ...(attachments ? { attachments } : {}),
+      },
+      saveToSentItems: false,
+    }),
+    signal: AbortSignal.timeout(20000),
+  });
+  if (!res.ok) {
+    const json = (await res.json().catch(() => ({}))) as { error?: { code?: string; message?: string } };
+    throw new Error(`Graph: envío rechazado (${res.status}) ${json.error?.code ?? ""} ${json.error?.message ?? ""}`.trim());
+  }
+}
+
+// ───────────── Envío por SMTP (alternativa) ─────────────
+
 let transporter: Transporter | undefined;
 
 // Sin SMTP_USER se envía sin autenticar: sirve para "Direct Send" de Microsoft 365
@@ -49,8 +164,26 @@ function getTransporter() {
   return transporter;
 }
 
+async function deliver(mail: Outgoing) {
+  if (graphConfigured()) return sendWithGraph(mail);
+  await getTransporter().sendMail({
+    from: { name: mail.fromName, address: mail.from },
+    to: mail.to,
+    replyTo: mail.replyTo.name ? { name: mail.replyTo.name, address: mail.replyTo.address } : mail.replyTo.address,
+    subject: mail.subject,
+    headers: mail.headers,
+    text: mail.text,
+    html: mail.html,
+    attachments: mail.inlineImage
+      ? [{ filename: mail.inlineImage.filename, path: mail.inlineImage.path, cid: mail.inlineImage.cid }]
+      : undefined,
+  });
+}
+
+const senderAddress = () => process.env.CONTACT_FROM ?? requiredEnv("SMTP_USER");
+
 export async function sendContactEmail(request: ContactRequest) {
-  const from = process.env.CONTACT_FROM ?? requiredEnv("SMTP_USER");
+  const from = senderAddress();
   const to = requiredEnv("CONTACT_TO");
   const name = singleLine(request.name);
 
@@ -87,8 +220,9 @@ export async function sendContactEmail(request: ContactRequest) {
     <p style="font-family:sans-serif;font-size:14px;white-space:pre-wrap">${escapeHtml(request.message)}</p>
   `;
 
-  await getTransporter().sendMail({
-    from: { name: "Web EPSIG", address: from },
+  await deliver({
+    fromName: "Web EPSIG",
+    from,
     to,
     replyTo: { name, address: singleLine(request.email) },
     subject: `Nueva solicitud web: ${name}${request.company ? ` (${singleLine(request.company)})` : ""}`,
@@ -106,7 +240,7 @@ function firstName(name: string) {
 }
 
 export async function sendContactConfirmation(request: ContactRequest) {
-  const from = process.env.CONTACT_FROM ?? requiredEnv("SMTP_USER");
+  const from = senderAddress();
   const greeting = firstName(request.name) ? `Hola, ${firstName(request.name)}:` : "Hola:";
   const phones = site.phones.join(" · ");
 
@@ -147,21 +281,21 @@ export async function sendContactConfirmation(request: ContactRequest) {
     </table>
   </div>`;
 
-  await getTransporter().sendMail({
-    from: { name: site.name, address: from },
+  await deliver({
+    fromName: site.name,
+    from,
     to: singleLine(request.email),
-    replyTo: site.email,
+    replyTo: { address: site.email },
     subject: `Hemos recibido tu mensaje — ${site.name}`,
     // Evita respuestas automáticas en bucle (fuera de oficina, etc.).
     headers: { "Auto-Submitted": "auto-replied", "X-Auto-Response-Suppress": "All" },
     text,
     html,
-    attachments: [
-      {
-        filename: "logo-epsig.png",
-        path: path.join(process.cwd(), "public/email/logo-epsig.png"),
-        cid: "logo-epsig",
-      },
-    ],
+    inlineImage: {
+      cid: "logo-epsig",
+      filename: "logo-epsig.png",
+      path: path.join(process.cwd(), "public/email/logo-epsig.png"),
+      contentType: "image/png",
+    },
   });
 }

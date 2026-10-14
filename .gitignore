@@ -42,3 +42,7 @@ next-env.d.ts
 .appdata/
 
 !.env.example
+
+# Certificado de Microsoft Graph (clave privada): nunca a git
+*.pem
+/certificado-graph/
