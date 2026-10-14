@@ -63,7 +63,8 @@ async function graphCredentials(tokenUrl: string, clientId: string): Promise<Rec
   const certFile = process.env.GRAPH_CERT_FILE;
   if (!certFile) return { client_secret: requiredEnv("GRAPH_CLIENT_SECRET") };
 
-  const pem = await readFile(path.resolve(process.cwd(), certFile), "utf8");
+  // turbopackIgnore: ruta del servidor decidida en tiempo de ejecución (evita empaquetar todo el proyecto).
+  const pem = await readFile(path.resolve(/*turbopackIgnore: true*/ process.cwd(), certFile), "utf8");
   const certPem = pem.match(/-----BEGIN CERTIFICATE-----[\s\S]+?-----END CERTIFICATE-----/)?.[0];
   if (!certPem) throw new Error(`Graph: ${certFile} no contiene el certificado`);
   const thumbprint = createHash("sha1").update(new X509Certificate(certPem).raw).digest();
