@@ -1,4 +1,5 @@
 import "server-only";
+import type { Locale } from "@/lib/i18n";
 
 // Crea oportunidades en el CRM de Odoo desde el formulario de contacto.
 // Usa la API externa de Odoo con una clave de API (Ajustes de usuario → Seguridad de la cuenta):
@@ -26,6 +27,8 @@ export type LeadInput = {
   company?: string;
   message: string;
   origin: LeadOrigin;
+  /** Idioma de la web desde la que se envió el formulario. */
+  lang?: Locale;
 };
 
 type Kwargs = Record<string, unknown>;
@@ -158,6 +161,7 @@ export async function createLead(lead: LeadInput) {
   ]);
 
   const originRows: [string, string | undefined][] = [
+    ["Idioma de la web", lead.lang ? (lead.lang === "ca" ? "valenciano" : "castellano") : undefined],
     ["Página del formulario", origin.formPage],
     ["Primera página visitada", origin.landing],
     ["Primera visita", origin.firstVisit],

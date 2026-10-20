@@ -1,28 +1,43 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import type { Localized } from "@/lib/i18n";
 
 // Categorías opcionales. Las cookies técnicas no necesitan consentimiento y siempre están activas.
 export const consentCategories = [
   {
     id: "functional",
-    title: "Funcionales",
-    body: "Permiten servicios integrados de terceros, como mapas, vídeos o chat de atención.",
+    title: { es: "Funcionales", ca: "Funcionals" },
+    body: {
+      es: "Permiten servicios integrados de terceros, como mapas, vídeos o chat de atención.",
+      ca: "Permeten serveis integrats de tercers, com ara mapes, vídeos o xat d'atenció.",
+    },
     cookiePrefixes: [],
   },
   {
     id: "analytics",
-    title: "Analíticas",
-    body: "Nos ayudan a entender, de forma agregada, cómo se usa la web para mejorarla (Google Analytics).",
+    title: { es: "Analíticas", ca: "Analítiques" },
+    body: {
+      es: "Nos ayudan a entender, de forma agregada, cómo se usa la web para mejorarla (Google Analytics).",
+      ca: "Ens ajuden a entendre, de manera agregada, com s'usa la web per a millorar-la (Google Analytics).",
+    },
     cookiePrefixes: ["_ga", "_gid", "_gat"],
   },
   {
     id: "marketing",
-    title: "Marketing",
-    body: "Permiten medir campañas y saber por qué canal nos conociste si nos escribes por el formulario.",
+    title: { es: "Marketing", ca: "Màrqueting" },
+    body: {
+      es: "Permiten medir campañas y saber por qué canal nos conociste si nos escribes por el formulario.",
+      ca: "Permeten mesurar campanyes i saber per quin canal ens vas conéixer si ens escrius pel formulari.",
+    },
     cookiePrefixes: ["_gcl", "_fbp", "_fbc"],
   },
-] as const;
+] as const satisfies readonly {
+  id: string;
+  title: Localized;
+  body: Localized;
+  cookiePrefixes: readonly string[];
+}[];
 
 export type ConsentCategory = (typeof consentCategories)[number]["id"];
 export type ConsentChoices = Record<ConsentCategory, boolean>;

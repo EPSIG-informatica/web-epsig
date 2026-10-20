@@ -22,15 +22,16 @@ Antes de subir cambios: `npm run lint` y `npm run build` sin errores.
 
 ## Estructura
 
-- `src/app/` — rutas (App Router):
+- `src/app/[lang]/` — páginas (App Router), una versión por idioma (ver «Idiomas»):
   - Inicio, `/nosotros`, `/contacto` (+ `/contacto/enviado` y `/contacto/error`).
   - `/servicios` y sus subpáginas: `odoo`, `consultoria-empresarial`, `transformacion-digital` y
     `proteccion-del-negocio` (ciberseguridad).
   - Asesoría: `/economico-financiero`, `/laboral`, `/fiscal-contable`.
   - `/software` y sus subpáginas: `control-electrico-camping`, `viviendas-tuteladas`, `conectores`.
   - `/kit-digital` y `/kit-consulting`, con una página por categoría (`[slug]`).
-  - Páginas legales (`/aviso-legal`, `/politica-de-privacidad`, `/politica-de-cookies`),
-    `sitemap.ts` y `robots.ts`.
+  - Páginas legales (`/aviso-legal`, `/politica-de-privacidad`, `/politica-de-cookies`).
+- `src/app/` (raíz) — `sitemap.ts`, `robots.ts`, iconos y la API.
+- `src/proxy.ts` — elige el idioma de cada visita (ver «Idiomas»).
 - `src/app/api/contacto/route.ts` — recibe el formulario de contacto (antispam, límite de envíos
   por IP y solo desde el propio dominio) y envía el correo con `src/lib/mailer.ts`.
 - `src/lib/site.ts` — datos de la empresa (contacto, oficinas, datos legales, servicios, software,
@@ -42,6 +43,20 @@ Antes de subir cambios: `npm run lint` y `npm run build` sin errores.
 - `next.config.ts` — cabeceras de seguridad (CSP, HSTS...) y redirecciones de las URLs de la
   antigua web WordPress.
 - `server.js` — fichero de arranque para Plesk (equivale a `next start`).
+
+## Idiomas (castellano y valenciano)
+
+- Castellano sin prefijo (`/servicios/`) y valenciano bajo `/ca/` (`/ca/servicios/`), con las mismas rutas.
+  Internamente todas las páginas cuelgan de `src/app/[lang]/`: `src/proxy.ts` reescribe las URLs sin prefijo a `/es/...`
+  (y redirige `/es/...` a la URL sin prefijo, que es la pública).
+- Detección: si el navegador está en catalán/valenciano (`Accept-Language: ca...`) y el usuario no ha elegido idioma,
+  las URLs sin prefijo redirigen (307) a `/ca/...`. El selector ES/VA del menú guarda la elección en la cookie `idioma`
+  y a partir de ahí manda la cookie. Google (sin Accept-Language) indexa las dos versiones por separado.
+- SEO: cada página llama a `pageMetadata(ruta, {...})` (`src/lib/i18n-server.ts`), que pone la canónica de su idioma,
+  las alternativas `hreflang` (`es`, `ca`, `x-default`) y Open Graph. El sitemap lista las dos versiones con sus alternativas.
+- Textos: en componentes de servidor `const t = await getT()` y en los de cliente `const t = useT()`; después
+  `t("Texto en castellano", "Text en valencià")`. Los datos de `src/lib/site.ts` son objetos `{ es, ca }` y se usan con `t(obj)`.
+- Enlaces: importa siempre `Link` de `@/components/link` (añade `/ca` solo); para `<a>` internos usa `t.path("/ruta")`.
 
 ## Variables de entorno
 

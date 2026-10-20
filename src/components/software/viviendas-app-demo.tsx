@@ -1,25 +1,30 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useLang, useT } from "@/components/lang-provider";
+import type { Localized } from "@/lib/i18n";
 
 // Demostración animada del software de viviendas tuteladas (public/animaciones/), presentada
 // igual que el vídeo de campings: marco, pausa, etapa actual y barra de etapas.
 // La animación se controla por postMessage (mismo origen): {target: "vt-demo", cmd: "pause" |
 // "play" | "goto", stage} y responde con {source: "vt-demo", type: "state", stage, progress, paused}.
+// En valenciano se carga con ?lang=ca (la animación lleva su propio diccionario).
 const SRC = "/animaciones/viviendas-tuteladas.html";
 
 // Deben coincidir con NAMES y DUR del script de la animación.
-const etapas = [
-  { titulo: "Inicio", ms: 7300 },
-  { titulo: "Entidades", ms: 4850 },
-  { titulo: "Empresas", ms: 6100 },
-  { titulo: "Documentos", ms: 2600 },
-  { titulo: "Certificado en PDF", ms: 25900 },
+const etapas: { titulo: Localized; ms: number }[] = [
+  { titulo: { es: "Inicio", ca: "Inici" }, ms: 7300 },
+  { titulo: { es: "Entidades", ca: "Entitats" }, ms: 4850 },
+  { titulo: { es: "Empresas", ca: "Empreses" }, ms: 6100 },
+  { titulo: { es: "Documentos", ca: "Documents" }, ms: 2600 },
+  { titulo: { es: "Certificado en PDF", ca: "Certificat en PDF" }, ms: 25900 },
 ];
 
 type Estado = { stage: number; progress: number; paused: boolean };
 
 export default function ViviendasAppDemo() {
+  const t = useT();
+  const lang = useLang();
   const marcoRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const pausadoPorUsuario = useRef(false);
@@ -92,6 +97,9 @@ export default function ViviendasAppDemo() {
   };
 
   const reproduciendo = !estado.paused;
+  const pantallaLabel = completa
+    ? t("Salir de pantalla completa", "Eixir de la pantalla completa")
+    : t("Ver en pantalla completa", "Veure en pantalla completa");
 
   return (
     <figure className="m-0">
@@ -106,18 +114,21 @@ export default function ViviendasAppDemo() {
             <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
             <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
           </span>
-          <span className="truncate font-mono text-[11.5px] text-mist-soft">viviendas tuteladas · gestión</span>
+          <span className="truncate font-mono text-[11.5px] text-mist-soft">{t("viviendas tuteladas · gestión", "habitatges tutelats · gestió")}</span>
           <span className="ml-auto flex shrink-0 items-center gap-1.5 font-mono text-[11px] text-accent">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-            app real
+            {t("app real", "app real")}
           </span>
         </div>
 
         <div className="overflow-hidden rounded-[14px] bg-[#05070b] [:fullscreen_&]:mx-auto [:fullscreen_&]:aspect-video [:fullscreen_&]:w-full [:fullscreen_&]:max-w-[calc((100vh-8rem)*16/9)]">
           <iframe
             ref={iframeRef}
-            src={SRC}
-            title="Demostración animada del software de gestión de viviendas tuteladas: inicio, entidades, empresas, documentación y generación de un certificado en PDF"
+            src={lang === "ca" ? `${SRC}?lang=ca` : SRC}
+            title={t(
+              "Demostración animada del software de gestión de viviendas tuteladas: inicio, entidades, empresas, documentación y generación de un certificado en PDF",
+              "Demostració animada del programari de gestió d'habitatges tutelats: inici, entitats, empreses, documentació i generació d'un certificat en PDF",
+            )}
             className="block aspect-video w-full border-0"
           />
         </div>
@@ -129,7 +140,7 @@ export default function ViviendasAppDemo() {
               type="button"
               onClick={alternar}
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
-              aria-label={reproduciendo ? "Pausar demostración" : "Reproducir demostración"}
+              aria-label={reproduciendo ? t("Pausar demostración", "Pausar la demostració") : t("Reproducir demostración", "Reproduir la demostració")}
             >
               {reproduciendo ? (
                 <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="currentColor" aria-hidden>
@@ -146,14 +157,14 @@ export default function ViviendasAppDemo() {
               <span className="mr-2 font-mono text-[11.5px] text-mist-faint">
                 {String(estado.stage + 1).padStart(2, "0")}/{String(etapas.length).padStart(2, "0")}
               </span>
-              {etapas[estado.stage]?.titulo}
+              {etapas[estado.stage] && t(etapas[estado.stage].titulo)}
             </span>
             <button
               type="button"
               onClick={pantallaCompleta}
               className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-mist-soft transition hover:bg-white/10 hover:text-white"
-              aria-label={completa ? "Salir de pantalla completa" : "Ver en pantalla completa"}
-              title={completa ? "Salir de pantalla completa" : "Ver en pantalla completa"}
+              aria-label={pantallaLabel}
+              title={pantallaLabel}
             >
               <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden>
                 {completa ? (
@@ -170,13 +181,13 @@ export default function ViviendasAppDemo() {
               const avance = i < estado.stage ? 1 : i === estado.stage ? estado.progress : 0;
               return (
                 <button
-                  key={etapa.titulo}
+                  key={etapa.titulo.es}
                   type="button"
                   onClick={() => irA(i)}
                   className="group py-1.5"
                   style={{ flexGrow: etapa.ms, flexBasis: 0 }}
-                  aria-label={`Ir a: ${etapa.titulo}`}
-                  title={etapa.titulo}
+                  aria-label={`${t("Ir a", "Anar a")}: ${t(etapa.titulo)}`}
+                  title={t(etapa.titulo)}
                 >
                   <span className="block h-1 overflow-hidden rounded-full bg-white/15 transition-colors group-hover:bg-white/30">
                     <span
@@ -191,7 +202,7 @@ export default function ViviendasAppDemo() {
         </div>
       </div>
       <figcaption className="mt-3 text-center text-[12.5px] text-mist-faint">
-        Recorrido real por el programa con datos de prueba.
+        {t("Recorrido real por el programa con datos de prueba.", "Recorregut real pel programa amb dades de prova.")}
       </figcaption>
     </figure>
   );

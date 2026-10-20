@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useT } from "@/components/lang-provider";
+import type { Localized } from "@/lib/i18n";
 
 // Recorrido en vídeo por la app real de camping, grabado con un camping de demostración
 // (clientes y consumos inventados). Se reproduce en silencio y en bucle solo mientras está
@@ -13,13 +15,13 @@ const VIDEO = {
 
 const DURACION = 26.2;
 
-const capitulos = [
-  { t: 0, titulo: "Acceso" },
-  { t: 3.4, titulo: "Parcelas en directo" },
-  { t: 6.2, titulo: "Check-in en segundos" },
-  { t: 12.8, titulo: "Consumo por parcela" },
-  { t: 19, titulo: "Informes de caja" },
-  { t: 22.6, titulo: "Shelly y tarifas" },
+const capitulos: { t: number; titulo: Localized }[] = [
+  { t: 0, titulo: { es: "Acceso", ca: "Accés" } },
+  { t: 3.4, titulo: { es: "Parcelas en directo", ca: "Parcel·les en directe" } },
+  { t: 6.2, titulo: { es: "Check-in en segundos", ca: "Check-in en segons" } },
+  { t: 12.8, titulo: { es: "Consumo por parcela", ca: "Consum per parcel·la" } },
+  { t: 19, titulo: { es: "Informes de caja", ca: "Informes de caixa" } },
+  { t: 22.6, titulo: { es: "Shelly y tarifas", ca: "Shelly i tarifes" } },
 ];
 
 const finDe = (index: number, duracion: number) => capitulos[index + 1]?.t ?? duracion;
@@ -32,6 +34,7 @@ const capituloEn = (t: number) => {
 };
 
 export default function CampingAppVideo() {
+  const t = useT();
   const marcoRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const rellenosRef = useRef<(HTMLSpanElement | null)[]>([]);
@@ -137,6 +140,10 @@ export default function CampingAppVideo() {
     else video?.webkitEnterFullscreen?.(); // iPhone: solo el vídeo puede ir a pantalla completa
   };
 
+  const pantallaLabel = completa
+    ? t("Salir de pantalla completa", "Eixir de la pantalla completa")
+    : t("Ver en pantalla completa", "Veure en pantalla completa");
+
   return (
     <figure className="m-0">
       <div
@@ -150,10 +157,10 @@ export default function CampingAppVideo() {
             <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
             <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
           </span>
-          <span className="truncate font-mono text-[11.5px] text-mist-soft">camper shelly · recepción</span>
+          <span className="truncate font-mono text-[11.5px] text-mist-soft">{t("camper shelly · recepción", "camper shelly · recepció")}</span>
           <span className="ml-auto flex shrink-0 items-center gap-1.5 font-mono text-[11px] text-accent">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-            app real
+            {t("app real", "app real")}
           </span>
         </div>
 
@@ -167,7 +174,10 @@ export default function CampingAppVideo() {
           playsInline
           preload="metadata"
           onClick={alternar}
-          aria-label="Recorrido en vídeo por el software: acceso, panel de parcelas, check-in, consumo eléctrico de una parcela, informes de caja y ajustes de Shelly y tarifas."
+          aria-label={t(
+            "Recorrido en vídeo por el software: acceso, panel de parcelas, check-in, consumo eléctrico de una parcela, informes de caja y ajustes de Shelly y tarifas.",
+            "Recorregut en vídeo pel programari: accés, panell de parcel·les, check-in, consum elèctric d'una parcel·la, informes de caixa i ajustos de Shelly i tarifes.",
+          )}
         />
 
         {/* Controles y capítulos */}
@@ -177,7 +187,7 @@ export default function CampingAppVideo() {
               type="button"
               onClick={alternar}
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
-              aria-label={reproduciendo ? "Pausar vídeo" : "Reproducir vídeo"}
+              aria-label={reproduciendo ? t("Pausar vídeo", "Pausar el vídeo") : t("Reproducir vídeo", "Reproduir el vídeo")}
             >
               {reproduciendo ? (
                 <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="currentColor" aria-hidden>
@@ -194,14 +204,14 @@ export default function CampingAppVideo() {
               <span className="mr-2 font-mono text-[11.5px] text-mist-faint">
                 {String(actual + 1).padStart(2, "0")}/{String(capitulos.length).padStart(2, "0")}
               </span>
-              {capitulos[actual].titulo}
+              {t(capitulos[actual].titulo)}
             </span>
             <button
               type="button"
               onClick={pantallaCompleta}
               className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-mist-soft transition hover:bg-white/10 hover:text-white"
-              aria-label={completa ? "Salir de pantalla completa" : "Ver en pantalla completa"}
-              title={completa ? "Salir de pantalla completa" : "Ver en pantalla completa"}
+              aria-label={pantallaLabel}
+              title={pantallaLabel}
             >
               <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden>
                 {completa ? (
@@ -216,13 +226,13 @@ export default function CampingAppVideo() {
           <div className="flex gap-1">
             {capitulos.map((capitulo, i) => (
               <button
-                key={capitulo.titulo}
+                key={capitulo.t}
                 type="button"
                 onClick={() => irA(i)}
                 className="group py-1.5"
                 style={{ flexGrow: finDe(i, DURACION) - capitulo.t, flexBasis: 0 }}
-                aria-label={`Ir a: ${capitulo.titulo}`}
-                title={capitulo.titulo}
+                aria-label={`${t("Ir a", "Anar a")}: ${t(capitulo.titulo)}`}
+                title={t(capitulo.titulo)}
               >
                 <span className="block h-1 overflow-hidden rounded-full bg-white/15 transition-colors group-hover:bg-white/30">
                   <span
@@ -239,7 +249,7 @@ export default function CampingAppVideo() {
         </div>
       </div>
       <figcaption className="mt-3 text-center text-[12.5px] text-mist-faint">
-        Grabación real de la app con un camping de demostración.
+        {t("Grabación real de la app con un camping de demostración.", "Gravació real de l'app amb un càmping de demostració.")}
       </figcaption>
     </figure>
   );

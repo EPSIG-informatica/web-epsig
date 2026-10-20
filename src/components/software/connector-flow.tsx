@@ -1,18 +1,28 @@
+import { getT } from "@/lib/i18n-server";
+
 // Diagrama del recorrido de los datos entre programas. Solo CSS (línea animada con .flow-line-live).
 const nodes = [
-  { name: "Forvenues", role: "Venta de entradas" },
-  { name: "Ágora", role: "TPV y ventas" },
-  { name: "Sage", role: "Contabilidad" },
-  { name: "FACe", role: "Factura electrónica" },
+  { name: "Forvenues", role: { es: "Venta de entradas", ca: "Venda d'entrades" } },
+  { name: "Ágora", role: { es: "TPV y ventas", ca: "TPV i vendes" } },
+  { name: "Sage", role: { es: "Contabilidad", ca: "Comptabilitat" } },
+  { name: "FACe", role: { es: "Factura electrónica", ca: "Factura electrònica" } },
 ] as const;
 
-const links = ["Automático", "Cada día", "Automático"] as const;
+const links = [
+  { es: "Automático", ca: "Automàtic" },
+  { es: "Cada día", ca: "Cada dia" },
+  { es: "Automático", ca: "Automàtic" },
+] as const;
 
-export default function ConnectorFlow() {
+export default async function ConnectorFlow() {
+  const t = await getT();
   return (
     <div
       role="img"
-      aria-label="Recorrido de los datos: Forvenues envía las ventas de entradas a Ágora, Ágora envía las ventas a Sage cada día y Sage envía las facturas a FACe."
+      aria-label={t(
+        "Recorrido de los datos: Forvenues envía las ventas de entradas a Ágora, Ágora envía las ventas a Sage cada día y Sage envía las facturas a FACe.",
+        "Recorregut de les dades: Forvenues envia les vendes d'entrades a Ágora, Ágora envia les vendes a Sage cada dia i Sage envia les factures a FACe.",
+      )}
       className="relative"
     >
       <ol className="flex flex-col items-stretch gap-0 lg:flex-row lg:items-center">
@@ -24,7 +34,7 @@ export default function ConnectorFlow() {
               </span>
               <span>
                 <span className="block font-display text-[17px] font-semibold text-white">{node.name}</span>
-                <span className="block text-[12.5px] text-mist-soft">{node.role}</span>
+                <span className="block text-[12.5px] text-mist-soft">{t(node.role)}</span>
               </span>
             </div>
 
@@ -39,7 +49,7 @@ export default function ConnectorFlow() {
                   <path d="M0,1 L96,1" stroke="var(--color-accent)" strokeWidth="2" strokeDasharray="4 6" className="flow-line-live" fill="none" />
                 </svg>
                 <span className="relative rounded-full border border-accent/40 bg-surface-dark px-2.5 py-1 font-mono text-[10.5px] text-accent">
-                  {links[index]}
+                  {t(links[index])}
                 </span>
               </div>
             )}

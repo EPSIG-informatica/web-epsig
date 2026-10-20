@@ -1,23 +1,54 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/link";
 import Reveal from "@/components/reveal";
 import { site, telHref } from "@/lib/site";
+import { getT } from "@/lib/i18n-server";
+import type { Localized } from "@/lib/i18n";
 
-// Next.js ya añade "noindex" a las respuestas 404.
-export const metadata: Metadata = {
-  title: "Página no encontrada",
-};
+// Next.js ya añade "noindex" a las respuestas 404. Sin canónica ni hreflang: no tiene ruta propia.
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return { title: t("Página no encontrada", "Pàgina no trobada") };
+}
 
-const shortcuts = [
-  { href: "/servicios", title: "Servicios", body: "Consultoría, digitalización y ciberseguridad" },
-  { href: "/servicios/odoo", title: "Odoo ERP", body: "Implantación completa de tu sistema de gestión" },
-  { href: "/kit-digital", title: "Kit Digital", body: "Web, tienda online, CRM y ciberseguridad" },
-  { href: "/kit-consulting", title: "Kit Consulting", body: "Asesoramiento en IA, datos y procesos" },
-  { href: "/servicios/consultoria-empresarial", title: "Consultoría Empresarial", body: "Asesoría económico-financiera, laboral y fiscal" },
-  { href: "/nosotros", title: "Nosotros", body: "Quiénes somos y cómo trabajamos" },
+const shortcuts: { href: string; title: Localized; body: Localized }[] = [
+  {
+    href: "/servicios",
+    title: { es: "Servicios", ca: "Serveis" },
+    body: { es: "Consultoría, digitalización y ciberseguridad", ca: "Consultoria, digitalització i ciberseguretat" },
+  },
+  {
+    href: "/servicios/odoo",
+    title: { es: "Odoo ERP", ca: "Odoo ERP" },
+    body: { es: "Implantación completa de tu sistema de gestión", ca: "Implantació completa del teu sistema de gestió" },
+  },
+  {
+    href: "/kit-digital",
+    title: { es: "Kit Digital", ca: "Kit Digital" },
+    body: { es: "Web, tienda online, CRM y ciberseguridad", ca: "Web, botiga en línia, CRM i ciberseguretat" },
+  },
+  {
+    href: "/kit-consulting",
+    title: { es: "Kit Consulting", ca: "Kit Consulting" },
+    body: { es: "Asesoramiento en IA, datos y procesos", ca: "Assessorament en IA, dades i processos" },
+  },
+  {
+    href: "/servicios/consultoria-empresarial",
+    title: { es: "Consultoría Empresarial", ca: "Consultoria Empresarial" },
+    body: {
+      es: "Asesoría económico-financiera, laboral y fiscal",
+      ca: "Assessoria economicofinancera, laboral i fiscal",
+    },
+  },
+  {
+    href: "/nosotros",
+    title: { es: "Nosotros", ca: "Nosaltres" },
+    body: { es: "Quiénes somos y cómo trabajamos", ca: "Qui som i com treballem" },
+  },
 ];
 
-export default function NotFound() {
+export default async function NotFound() {
+  const t = await getT();
   return (
     <>
       <section className="relative overflow-hidden bg-surface-dark pt-20 pb-20 text-white sm:pt-28 sm:pb-24">
@@ -56,11 +87,13 @@ export default function NotFound() {
           </p>
 
           <h1 className="mt-4 text-[28px] leading-[1.2] text-white sm:text-[36px]">
-            Esta página no existe o ha cambiado de sitio
+            {t("Esta página no existe o ha cambiado de sitio", "Esta pàgina no existix o ha canviat de lloc")}
           </h1>
           <p className="mx-auto mt-4 max-w-[48ch] text-base leading-relaxed text-mist-soft">
-            Puede que el enlace esté mal escrito o que hayamos reorganizado la web. Desde aquí
-            puedes volver al inicio o ir directamente a lo que buscabas.
+            {t(
+              "Puede que el enlace esté mal escrito o que hayamos reorganizado la web. Desde aquí puedes volver al inicio o ir directamente a lo que buscabas.",
+              "Pot ser que l'enllaç estiga mal escrit o que hàgem reorganitzat la web. Des d'ací pots tornar a l'inici o anar directament al que buscaves.",
+            )}
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -68,13 +101,13 @@ export default function NotFound() {
               href="/"
               className="w-full rounded-full bg-white px-6 py-3 text-[14px] font-semibold text-ink transition-colors hover:bg-mist sm:w-auto"
             >
-              Volver al inicio
+              {t("Volver al inicio", "Torna a l'inici")}
             </Link>
             <Link
               href="/contacto"
               className="w-full rounded-full border-[1.5px] border-white/25 px-6 py-3 text-[14px] font-semibold text-white transition-colors hover:border-white sm:w-auto"
             >
-              Contactar
+              {t("Contactar", "Contacta")}
             </Link>
           </div>
         </Reveal>
@@ -83,9 +116,9 @@ export default function NotFound() {
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-6">
           <Reveal>
-            <h2 className="mb-2 text-center text-xl text-ink sm:text-2xl">Quizá te interese</h2>
+            <h2 className="mb-2 text-center text-xl text-ink sm:text-2xl">{t("Quizá te interese", "Potser t'interessa")}</h2>
             <p className="mb-10 text-center text-[15px] text-ink-soft">
-              Las secciones más visitadas de {site.name}.
+              {t(`Las secciones más visitadas de ${site.name}.`, `Les seccions més visitades d'${site.name}.`)}
             </p>
           </Reveal>
 
@@ -101,12 +134,12 @@ export default function NotFound() {
                   </span>
                   <span className="min-w-0">
                     <span className="flex items-center gap-1.5 text-[15px] font-semibold text-ink">
-                      {item.title}
+                      {t(item.title)}
                       <span className="text-primary transition-transform group-hover:translate-x-0.5" aria-hidden>
                         →
                       </span>
                     </span>
-                    <span className="mt-0.5 block text-[13.5px] leading-snug text-ink-soft">{item.body}</span>
+                    <span className="mt-0.5 block text-[13.5px] leading-snug text-ink-soft">{t(item.body)}</span>
                   </span>
                 </Link>
               </Reveal>
@@ -114,11 +147,11 @@ export default function NotFound() {
           </div>
 
           <p className="mt-10 text-center text-sm text-ink-soft">
-            ¿No encuentras lo que buscas? Escríbenos a{" "}
+            {t("¿No encuentras lo que buscas? Escríbenos a", "No trobes el que busques? Escriu-nos a")}{" "}
             <a href={`mailto:${site.email}`} className="font-medium text-primary underline underline-offset-2 hover:no-underline">
               {site.email}
             </a>{" "}
-            o llámanos al{" "}
+            {t("o llámanos al", "o telefona'ns al")}{" "}
             <a href={telHref(site.phones[0])} className="font-medium text-primary underline underline-offset-2 hover:no-underline">
               {site.phones[0]}
             </a>

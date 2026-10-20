@@ -1,27 +1,43 @@
 import type { Metadata } from "next";
 import ServiceDetail from "@/components/service-detail";
 import { asesoriaAreas } from "@/lib/site";
+import { getT, pageMetadata } from "@/lib/i18n-server";
 
-export const metadata: Metadata = {
-  title: "Consultoría Empresarial",
-  description:
-    "Asesoría económico-financiera, laboral y fiscal-contable, empresa familiar y protección de datos para pymes y particulares.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return pageMetadata("/servicios/consultoria-empresarial", {
+    title: t("Consultoría Empresarial", "Consultoria Empresarial"),
+    description: t(
+      "Asesoría económico-financiera, laboral y fiscal-contable, empresa familiar y protección de datos para pymes y particulares.",
+      "Assessoria economicofinancera, laboral i fiscal-comptable, empresa familiar i protecció de dades per a pimes i particulars.",
+    ),
+  });
+}
 
-export default function ConsultoriaEmpresarialPage() {
+export default async function ConsultoriaEmpresarialPage() {
+  const t = await getT();
   return (
     <ServiceDetail
-      eyebrow="Consultoría Empresarial"
-      title="La asesoría de toda la vida, con la organización que necesita una empresa que crece"
-      lead="Antes de digitalizar o proteger nada, hay que tener claro cómo está tu empresa hoy: sus cuentas, su personal y su cumplimiento normativo."
+      eyebrow={t("Consultoría Empresarial", "Consultoria Empresarial")}
+      title={t(
+        "La asesoría de toda la vida, con la organización que necesita una empresa que crece",
+        "L'assessoria de tota la vida, amb l'organització que necessita una empresa que creix",
+      )}
+      lead={t(
+        "Antes de digitalizar o proteger nada, hay que tener claro cómo está tu empresa hoy: sus cuentas, su personal y su cumplimiento normativo.",
+        "Abans de digitalitzar o protegir res, cal tindre clar com està hui la teua empresa: els seus comptes, el seu personal i el seu compliment normatiu.",
+      )}
       features={asesoriaAreas.map((area) => ({
-        title: area.title,
-        body: area.body,
+        title: t(area.title),
+        body: t(area.body),
         href: "slug" in area ? `/${area.slug}` : undefined,
       }))}
-      ctaTitle="¿Hablamos de la organización de tu empresa?"
-      ctaBody="Una primera conversación gratuita para entender dónde estás y qué necesitas."
-      ctaLabel="Solicitar diagnóstico"
+      ctaTitle={t("¿Hablamos de la organización de tu empresa?", "Parlem de l'organització de la teua empresa?")}
+      ctaBody={t(
+        "Una primera conversación gratuita para entender dónde estás y qué necesitas.",
+        "Una primera conversa gratuïta per a entendre on estàs i què necessites.",
+      )}
+      ctaLabel={t("Solicitar diagnóstico", "Sol·licitar diagnòstic")}
     />
   );
 }

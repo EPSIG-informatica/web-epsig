@@ -1,17 +1,29 @@
 import Reveal from "@/components/reveal";
+import { getT } from "@/lib/i18n-server";
 
-export default function Mission() {
+export default async function Mission() {
+  const t = await getT();
   return (
     <section className="bg-surface-alt py-20 text-center sm:py-24">
       <Reveal className="mx-auto max-w-3xl px-6">
         <p className="font-display text-[26px] font-semibold leading-[1.35] text-ink sm:text-[32px]">
-          Ayudamos a las empresas a{" "}
-          <span className="text-primary">mejorar su gestión</span>,{" "}
-          <span className="text-primary">digitalizar sus procesos</span> y{" "}
-          <span className="text-accent-strong">proteger su negocio</span>.
+          {t(
+            <>
+              Ayudamos a las empresas a{" "}
+              <span className="text-primary">mejorar su gestión</span>,{" "}
+              <span className="text-primary">digitalizar sus procesos</span> y{" "}
+              <span className="text-accent-strong">proteger su negocio</span>.
+            </>,
+            <>
+              Ajudem les empreses a{" "}
+              <span className="text-primary">millorar la seua gestió</span>,{" "}
+              <span className="text-primary">digitalitzar els seus processos</span> i{" "}
+              <span className="text-accent-strong">protegir el seu negoci</span>.
+            </>,
+          )}
         </p>
         <small className="mt-5.5 block font-mono text-[13px] tracking-wide text-ink-soft">
-          ESTE ES EL PORQUÉ DETRÁS DE CADA SERVICIO DE EPSIG
+          {t("ESTE ES EL PORQUÉ DETRÁS DE CADA SERVICIO DE EPSIG", "ESTE ÉS EL PERQUÈ DE CADA SERVEI D'EPSIG")}
         </small>
       </Reveal>
     </section>

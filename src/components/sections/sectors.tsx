@@ -2,13 +2,18 @@ import Reveal from "@/components/reveal";
 import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
 import { sectors } from "@/lib/site";
+import { getT } from "@/lib/i18n-server";
 
-export default function Sectors() {
+export default async function Sectors() {
+  const t = await getT();
   return (
     <section id="sectores" className="py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
-          <SectionHeading eyebrow="Sectores" title="Adaptado al día a día de tu negocio" />
+          <SectionHeading
+            eyebrow={t("Sectores", "Sectors")}
+            title={t("Adaptado al día a día de tu negocio", "Adaptat al dia a dia del teu negoci")}
+          />
         </Reveal>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {sectors.map((sector, index) => (
@@ -21,8 +26,8 @@ export default function Sectors() {
                     : "border-line bg-surface"
                 }`}
               >
-                <h3 className="mb-2 text-[16.5px]">{sector.title}</h3>
-                <p className="text-[13px] leading-relaxed text-ink-soft">{sector.body}</p>
+                <h3 className="mb-2 text-[16.5px]">{t(sector.title)}</h3>
+                <p className="text-[13px] leading-relaxed text-ink-soft">{t(sector.body)}</p>
               </TiltCard>
             </Reveal>
           ))}

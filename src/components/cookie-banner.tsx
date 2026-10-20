@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/link";
 import { useEffect, useRef, useState } from "react";
+import { useT } from "@/components/lang-provider";
 import {
   allChoices,
   consentCategories,
@@ -12,6 +13,7 @@ import {
 } from "@/lib/consent";
 
 export default function CookieBanner() {
+  const t = useT();
   const consent = useConsent();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [draft, setDraft] = useState<ConsentChoices>(() => allChoices(false));
@@ -65,15 +67,15 @@ export default function CookieBanner() {
             tabIndex={-1}
             className="mb-2 font-display text-base font-semibold text-ink outline-none"
           >
-            {settingsOpen ? "Configurar cookies" : "Usamos cookies"}
+            {settingsOpen ? t("Configurar cookies", "Configurar cookies") : t("Usamos cookies", "Usem cookies")}
           </h2>
           <p className="text-[13.5px] leading-relaxed text-ink-soft">
-            Utilizamos cookies técnicas necesarias para que la web funcione y, solo si lo
-            aceptas, cookies opcionales para las finalidades que elijas. Puedes cambiar tu
-            decisión en cualquier momento desde «Configurar cookies», en el pie de página. Más
-            información en nuestra{" "}
+            {t(
+              "Utilizamos cookies técnicas necesarias para que la web funcione y, solo si lo aceptas, cookies opcionales para las finalidades que elijas. Puedes cambiar tu decisión en cualquier momento desde «Configurar cookies», en el pie de página. Más información en nuestra ",
+              "Utilitzem cookies tècniques necessàries perquè la web funcione i, només si ho acceptes, cookies opcionals per a les finalitats que tries. Pots canviar la teua decisió en qualsevol moment des de «Configurar cookies», en el peu de pàgina. Més informació en la nostra ",
+            )}
             <Link href="/politica-de-cookies" className="font-medium text-primary underline underline-offset-2 hover:no-underline">
-              política de cookies
+              {t("política de cookies", "política de cookies")}
             </Link>
             .
           </p>
@@ -81,16 +83,19 @@ export default function CookieBanner() {
           {settingsOpen && (
             <ul className="mt-4 flex max-h-[45vh] flex-col gap-2 overflow-y-auto">
               <CategoryRow
-                title="Técnicas"
-                body="Necesarias para el funcionamiento y la seguridad de la web. No se pueden desactivar."
+                title={t("Técnicas", "Tècniques")}
+                body={t(
+                  "Necesarias para el funcionamiento y la seguridad de la web. No se pueden desactivar.",
+                  "Necessàries per al funcionament i la seguretat de la web. No es poden desactivar.",
+                )}
                 checked
                 disabled
               />
               {consentCategories.map((category) => (
                 <CategoryRow
                   key={category.id}
-                  title={category.title}
-                  body={category.body}
+                  title={t(category.title)}
+                  body={t(category.body)}
                   checked={draft[category.id]}
                   onChange={(checked) => setDraft((d) => ({ ...d, [category.id]: checked }))}
                 />
@@ -100,12 +105,12 @@ export default function CookieBanner() {
 
           <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-end">
             {settingsOpen ? (
-              <BannerButton onClick={() => decide(draft)}>Guardar selección</BannerButton>
+              <BannerButton onClick={() => decide(draft)}>{t("Guardar selección", "Guardar la selecció")}</BannerButton>
             ) : (
-              <BannerButton onClick={() => setSettingsOpen(true)}>Configurar</BannerButton>
+              <BannerButton onClick={() => setSettingsOpen(true)}>{t("Configurar", "Configurar")}</BannerButton>
             )}
-            <BannerButton onClick={() => decide(allChoices(false))}>Rechazar todas</BannerButton>
-            <BannerButton onClick={() => decide(allChoices(true))}>Aceptar todas</BannerButton>
+            <BannerButton onClick={() => decide(allChoices(false))}>{t("Rechazar todas", "Rebutjar-les totes")}</BannerButton>
+            <BannerButton onClick={() => decide(allChoices(true))}>{t("Aceptar todas", "Acceptar-les totes")}</BannerButton>
           </div>
         </div>
     )

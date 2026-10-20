@@ -1,5 +1,6 @@
 "use client";
 
+import { useT } from "@/components/lang-provider";
 import { openCookieSettings, useConsent, type ConsentCategory } from "@/lib/consent";
 
 /**
@@ -24,16 +25,22 @@ export default function ConsentGate({
   return consent?.[category] ? children : fallback;
 }
 
-export function ConsentPlaceholder({ label = "Este contenido" }: { label?: string }) {
+export function ConsentPlaceholder({ label }: { label?: string }) {
+  const t = useT();
   return (
     <div className="flex flex-col items-center justify-center gap-3 rounded-brand border border-dashed border-line bg-surface-alt p-6 text-center text-sm text-ink-soft">
-      <p>{label} usa cookies de terceros que no has aceptado.</p>
+      <p>
+        {t(
+          `${label ?? "Este contenido"} usa cookies de terceros que no has aceptado.`,
+          `${label ?? "Este contingut"} usa cookies de tercers que no has acceptat.`,
+        )}
+      </p>
       <button
         type="button"
         onClick={openCookieSettings}
         className="rounded-full bg-ink px-5 py-2 text-[13px] font-semibold text-white hover:bg-primary"
       >
-        Configurar cookies
+        {t("Configurar cookies", "Configurar cookies")}
       </button>
     </div>
   );

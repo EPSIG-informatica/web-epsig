@@ -1,17 +1,25 @@
-import Link from "next/link";
+import Link from "@/components/link";
 import Reveal from "@/components/reveal";
 import SectionHeading from "@/components/section-heading";
 import { software } from "@/lib/site";
+import { getT } from "@/lib/i18n-server";
 
 // Bloque de la portada con el software propio.
-export default function SoftwareSpotlight() {
+export default async function SoftwareSpotlight() {
+  const t = await getT();
   return (
     <section className="py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
-          eyebrow="Software propio"
-          title="Herramientas que hemos creado para problemas reales"
-          body="Además de implantar software, desarrollamos el nuestro cuando ningún programa resuelve bien el problema."
+          eyebrow={t("Software propio", "Software propi")}
+          title={t(
+            "Herramientas que hemos creado para problemas reales",
+            "Eines que hem creat per a problemes reals",
+          )}
+          body={t(
+            "Además de implantar software, desarrollamos el nuestro cuando ningún programa resuelve bien el problema.",
+            "A més d'implantar programari, desenvolupem el nostre quan cap programa no resol bé el problema.",
+          )}
         />
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           <Reveal className="h-full">
@@ -25,9 +33,9 @@ export default function SoftwareSpotlight() {
                 ))}
               </span>
               <span>
-                <span className="block text-[19px] font-semibold text-ink">{software.camping.title}</span>
-                <span className="mt-1.5 block text-[14.5px] leading-relaxed text-ink-soft">{software.camping.summary}</span>
-                <span className="mt-4 block text-sm font-semibold text-primary">Descubrir →</span>
+                <span className="block text-[19px] font-semibold text-ink">{t(software.camping.title)}</span>
+                <span className="mt-1.5 block text-[14.5px] leading-relaxed text-ink-soft">{t(software.camping.summary)}</span>
+                <span className="mt-4 block text-sm font-semibold text-primary">{t("Descubrir →", "Descobrir →")}</span>
               </span>
             </Link>
           </Reveal>
@@ -45,9 +53,9 @@ export default function SoftwareSpotlight() {
                 ))}
               </span>
               <span>
-                <span className="block text-[19px] font-semibold text-ink">{software.viviendas.title}</span>
-                <span className="mt-1.5 block text-[14.5px] leading-relaxed text-ink-soft">{software.viviendas.summary}</span>
-                <span className="mt-4 block text-sm font-semibold text-primary">Ver el software →</span>
+                <span className="block text-[19px] font-semibold text-ink">{t(software.viviendas.title)}</span>
+                <span className="mt-1.5 block text-[14.5px] leading-relaxed text-ink-soft">{t(software.viviendas.summary)}</span>
+                <span className="mt-4 block text-sm font-semibold text-primary">{t("Ver el software →", "Veure el software →")}</span>
               </span>
             </Link>
           </Reveal>
@@ -65,9 +73,9 @@ export default function SoftwareSpotlight() {
                 ))}
               </span>
               <span>
-                <span className="block text-[19px] font-semibold text-ink">{software.conectores.title}</span>
-                <span className="mt-1.5 block text-[14.5px] leading-relaxed text-ink-soft">{software.conectores.summary}</span>
-                <span className="mt-4 block text-sm font-semibold text-primary">Ver conectores →</span>
+                <span className="block text-[19px] font-semibold text-ink">{t(software.conectores.title)}</span>
+                <span className="mt-1.5 block text-[14.5px] leading-relaxed text-ink-soft">{t(software.conectores.summary)}</span>
+                <span className="mt-4 block text-sm font-semibold text-primary">{t("Ver conectores →", "Veure connectors →")}</span>
               </span>
             </Link>
           </Reveal>

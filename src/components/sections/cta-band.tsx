@@ -1,10 +1,11 @@
-import Link from "next/link";
+import Link from "@/components/link";
 import Reveal from "@/components/reveal";
+import { getT } from "@/lib/i18n-server";
 
-export default function CtaBand({
-  title = "¿Empezamos con un diagnóstico gratuito?",
-  body = "Una conversación de 30 minutos para ver qué necesita tu empresa primero.",
-  ctaLabel = "Solicitar diagnóstico",
+export default async function CtaBand({
+  title,
+  body,
+  ctaLabel,
   ctaHref = "/contacto#diagnostico",
   spaced = false,
 }: {
@@ -15,6 +16,15 @@ export default function CtaBand({
   /** Espacio también arriba: para cuando la sección anterior tiene fondo de color y la banda quedaría pegada. */
   spaced?: boolean;
 }) {
+  const t = await getT();
+  // Textos por defecto en el idioma de la página (si llega el prop, se usa tal cual).
+  title ??= t("¿Empezamos con un diagnóstico gratuito?", "Comencem amb un diagnòstic gratuït?");
+  body ??= t(
+    "Una conversación de 30 minutos para ver qué necesita tu empresa primero.",
+    "Una conversa de 30 minuts per a veure què necessita primer la teua empresa.",
+  );
+  ctaLabel ??= t("Solicitar diagnóstico", "Sol·licitar diagnòstic");
+
   return (
     <div className={`px-6 pb-20 sm:pb-24 ${spaced ? "pt-20 sm:pt-24" : ""}`}>
       <Reveal

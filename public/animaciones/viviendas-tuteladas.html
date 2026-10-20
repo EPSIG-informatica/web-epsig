@@ -351,6 +351,89 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-l
 </div>
 
 <script>
+// Idioma de la animación: castellano por defecto; ?lang=ca la muestra en valenciano.
+// Se traduce el texto visible (nodos de texto exactos) y las cadenas que escribe la animación (L()).
+const LANG=new URLSearchParams(location.search).get('lang')==='ca'?'ca':'es';
+const CA={
+'Entidades':'Entitats','Empresas':'Empreses','Viviendas':'Habitatges','Usuarios':'Usuaris',
+'Planing dia tareas':'Planificació dia tasques','Tareas Trabajador':'Tasques Treballador',
+'Presupuestos':'Pressupostos','Contactos':'Contactes','Configuración':'Configuració','Inicio':'Inici',
+'[PRUEBAS] Entidad De...':'[PROVES] Entitat De...',
+'¡Hola de nuevo, EPSIG! 👋':'Hola de nou, EPSIG! 👋',
+'Martes, 29 De Septiembre De 2026':'Dimarts, 29 De Setembre De 2026',
+'TOTAL VIVIENDAS':'TOTAL HABITATGES','TAREAS PENDIENTES':'TASQUES PENDENTS',
+'VIVIENDAS CON TAREAS':'HABITATGES AMB TASQUES','ESTADO GENERAL':'ESTAT GENERAL',
+'Sin Pendientes 🎉':'Sense Pendents 🎉',
+'Viviendas Registradas (1)':'Habitatges Registrats (1)',
+'Explora y gestiona las viviendas asociadas a la empresa.':"Explora i gestiona els habitatges associats a l'empresa.",
+'Buscar por nombre o dirección...':'Busca per nom o adreça...',
+'Calle de pruebas 1':'Carrer de proves 1',
+'Mis Tareas Pendientes (0)':'Les Meues Tasques Pendents (0)',
+'Actividades de mantenimiento o servicio pendientes de completar.':'Activitats de manteniment o servei pendents de completar.',
+'Todas':'Totes','Recientes (últimos 3 días)':'Recents (últims 3 dies)',
+'¡Todo al día!':'Tot al dia!',
+'No tienes tareas pendientes asignadas en este momento.':'No tens tasques pendents assignades en este moment.',
+'Buscar entidad o empresa...':'Busca entitat o empresa...','3 entidades':'3 entitats','Nueva entidad':'Nova entitat',
+'[PRUEBAS] Entidad Demo':'[PROVES] Entitat Demo','[PRUEBAS] Entidad Demo 2':'[PROVES] Entitat Demo 2',
+'2 empresas':'2 empreses','5 empresas':'5 empreses','Persona de pruebas':'Persona de proves',
+'Ver empresas →':'Veure empreses →','Sin CIF':'Sense CIF',
+'Contacto...':'Contacte...','Teléfono...':'Telèfon...','Nueva empresa':'Nova empresa',
+'Contacto de pruebas':'Contacte de proves',
+'Documentos - [PRUEBAS] Demo 2 Norte S.L.':'Documents - [PROVES] Demo 2 Norte S.L.',
+'1. VIVIENDA-Documentación':'1. HABITATGE-Documentació','2. RESIDENTES-Documentación':'2. RESIDENTS-Documentació',
+'3. TRABAJADORES-Documentación':'3. TREBALLADORS-Documentació','4. Documentos Varios':'4. Documents Diversos',
+'5. Normativa Vigente':'5. Normativa Vigent','6. Inspecciones':'6. Inspeccions',
+'7. Protocolo Funcionamiento VT':'7. Protocol Funcionament VT',
+'8. Textos LPD (Protección de datos)':'8. Textos LPD (Protecció de dades)',
+'Certificado Ingreso y Coste Plaza':'Certificat Ingrés i Cost Plaça',
+'Nombre del representante':'Nom del representant','DNI del representante':'DNI del representant',
+'Ej: 12345678A':'Ex.: 12345678A','Domicilio social':'Domicili social',
+'Ej: Gandia (València), C/ Sant Rafael Nº':'Ex.: Gandia (València), C/ Sant Rafael Núm.',
+'Vivienda tutelada':'Habitatge tutelat','Selecciona una vivienda':'Selecciona un habitatge',
+'Número de registro':'Número de registre','Año del ejercicio económico':"Any de l'exercici econòmic",
+'Ej: 2026':'Ex.: 2026','Presupuesto mensual (en letra e importe)':'Pressupost mensual (en lletra i import)',
+'Ej: DOS MIL CIENTO SESENTA EUROS (2160,00 €uros, I.V.A. incluido)':'Ex.: DOS MIL CENT SEIXANTA EUROS (2160,00 €uros, IVA inclòs)',
+'Nombre del residente':'Nom del resident','Escribe para buscar...':'Escriu per a buscar...',
+'DNI del residente':'DNI del resident','Ej: 87654321Z':'Ex.: 87654321Z',
+'Fecha de ingreso':"Data d'ingrés",'Número de cuenta (IBAN)':'Número de compte (IBAN)',
+'Ej: ES12 3456 7890 1234...':'Ex.: ES12 3456 7890 1234...',
+'CERTIFICADO INGRESO Y COSTE PLAZA':'CERTIFICAT INGRÉS I COST PLAÇA','VIVIENDA SALUD MENTAL':'HABITATGE SALUT MENTAL',
+'Contacto de pruebas, con DNI':'Contacte de proves, amb DNI',
+'[DNI del representante]':'[DNI del representant]',
+'y, en calidad de representante de la entidad':"i, en qualitat de representant de l'entitat",
+', con domicilio social en':', amb domicili social a','[Domicilio social]':'[Domicili social]',
+', y CIF nº B00000000, entidad titular de la vivienda tutelada:':", i CIF núm. B00000000, entitat titular de l'habitatge tutelat:",
+'Vivienda Tutelada':'Habitatge Tutelat','[Vivienda tutelada]':'[Habitatge tutelat]',
+'. Número de Registro:':'. Número de Registre:','[Número de registro]':'[Número de registre]',
+'CERTIFICO QUE:':'CERTIFIQUE QUE:',
+'El Presupuesto mensual por la estancia y atención en nuestros Centros, cuya normativa de actividad y funcionamiento queda regulada según lo dispuesto en la ley 11/2003 de 10 de abril, el decreto 27/2023 de 10 de marzo del Consell, así como en el Decreto 91/2002, de 30 de Mayo del Gobierno Valenciano, durante el ejercicio económico del año':
+"El Pressupost mensual per l'estada i l'atenció en els nostres Centres, la normativa d'activitat i funcionament dels quals queda regulada segons el que disposen la llei 11/2003, de 10 d'abril, el decret 27/2023, de 10 de març, del Consell, així com el Decret 91/2002, de 30 de maig, del Govern Valencià, durant l'exercici econòmic de l'any",
+'[Año del ejercicio económico]':"[Any de l'exercici econòmic]",
+', asciende mensualmente a un total de:':', puja mensualment a un total de:',
+'[Presupuesto mensual]':'[Pressupost mensual]','[Nombre del residente]':'[Nom del resident]',
+'con DNI':'amb DNI','[DNI del residente]':'[DNI del resident]',
+', ingresó en la citada Vivienda el día':", va ingressar en l'esmentat Habitatge el dia",
+'[Fecha de ingreso]':"[Data d'ingrés]",
+', y a fecha de la firma del presente certificado se encuentra ocupando plaza en la citada Vivienda.':", i a data de la signatura del present certificat ocupa plaça en l'esmentat Habitatge.",
+'El número de cuenta para abonar factura es:':'El número de compte per a abonar la factura és:',
+'[Número de cuenta]':'[Número de compte]',
+'Se expide el presente certificado para que se pueda tramitar las ayudas correspondientes.':'S\'expedix el present certificat perquè es puguen tramitar les ajudes corresponents.',
+'DOS MIL CIENTO SESENTA EUROS (2160,00 €uros, I.V.A. incluido)':'DOS MIL CENT SEIXANTA EUROS (2160,00 €uros, IVA inclòs)',
+'Residente de pruebas':'Resident de proves','15 de marzo de 2026':'15 de març de 2026'
+};
+const L=t=>LANG==='ca'?(CA[t]||t).replace(/\[PRUEBAS\]/g,'[PROVES]'):t;
+if(LANG==='ca'){
+  document.documentElement.lang='ca';
+  const w=document.createTreeWalker(document.getElementById('stage'),NodeFilter.SHOW_TEXT);
+  for(let n=w.nextNode();n;n=w.nextNode()){
+    const m=n.data.match(/^(\s*)([\s\S]*?)(\s*)$/);
+    if(!m[2])continue;
+    const v=L(m[2].replace(/\s+/g,' '));
+    if(v!==m[2])n.data=m[1]+v+m[3];
+  }
+}
+</script>
+<script>
 const IC={
 org:'<rect x="9" y="2" width="6" height="5" rx="1"/><rect x="2" y="17" width="6" height="5" rx="1"/><rect x="16" y="17" width="6" height="5" rx="1"/><path d="M12 7v5M5 17v-5h14v5"/>',
 bldg:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/>',
@@ -417,9 +500,10 @@ async function click(){
 }
 function show(id){$$('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+id));}
 function setNav(n){$$('.nav').forEach(x=>x.classList.toggle('act',x.dataset.n===n));}
-async function title(t){const h=$('#htitle');h.style.opacity=0;await wait(200);h.textContent=t;h.style.opacity=1;}
+async function title(t){const h=$('#htitle');h.style.opacity=0;await wait(200);h.textContent=L(t);h.style.opacity=1;}
 function setPrev(k,val){const p=$(`[data-p="${k}"]`);if(!p)return;p.textContent=val;p.classList.add('f');p.classList.remove('fl');void p.offsetWidth;p.classList.add('fl');}
 async function fill(k,text,pv,speed=30){
+  text=L(text);if(pv)pv=L(pv);
   const f=$(`[data-k="${k}"]`),inp=f.querySelector('.inp'),v=f.querySelector('.v');
   await moveTo(inp,.35,.5,520);await click();
   f.classList.add('focus','has');v.textContent='';
@@ -437,7 +521,7 @@ $$('.paper .p').forEach(p=>p.dataset.orig=p.textContent);
 
 // Estado de partida de cada etapa (para poder saltar directamente a ella).
 function base(nav,t,view){
-  reset();setNav(nav);$('#htitle').textContent=t;$('#htitle').style.opacity=1;show(view);
+  reset();setNav(nav);$('#htitle').textContent=L(t);$('#htitle').style.opacity=1;show(view);
   $('#end').classList.remove('on');cur.classList.remove('hide');place(1380,760,0);
 }
 

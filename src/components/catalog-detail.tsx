@@ -1,9 +1,10 @@
-import Link from "next/link";
+import Link from "@/components/link";
 import PageHero from "@/components/page-hero";
 import Reveal from "@/components/reveal";
 import CtaBand from "@/components/sections/cta-band";
+import { getT } from "@/lib/i18n-server";
 
-export default function CatalogDetail({
+export default async function CatalogDetail({
   eyebrow,
   title,
   lead,
@@ -30,6 +31,7 @@ export default function CatalogDetail({
   ctaLabel?: string;
   notice?: React.ReactNode;
 }) {
+  const t = await getT();
   return (
     <>
       <PageHero eyebrow={eyebrow} title={title} lead={lead} />
@@ -66,7 +68,10 @@ export default function CatalogDetail({
               <div className="mt-8 rounded-brand border border-line bg-primary-pale p-5 text-center">
                 <span className="font-mono text-lg font-semibold text-primary">{price}</span>
                 <p className="mt-1 text-xs text-ink-soft">
-                  Precio orientativo, IVA no incluido. Consulta tu caso concreto.
+                  {t(
+                    "Precio orientativo, IVA no incluido. Consulta tu caso concreto.",
+                    "Preu orientatiu, IVA no inclòs. Consulta el teu cas concret.",
+                  )}
                 </p>
               </div>
             )}

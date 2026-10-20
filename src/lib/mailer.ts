@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import nodemailer, { type Transporter } from "nodemailer";
 import { site } from "@/lib/site";
+import { defaultLocale, localizePath, translator, type Locale } from "@/lib/i18n";
 
 export type ContactRequest = {
   name: string;
@@ -183,7 +184,7 @@ async function deliver(mail: Outgoing) {
 
 const senderAddress = () => process.env.CONTACT_FROM ?? requiredEnv("SMTP_USER");
 
-export async function sendContactEmail(request: ContactRequest) {
+export async function sendContactEmail(request: ContactRequest, lang: Locale = defaultLocale) {
   const from = senderAddress();
   const to = requiredEnv("CONTACT_TO");
   const name = singleLine(request.name);
@@ -193,6 +194,7 @@ export async function sendContactEmail(request: ContactRequest) {
     ["Correo", request.email],
     ["Teléfono", request.phone],
     ["Empresa", request.company],
+    ["Idioma", lang === "ca" ? "valenciano" : "castellano"],
     [
       "Privacidad",
       `Aceptada el ${request.privacyAcceptedAt.toLocaleString("es-ES", { timeZone: "Europe/Madrid" })}`,
@@ -240,24 +242,37 @@ function firstName(name: string) {
   return clean || undefined;
 }
 
-export async function sendContactConfirmation(request: ContactRequest) {
+export async function sendContactConfirmation(request: ContactRequest, lang: Locale = defaultLocale) {
   const from = senderAddress();
-  const greeting = firstName(request.name) ? `Hola, ${firstName(request.name)}:` : "Hola:";
+  const t = translator(lang);
+  const first = firstName(request.name);
+  const greeting = first ? `${t("Hola", "Hola")}, ${first}:` : `${t("Hola", "Hola")}:`;
   const phones = site.phones.join(" · ");
+  const webUrl = `${site.url}${localizePath("/", lang)}`;
+  const privacyUrl = `${site.url}${localizePath("/politica-de-privacidad/", lang)}`;
 
   const text = [
     greeting,
     "",
-    `Gracias por contactar con ${site.name}. Hemos recibido tu mensaje y te responderemos lo antes posible, normalmente en un plazo de 24 a 48 horas laborables.`,
+    t(
+      `Gracias por contactar con ${site.name}. Hemos recibido tu mensaje y te responderemos lo antes posible, normalmente en un plazo de 24 a 48 horas laborables.`,
+      `Gràcies per contactar amb ${site.name}. Hem rebut el teu missatge i et respondrem al més prompte possible, normalment en un termini de 24 a 48 hores laborables.`,
+    ),
     "",
-    `Si es urgente, puedes llamarnos a cualquiera de estos teléfonos: ${phones} (de lunes a viernes por la mañana).`,
+    t(
+      `Si es urgente, puedes llamarnos a cualquiera de estos teléfonos: ${phones} (de lunes a viernes por la mañana).`,
+      `Si és urgent, pots telefonar-nos a qualsevol d'estos telèfons: ${phones} (de dilluns a divendres pel matí).`,
+    ),
     "",
-    "Un saludo,",
-    `El equipo de ${site.name}`,
-    site.url,
+    t("Un saludo,", "Una salutació,"),
+    t(`El equipo de ${site.name}`, `L'equip d'${site.name}`),
+    webUrl,
     "",
     "---",
-    `Recibes este correo porque se ha enviado el formulario de contacto de ${site.url} con esta dirección. Si no has sido tú, ignóralo: no volveremos a escribirte. Responsable del tratamiento: ${site.legalName}. Más información: ${site.url}/politica-de-privacidad/`,
+    t(
+      `Recibes este correo porque se ha enviado el formulario de contacto de ${site.url} con esta dirección. Si no has sido tú, ignóralo: no volveremos a escribirte. Responsable del tratamiento: ${site.legalName}. Más información: ${privacyUrl}`,
+      `Reps este correu perquè s'ha enviat el formulari de contacte de ${site.url} amb esta adreça. Si no has sigut tu, ignora'l: no et tornarem a escriure. Responsable del tractament: ${site.legalName}. Més informació: ${privacyUrl}`,
+    ),
   ].join("\n");
 
   const html = `
@@ -266,18 +281,27 @@ export async function sendContactConfirmation(request: ContactRequest) {
       <tr><td style="padding:28px 32px 8px"><img src="cid:logo-epsig" width="180" height="50" alt="${site.name}" style="display:block;border:0"></td></tr>
       <tr><td style="padding:16px 32px 8px;color:#0b1220;font-size:15px;line-height:1.6">
         <p style="margin:0 0 14px">${escapeHtml(greeting)}</p>
-        <p style="margin:0 0 14px">Gracias por contactar con <strong>${site.name}</strong>. Hemos recibido tu mensaje y te responderemos lo antes posible, normalmente en un plazo de <strong>24 a 48 horas laborables</strong>.</p>
-        <p style="margin:0 0 14px">Si es urgente, puedes llamarnos a cualquiera de estos teléfonos: <strong>${phones}</strong> (de lunes a viernes por la mañana).</p>
-        <p style="margin:0 0 4px">Un saludo,</p>
-        <p style="margin:0">El equipo de ${site.name}</p>
+        <p style="margin:0 0 14px">${t(
+          `Gracias por contactar con <strong>${site.name}</strong>. Hemos recibido tu mensaje y te responderemos lo antes posible, normalmente en un plazo de <strong>24 a 48 horas laborables</strong>.`,
+          `Gràcies per contactar amb <strong>${site.name}</strong>. Hem rebut el teu missatge i et respondrem al més prompte possible, normalment en un termini de <strong>24 a 48 hores laborables</strong>.`,
+        )}</p>
+        <p style="margin:0 0 14px">${t(
+          `Si es urgente, puedes llamarnos a cualquiera de estos teléfonos: <strong>${phones}</strong> (de lunes a viernes por la mañana).`,
+          `Si és urgent, pots telefonar-nos a qualsevol d'estos telèfons: <strong>${phones}</strong> (de dilluns a divendres pel matí).`,
+        )}</p>
+        <p style="margin:0 0 4px">${t("Un saludo,", "Una salutació,")}</p>
+        <p style="margin:0">${t(`El equipo de ${site.name}`, `L'equip d'${site.name}`)}</p>
       </td></tr>
       <tr><td style="padding:20px 32px 28px">
-        <a href="${site.url}" style="display:inline-block;background:#0b1220;color:#ffffff;text-decoration:none;font-size:13px;font-weight:bold;padding:11px 22px;border-radius:999px">Visitar la web</a>
+        <a href="${webUrl}" style="display:inline-block;background:#0b1220;color:#ffffff;text-decoration:none;font-size:13px;font-weight:bold;padding:11px 22px;border-radius:999px">${t("Visitar la web", "Visitar la web")}</a>
       </td></tr>
       <tr><td style="padding:18px 32px;background:#f2f5fb;color:#8c98ad;font-size:11.5px;line-height:1.5">
         ${site.legalName} · ${escapeHtml(site.registeredAddress)} · ${site.email}<br><br>
-        Recibes este correo porque se ha enviado el formulario de contacto de nuestra web con esta dirección. Si no has sido tú, ignóralo: no volveremos a escribirte.
-        Responsable del tratamiento: ${site.legalName}. <a href="${site.url}/politica-de-privacidad/" style="color:#8c98ad">Política de privacidad</a>.
+        ${t(
+          "Recibes este correo porque se ha enviado el formulario de contacto de nuestra web con esta dirección. Si no has sido tú, ignóralo: no volveremos a escribirte.",
+          "Reps este correu perquè s'ha enviat el formulari de contacte de la nostra web amb esta adreça. Si no has sigut tu, ignora'l: no et tornarem a escriure.",
+        )}
+        ${t("Responsable del tratamiento", "Responsable del tractament")}: ${site.legalName}. <a href="${privacyUrl}" style="color:#8c98ad">${t("Política de privacidad", "Política de privacitat")}</a>.
       </td></tr>
     </table>
   </div>`;
@@ -287,7 +311,7 @@ export async function sendContactConfirmation(request: ContactRequest) {
     from,
     to: singleLine(request.email),
     replyTo: { address: site.email },
-    subject: `Hemos recibido tu mensaje — ${site.name}`,
+    subject: t(`Hemos recibido tu mensaje — ${site.name}`, `Hem rebut el teu missatge — ${site.name}`),
     // Evita respuestas automáticas en bucle (fuera de oficina, etc.).
     headers: { "Auto-Submitted": "auto-replied", "X-Auto-Response-Suppress": "All" },
     text,

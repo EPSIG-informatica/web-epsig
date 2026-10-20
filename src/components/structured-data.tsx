@@ -1,4 +1,6 @@
 import { site } from "@/lib/site";
+import { getLang } from "@/lib/i18n-server";
+import { locales, localizePath, schemaLanguages, type Locale } from "@/lib/i18n";
 
 // Datos estructurados (JSON-LD) para Google: la empresa, sus dos oficinas y la web.
 // Se generan desde `site.ts` para que coincidan siempre con lo que se ve en la página.
@@ -9,7 +11,7 @@ const telephone = `+34 ${site.phones[0]}`;
 const offices = site.offices.map((office) => ({
   "@type": "ProfessionalService",
   "@id": `${site.url}/#oficina-${office.postalCode}`,
-  name: `${site.name} — ${office.name}`,
+  name: `${site.name} — ${office.name.es}`,
   url: site.url,
   image: `${site.url}/logo-epsig-cuadrado.png`,
   telephone,
@@ -30,11 +32,11 @@ const offices = site.offices.map((office) => ({
     opens: slot.opens,
     closes: slot.closes,
   })),
-  areaServed: site.zones.map((zone) => ({ "@type": "AdministrativeArea", name: zone })),
+  areaServed: site.zones.map((zone) => ({ "@type": "AdministrativeArea", name: zone.es })),
   parentOrganization: { "@id": orgId },
 }));
 
-const data = {
+const dataFor = (lang: Locale) => ({
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -46,7 +48,7 @@ const data = {
       foundingDate: String(site.foundedYear),
       url: site.url,
       logo: `${site.url}/logo-epsig-cuadrado.png`,
-      description: site.description,
+      description: site.description[lang],
       email: site.email,
       telephone,
       address: offices[0].address,
@@ -64,15 +66,16 @@ const data = {
     {
       "@type": "WebSite",
       "@id": `${site.url}/#website`,
-      url: site.url,
+      url: `${site.url}${localizePath("/", lang)}`,
       name: site.name,
-      inLanguage: "es-ES",
+      inLanguage: locales.map((locale) => schemaLanguages[locale]),
       publisher: { "@id": orgId },
     },
   ],
-};
+});
 
-export default function StructuredData() {
+export default async function StructuredData() {
+  const data = dataFor(await getLang());
   return (
     <script
       type="application/ld+json"

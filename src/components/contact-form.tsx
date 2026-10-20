@@ -1,13 +1,16 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { site } from "@/lib/site";
 import { originForSubmit } from "@/lib/attribution";
+import { useLang, useT } from "@/components/lang-provider";
 
 type Status = "idle" | "loading" | "success" | "error";
 
 export default function ContactForm() {
+  const t = useT();
+  const lang = useLang();
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const successRef = useRef<HTMLHeadingElement>(null);
@@ -32,6 +35,7 @@ export default function ContactForm() {
       ...Object.fromEntries(new FormData(form).entries()),
       elapsed: startedAt.current ? Date.now() - startedAt.current : 0,
       origin: originForSubmit(),
+      lang,
     };
 
     try {
@@ -43,14 +47,14 @@ export default function ContactForm() {
 
       if (!res.ok) {
         const payload = await res.json().catch(() => ({}));
-        throw new Error(payload.error || "No se pudo enviar el formulario.");
+        throw new Error(payload.error || t("No se pudo enviar el formulario.", "No s'ha pogut enviar el formulari."));
       }
 
       setStatus("success");
       form.reset();
     } catch (err) {
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Ha ocurrido un error inesperado.");
+      setErrorMsg(err instanceof Error ? err.message : t("Ha ocurrido un error inesperado.", "Hi ha hagut un error inesperat."));
     }
   }
 
@@ -61,10 +65,13 @@ export default function ContactForm() {
         className="pop-in rounded-brand border border-accent/30 bg-accent-pale p-8 text-center"
       >
         <h3 ref={successRef} tabIndex={-1} className="mb-2 text-lg font-semibold text-ink outline-none">
-          ¡Gracias! Hemos recibido tu mensaje.
+          {t("¡Gracias! Hemos recibido tu mensaje.", "Gràcies! Hem rebut el teu missatge.")}
         </h3>
         <p className="text-sm text-ink-soft">
-          Te hemos enviado un correo de confirmación y te responderemos lo antes posible.
+          {t(
+            "Te hemos enviado un correo de confirmación y te responderemos lo antes posible.",
+            "T'hem enviat un correu de confirmació i et respondrem al més prompte possible.",
+          )}
         </p>
       </div>
     );
@@ -78,24 +85,25 @@ export default function ContactForm() {
       onSubmit={handleSubmit}
       className="flex flex-col gap-4"
     >
+      <input type="hidden" name="lang" value={lang} />
       {/* Campo trampa: invisible para personas, los bots lo rellenan. */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
         <label>
-          No rellenes este campo
+          {t("No rellenes este campo", "Deixa este camp en blanc")}
           <input type="text" name="website" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Field label="Nombre" name="name" autoComplete="name" required />
-        <Field label="Correo electrónico" name="email" type="email" autoComplete="email" required />
+        <Field label={t("Nombre", "Nom")} name="name" autoComplete="name" required />
+        <Field label={t("Correo electrónico", "Correu electrònic")} name="email" type="email" autoComplete="email" required />
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Field label="Teléfono" name="phone" type="tel" autoComplete="tel" />
-        <Field label="Empresa" name="company" autoComplete="organization" />
+        <Field label={t("Teléfono", "Telèfon")} name="phone" type="tel" autoComplete="tel" />
+        <Field label={t("Empresa", "Empresa")} name="company" autoComplete="organization" />
       </div>
       <label className="flex flex-col gap-1.5 text-sm font-medium text-ink">
         <span>
-          Cuéntanos qué necesitas
+          {t("Cuéntanos qué necesitas", "Conta'ns què necessites")}
           <RequiredMark />
         </span>
         <textarea
@@ -115,10 +123,10 @@ export default function ContactForm() {
           className="mt-0.5 h-4 w-4 shrink-0 accent-primary"
         />
         <span>
-          He leído y acepto la{" "}
+          {t("He leído y acepto la ", "He llegit i accepte la ")}
           <Link href="/politica-de-privacidad" target="_blank" className="font-medium text-primary underline underline-offset-2 hover:no-underline">
-            política de privacidad
-            <span className="sr-only"> (se abre en una pestaña nueva)</span>
+            {t("política de privacidad", "política de privacitat")}
+            <span className="sr-only">{t(" (se abre en una pestaña nueva)", " (s'obri en una pestanya nova)")}</span>
           </Link>
           .<RequiredMark />
         </span>
@@ -134,17 +142,19 @@ export default function ContactForm() {
         disabled={status === "loading"}
         className="mt-2 self-start rounded-full bg-ink px-7 py-3 text-[14px] font-semibold text-white transition hover:scale-[1.03] hover:bg-primary active:scale-[0.97] disabled:opacity-60"
       >
-        {status === "loading" ? "Enviando…" : "Enviar mensaje"}
+        {status === "loading" ? t("Enviando…", "Enviant…") : t("Enviar mensaje", "Enviar el missatge")}
       </button>
 
       <p className="mt-2 text-[12px] leading-relaxed text-ink-soft">
-        <strong className="font-semibold text-ink">Información básica sobre protección de datos.</strong>{" "}
-        Responsable: {site.legalName}. Finalidad: atender tu solicitud de información o
-        diagnóstico. Legitimación: tu consentimiento. Destinatarios: no se ceden datos a
-        terceros, salvo obligación legal. Derechos: acceso, rectificación, supresión y otros
-        derechos, escribiendo a {site.email}. Más información en la{" "}
+        <strong className="font-semibold text-ink">
+          {t("Información básica sobre protección de datos.", "Informació bàsica sobre protecció de dades.")}
+        </strong>{" "}
+        {t(
+          `Responsable: ${site.legalName}. Finalidad: atender tu solicitud de información o diagnóstico. Legitimación: tu consentimiento. Destinatarios: no se ceden datos a terceros, salvo obligación legal. Derechos: acceso, rectificación, supresión y otros derechos, escribiendo a ${site.email}. Más información en la `,
+          `Responsable: ${site.legalName}. Finalitat: atendre la teua sol·licitud d'informació o de diagnòstic. Legitimació: el teu consentiment. Destinataris: no se cedixen dades a tercers, excepte per obligació legal. Drets: accés, rectificació, supressió i altres drets, escrivint a ${site.email}. Més informació en la `,
+        )}
         <Link href="/politica-de-privacidad" className="underline hover:text-primary">
-          política de privacidad
+          {t("política de privacidad", "política de privacitat")}
         </Link>
         .
       </p>

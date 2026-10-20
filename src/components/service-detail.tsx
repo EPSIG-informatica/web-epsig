@@ -4,8 +4,9 @@ import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
 import IndexMark from "@/components/index-mark";
 import CtaBand from "@/components/sections/cta-band";
+import { getT } from "@/lib/i18n-server";
 
-export default function ServiceDetail({
+export default async function ServiceDetail({
   eyebrow,
   title,
   lead,
@@ -24,6 +25,7 @@ export default function ServiceDetail({
   ctaBody?: string;
   ctaLabel?: string;
 }) {
+  const t = await getT();
   return (
     <>
       <PageHero eyebrow={eyebrow} title={title} lead={lead} />
@@ -34,7 +36,11 @@ export default function ServiceDetail({
             {intro && <p className="text-base leading-relaxed text-ink-soft">{intro}</p>}
           </div>
 
-          <SectionHeading eyebrow="Qué incluye" title="Servicios dentro de esta área" align="left" />
+          <SectionHeading
+            eyebrow={t("Qué incluye", "Què inclou")}
+            title={t("Servicios dentro de esta área", "Serveis dins d'esta àrea")}
+            align="left"
+          />
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {features.map((feature, index) => (
               <Reveal key={feature.title} delay={(index % 4) * 0.06}>
@@ -48,7 +54,7 @@ export default function ServiceDetail({
                   <h3 className="mb-2 text-[17px]">{feature.title}</h3>
                   <p className="text-[14.5px] leading-relaxed text-ink-soft">{feature.body}</p>
                   {feature.href && (
-                    <span className="mt-3 inline-block text-sm font-semibold text-primary">Ver más →</span>
+                    <span className="mt-3 inline-block text-sm font-semibold text-primary">{t("Ver más →", "Veure'n més →")}</span>
                   )}
                 </TiltCard>
               </Reveal>

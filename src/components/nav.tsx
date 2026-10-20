@@ -1,15 +1,19 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { primaryNav, site } from "@/lib/site";
+import { logicalPath } from "@/lib/i18n";
+import { useT } from "@/components/lang-provider";
+import LanguageSwitcher from "@/components/language-switcher";
 import logo from "@/assets/logo-epsig.png";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const t = useT();
   const toggleRef = useRef<HTMLButtonElement>(null);
 
   // Cerrar el menú móvil al cambiar de página (también con el botón Atrás).
@@ -37,15 +41,17 @@ export default function Nav() {
     };
   }, [open]);
 
+  // Se compara sin prefijo de idioma ni barra final ("/ca/servicios/" → "/servicios").
+  const current = logicalPath(pathname);
   function isActive(href: string) {
-    if (href === "/") return pathname === "/";
-    return pathname === href || pathname.startsWith(`${href}/`);
+    if (href === "/") return current === "/";
+    return current === href || current.startsWith(`${href}/`);
   }
 
   return (
     <nav className="sticky top-0 z-50 border-b border-line bg-surface/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
-        <Link href="/" className="flex shrink-0 items-center" aria-label={`${site.name} — Inicio`}>
+        <Link href="/" className="flex shrink-0 items-center" aria-label={`${site.name} — ${t("Inicio", "Inici")}`}>
           <Image src={logo} alt={site.name} preload sizes="144px" className="h-9 w-auto shrink-0 sm:h-10" />
         </Link>
 
@@ -59,8 +65,8 @@ export default function Nav() {
                   rel="noopener noreferrer"
                   className="whitespace-nowrap rounded-full px-2.5 py-2 font-medium text-ink-soft transition-colors hover:bg-surface-alt hover:text-ink xl:px-3.5"
                 >
-                  {item.label} <span aria-hidden>↗</span>
-                  <span className="sr-only"> (se abre en una pestaña nueva)</span>
+                  {t(item.label)} <span aria-hidden>↗</span>
+                  <span className="sr-only">{t(" (se abre en una pestaña nueva)", " (s'obri en una pestanya nova)")}</span>
                 </a>
               ) : (
                 <Link
@@ -70,7 +76,7 @@ export default function Nav() {
                     item.highlight || isActive(item.href) ? "font-semibold text-primary" : "text-ink-soft"
                   }`}
                 >
-                  {item.label}
+                  {t(item.label)}
                   {isActive(item.href) && (
                     <span
                       aria-hidden
@@ -92,9 +98,9 @@ export default function Nav() {
                       href={child.href}
                       className="block rounded-xl px-3.5 py-2.5 hover:bg-surface-alt"
                     >
-                      <span className="block text-sm font-semibold text-ink">{child.label}</span>
+                      <span className="block text-sm font-semibold text-ink">{t(child.label)}</span>
                       {child.description && (
-                        <span className="block text-xs text-ink-soft">{child.description}</span>
+                        <span className="block text-xs text-ink-soft">{t(child.description)}</span>
                       )}
                     </Link>
                   ))}
@@ -105,41 +111,45 @@ export default function Nav() {
         </ul>
 
         <div className="hidden shrink-0 items-center gap-3 lg:flex">
+          <LanguageSwitcher />
           <Link
             href="/contacto"
             className="hidden whitespace-nowrap rounded-full border-[1.5px] border-line px-5 py-2.5 text-[13.5px] font-semibold transition-colors hover:border-ink xl:inline-block"
           >
-            Contacto
+            {t("Contacto", "Contacte")}
           </Link>
           <Link
             href="/contacto#diagnostico"
             className="inline-block whitespace-nowrap rounded-full bg-ink px-5 py-3 text-[13.5px] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(42,107,165,.6)] transition hover:scale-[1.04] hover:bg-primary active:scale-[0.97]"
           >
-            Diagnóstico gratuito
+            {t("Diagnóstico gratuito", "Diagnòstic gratuït")}
           </Link>
         </div>
 
-        <button
-          ref={toggleRef}
-          type="button"
-          aria-controls="menu-movil"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-line lg:hidden"
-          aria-label={open ? "Cerrar menú" : "Abrir menú"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="relative block h-3 w-4">
-            <span
-              className={`absolute left-0 top-0 h-[1.5px] w-4 bg-ink transition-transform ${open ? "translate-y-[6px] rotate-45" : ""}`}
-            />
-            <span
-              className={`absolute left-0 top-[6px] h-[1.5px] w-4 bg-ink transition-opacity ${open ? "opacity-0" : ""}`}
-            />
-            <span
-              className={`absolute left-0 top-3 h-[1.5px] w-4 bg-ink transition-transform ${open ? "-translate-y-[6px] -rotate-45" : ""}`}
-            />
-          </span>
-        </button>
+        <div className="flex items-center gap-2.5 lg:hidden">
+          <LanguageSwitcher />
+          <button
+            ref={toggleRef}
+            type="button"
+            aria-controls="menu-movil"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-line"
+            aria-label={open ? t("Cerrar menú", "Tanca el menú") : t("Abrir menú", "Obri el menú")}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className="relative block h-3 w-4">
+              <span
+                className={`absolute left-0 top-0 h-[1.5px] w-4 bg-ink transition-transform ${open ? "translate-y-[6px] rotate-45" : ""}`}
+              />
+              <span
+                className={`absolute left-0 top-[6px] h-[1.5px] w-4 bg-ink transition-opacity ${open ? "opacity-0" : ""}`}
+              />
+              <span
+                className={`absolute left-0 top-3 h-[1.5px] w-4 bg-ink transition-transform ${open ? "-translate-y-[6px] -rotate-45" : ""}`}
+              />
+            </span>
+          </button>
+        </div>
       </div>
 
       {open && (
@@ -159,8 +169,8 @@ export default function Nav() {
                         onClick={() => setOpen(false)}
                         className="block rounded-lg px-3 py-2.5 font-medium text-ink-soft"
                       >
-                        {item.label} <span aria-hidden>↗</span>
-                        <span className="sr-only"> (se abre en una pestaña nueva)</span>
+                        {t(item.label)} <span aria-hidden>↗</span>
+                        <span className="sr-only">{t(" (se abre en una pestaña nueva)", " (s'obri en una pestanya nova)")}</span>
                       </a>
                     ) : (
                       <Link
@@ -171,7 +181,7 @@ export default function Nav() {
                           item.highlight || isActive(item.href) ? "text-primary" : "text-ink-soft"
                         }`}
                       >
-                        {item.label}
+                        {t(item.label)}
                       </Link>
                     )}
                     {item.children && (
@@ -183,7 +193,7 @@ export default function Nav() {
                               onClick={() => setOpen(false)}
                               className="block rounded-lg px-2 py-2 text-sm text-ink-soft"
                             >
-                              {child.label}
+                              {t(child.label)}
                             </Link>
                           </li>
                         ))}
@@ -198,14 +208,14 @@ export default function Nav() {
                   onClick={() => setOpen(false)}
                   className="rounded-full border-[1.5px] border-line px-5 py-2.5 text-center text-[13.5px] font-semibold"
                 >
-                  Contacto
+                  {t("Contacto", "Contacte")}
                 </Link>
                 <Link
                   href="/contacto#diagnostico"
                   onClick={() => setOpen(false)}
                   className="rounded-full bg-ink px-5 py-3 text-center text-[13.5px] font-semibold text-white"
                 >
-                  Diagnóstico gratuito
+                  {t("Diagnóstico gratuito", "Diagnòstic gratuït")}
                 </Link>
               </div>
             </div>
