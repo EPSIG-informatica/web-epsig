@@ -36,6 +36,7 @@ export default async function KitConsultingServicePage({
 
   return (
     <CatalogDetail
+      path={`/kit-consulting/${slug}`}
       eyebrow="Kit Consulting"
       title={t(service.title)}
       lead={t(service.summary)}

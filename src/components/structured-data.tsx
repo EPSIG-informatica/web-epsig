@@ -1,5 +1,5 @@
 import { site } from "@/lib/site";
-import { getLang } from "@/lib/i18n-server";
+import { absoluteUrl, getLang } from "@/lib/i18n-server";
 import { locales, localizePath, schemaLanguages, type Locale } from "@/lib/i18n";
 
 // Datos estructurados (JSON-LD) para Google: la empresa, sus dos oficinas y la web.
@@ -74,13 +74,38 @@ const dataFor = (lang: Locale) => ({
   ],
 });
 
-export default async function StructuredData() {
-  const data = dataFor(await getLang());
+/** Bloque JSON-LD. */
+export function JsonLd({ data }: { data: object }) {
   return (
     <script
       type="application/ld+json"
       // Se escapa "<" para que ningún valor pueda cerrar la etiqueta <script>.
       dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }}
+    />
+  );
+}
+
+export default async function StructuredData() {
+  return <JsonLd data={dataFor(await getLang())} />;
+}
+
+/** Servicio que presta la empresa, descrito en la página `path` (JSON-LD `Service`). */
+export async function ServiceSchema({ path, name, description }: { path: string; name: string; description?: string }) {
+  const lang = await getLang();
+  const url = absoluteUrl(path, lang);
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "@id": `${url}#servicio`,
+        name,
+        description,
+        url,
+        inLanguage: schemaLanguages[lang],
+        provider: { "@id": orgId },
+        areaServed: site.zones.map((zone) => ({ "@type": "AdministrativeArea", name: zone[lang] })),
+      }}
     />
   );
 }

@@ -11,7 +11,7 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/kit-consulting", {
-    title: "Kit Consulting",
+    title: t("Kit Consulting: Asesor Digital en Valencia y Alicante", "Kit Consulting: Assessor Digital a València i Alacant", "Kit Consulting Advisor in Valencia and Alicante"),
     description: t(
       "Servicios de asesoramiento del programa Kit Consulting: inteligencia artificial, análisis de datos, procesos, estrategia, ciberseguridad y transformación digital, con EPSIG como Asesor Digital.",
       "Serveis d'assessorament del programa Kit Consulting: intel·ligència artificial, anàlisi de dades, processos, estratègia, ciberseguretat i transformació digital, amb EPSIG com a Assessor Digital.",
@@ -25,6 +25,7 @@ export default async function KitConsultingPage() {
   return (
     <>
       <PageHero
+        path="/kit-consulting"
         eyebrow={t("Asesor Digital", "Assessor Digital", "Accredited Digital Advisor")}
         title={t(
           "Kit Consulting: asesoramiento experto para digitalizar tu empresa",

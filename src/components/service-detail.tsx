@@ -7,6 +7,7 @@ import CtaBand from "@/components/sections/cta-band";
 import { getT } from "@/lib/i18n-server";
 
 export default async function ServiceDetail({
+  path,
   eyebrow,
   title,
   lead,
@@ -16,6 +17,9 @@ export default async function ServiceDetail({
   ctaBody,
   ctaLabel,
 }: {
+  /** Ruta interna de la página. */
+  path: string;
+  /** Nombre del servicio (también para Google). */
   eyebrow: string;
   title: string;
   lead: string;
@@ -28,7 +32,7 @@ export default async function ServiceDetail({
   const t = await getT();
   return (
     <>
-      <PageHero eyebrow={eyebrow} title={title} lead={lead} />
+      <PageHero eyebrow={eyebrow} title={title} lead={lead} path={path} service={eyebrow} />
 
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-6">

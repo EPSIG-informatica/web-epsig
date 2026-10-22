@@ -13,7 +13,10 @@ function getArea(slug: AreaSlug) {
 export async function asesoriaAreaMetadata(slug: AreaSlug): Promise<Metadata> {
   const t = await getT();
   const area = getArea(slug);
-  return pageMetadata(`/${slug}`, { title: t(area.pageTitle), description: t(area.description) });
+  return pageMetadata(`/${slug}`, {
+    title: `${t(area.pageTitle)} ${t("en Valencia y Gata de Gorgos", "a València i Gata de Gorgos", "in Valencia and Gata de Gorgos")}`,
+    description: t(area.description),
+  });
 }
 
 export default async function AsesoriaArea({ slug }: { slug: AreaSlug }) {
@@ -21,6 +24,7 @@ export default async function AsesoriaArea({ slug }: { slug: AreaSlug }) {
   const area = getArea(slug);
   return (
     <CatalogDetail
+      path={`/${slug}`}
       eyebrow={t("Consultoría Empresarial", "Consultoria Empresarial", "Business Consulting")}
       title={t(area.pageTitle)}
       body={t(area.body)}

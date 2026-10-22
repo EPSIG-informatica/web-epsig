@@ -8,7 +8,7 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/contacto", {
-    title: t("Contacto", "Contacte", "Contact Us for a Free Assessment"),
+    title: t("Contacto y diagnóstico gratuito en Valencia y Gata de Gorgos", "Contacte i diagnòstic gratuït a València i Gata de Gorgos", "Contact Us: Free Assessment in Valencia"),
     description: t(
       "Solicita tu diagnóstico gratuito o contacta con EPSIG Consultores en Gata de Gorgos (Alicante) o Valencia.",
       "Sol·licita el teu diagnòstic gratuït o contacta amb EPSIG Consultores a Gata de Gorgos (Alacant) o València.",
@@ -22,6 +22,7 @@ export default async function ContactoPage() {
   return (
     <>
       <PageHero
+        path="/contacto"
         eyebrow={t("Contacto", "Contacte", "Contact")}
         title={t("Hablemos de tu empresa", "Parlem de la teua empresa", "Let's talk about your business")}
         lead={t(

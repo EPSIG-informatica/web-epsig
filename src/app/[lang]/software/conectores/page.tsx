@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "@/components/link";
+import Breadcrumbs from "@/components/breadcrumbs";
 import Reveal from "@/components/reveal";
 import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
@@ -118,6 +119,7 @@ export default async function ConectoresPage() {
         />
         <div className="relative mx-auto max-w-6xl px-6">
           <div className="hero-in mx-auto max-w-3xl text-center">
+            <Breadcrumbs path="/software/conectores" className="mb-6" />
             <div className="inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-mist-accent">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
               {t("Software propio · Conectores", "Programari propi · Connectors", "Our own software · Connectors")}

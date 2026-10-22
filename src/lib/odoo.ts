@@ -25,6 +25,8 @@ export type LeadInput = {
   email: string;
   phone?: string;
   company?: string;
+  /** Lo que le interesa, del desplegable del formulario: se añade como etiqueta. */
+  interest?: string;
   message: string;
   origin: LeadOrigin;
   /** Idioma de la web desde la que se envió el formulario. */
@@ -153,8 +155,9 @@ export async function createLead(lead: LeadInput) {
   const { origin } = lead;
   const channel = inferChannel(origin);
 
-  const [tagId, sourceId, mediumId, campaignId] = await Promise.all([
+  const [tagId, interestTagId, sourceId, mediumId, campaignId] = await Promise.all([
     findOrCreate("crm.tag", process.env.ODOO_LEAD_TAG || "Web"),
+    lead.interest ? findOrCreate("crm.tag", lead.interest) : undefined,
     channel.source ? findOrCreate("utm.source", channel.source) : undefined,
     channel.medium ? findOrCreate("utm.medium", channel.medium) : undefined,
     origin.campaign ? findOrCreate("utm.campaign", origin.campaign) : undefined,
@@ -189,7 +192,7 @@ export async function createLead(lead: LeadInput) {
     email_from: lead.email,
     phone: lead.phone || false,
     description,
-    ...(tagId ? { tag_ids: [[4, tagId]] } : {}),
+    tag_ids: [tagId, interestTagId].filter(Boolean).map((id) => [4, id]),
     ...(sourceId ? { source_id: sourceId } : {}),
     ...(mediumId ? { medium_id: mediumId } : {}),
     ...(campaignId ? { campaign_id: campaignId } : {}),

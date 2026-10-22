@@ -11,6 +11,8 @@ export type ContactRequest = {
   email: string;
   phone?: string;
   company?: string;
+  /** Lo que le interesa, del desplegable del formulario (etiqueta en castellano). */
+  interest?: string;
   message: string;
   privacyAcceptedAt: Date;
 };
@@ -194,6 +196,7 @@ export async function sendContactEmail(request: ContactRequest, lang: Locale = d
     ["Correo", request.email],
     ["Teléfono", request.phone],
     ["Empresa", request.company],
+    ["Le interesa", request.interest],
     ["Idioma", { es: "castellano", ca: "valenciano", en: "inglés" }[lang]],
     [
       "Privacidad",
