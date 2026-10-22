@@ -9,7 +9,7 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/software", {
-    title: "Software",
+    title: t("Software de gestión a medida para empresas", "Programari de gestió a mida per a empreses"),
     description: t(
       "Software propio de EPSIG: gestión y control eléctrico para campings, gestión de viviendas tuteladas y conectores que integran Forvenues, Ágora, Sage y FACe.",
       "Programari propi d'EPSIG: gestió i control elèctric per a càmpings, gestió d'habitatges tutelats i connectors que integren Forvenues, Ágora, Sage i FACe.",
@@ -27,6 +27,7 @@ export default async function SoftwarePage() {
   return (
     <>
       <PageHero
+        path="/software"
         eyebrow={t("Software propio", "Programari propi")}
         title={t("Software que resuelve problemas reales", "Programari que resol problemes reals")}
         lead={t(

@@ -11,7 +11,7 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/kit-digital", {
-    title: "Kit Digital",
+    title: t("Kit Digital: Agente Digitalizador en Valencia y Alicante", "Kit Digital: Agent Digitalitzador a València i Alacant"),
     description: t(
       "Soluciones del programa Kit Digital para pymes y autónomos: web, tienda online, CRM, factura electrónica, ciberseguridad y más, con EPSIG como Agente Digitalizador Adherido.",
       "Solucions del programa Kit Digital per a pimes i autònoms: web, botiga en línia, CRM, factura electrònica, ciberseguretat i més, amb EPSIG com a Agent Digitalitzador Adherit.",
@@ -24,6 +24,7 @@ export default async function KitDigitalPage() {
   return (
     <>
       <PageHero
+        path="/kit-digital"
         eyebrow={t("Agente Digitalizador Adherido", "Agent Digitalitzador Adherit")}
         title={t("Kit Digital: soluciones digitales para tu pyme", "Kit Digital: solucions digitals per a la teua pime")}
         lead={t(

@@ -12,7 +12,7 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/servicios/proteccion-del-negocio", {
-    title: t("Protección del Negocio", "Protecció del Negoci"),
+    title: t("Ciberseguridad gestionada para empresas en Valencia y Alicante", "Ciberseguretat gestionada per a empreses a València i Alacant"),
     description: t(
       "Ciberseguridad gestionada a medida para servidores Windows, Ubuntu, Plesk/web y equipos de trabajo: paquetes orientativos o servicios por separado, con presupuesto personalizado. Partner oficial de ESET.",
       "Ciberseguretat gestionada a mida per a servidors Windows, Ubuntu, Plesk/web i equips de treball: paquets orientatius o serveis per separat, amb pressupost personalitzat. Partner oficial d'ESET.",
@@ -361,6 +361,8 @@ export default async function ProteccionDelNegocioPage() {
   return (
     <>
       <PageHero
+        path="/servicios/proteccion-del-negocio"
+        service={t("Ciberseguridad gestionada", "Ciberseguretat gestionada")}
         eyebrow={t("Ciberseguridad · Partner oficial ESET", "Ciberseguretat · Partner oficial d'ESET")}
         title={t("Protección del Negocio", "Protecció del Negoci")}
         lead={t(

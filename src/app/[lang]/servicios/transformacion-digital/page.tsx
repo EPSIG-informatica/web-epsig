@@ -5,7 +5,7 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/servicios/transformacion-digital", {
-    title: t("Transformación Digital", "Transformació Digital"),
+    title: t("Transformación digital e IA para pymes en Valencia", "Transformació digital i IA per a pimes a València"),
     description: t(
       "Automatización, IA y digitalización de procesos para pymes. Agentes Digitalizadores Adheridos y Asesores Digitales de Kit Digital y Kit Consulting.",
       "Automatització, IA i digitalització de processos per a pimes. Agents Digitalitzadors Adherits i Assessors Digitals de Kit Digital i Kit Consulting.",
@@ -17,6 +17,7 @@ export default async function TransformacionDigitalPage() {
   const t = await getT();
   return (
     <ServiceDetail
+      path="/servicios/transformacion-digital"
       eyebrow={t("Transformación Digital", "Transformació Digital")}
       title={t(
         "Automatización e IA aplicadas a tu día a día, no a la teoría",

@@ -11,7 +11,7 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/servicios", {
-    title: t("Servicios", "Serveis"),
+    title: t("Servicios para pymes: Odoo, asesoría y ciberseguridad", "Serveis per a pimes: Odoo, assessoria i ciberseguretat"),
     description: t(
       "Consultoría empresarial, transformación digital e implantación de Odoo ERP, y protección del negocio con ciberseguridad gestionada.",
       "Consultoria empresarial, transformació digital i implantació d'Odoo ERP, i protecció del negoci amb ciberseguretat gestionada.",
@@ -24,6 +24,7 @@ export default async function ServiciosPage() {
   return (
     <>
       <PageHero
+        path="/servicios"
         eyebrow={t("Servicios", "Serveis")}
         title={t("Tres formas de ayudarte a funcionar mejor", "Tres maneres d'ajudar-te a funcionar millor")}
         lead={t(

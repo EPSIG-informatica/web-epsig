@@ -12,7 +12,7 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/nosotros", {
-    title: t("Nosotros", "Nosaltres"),
+    title: t("Quiénes somos: consultores en Valencia y Gata de Gorgos", "Qui som: consultors a València i Gata de Gorgos"),
     description: t(
       "EPSIG Consultores: consultoría empresarial, transformación digital e implantación de Odoo ERP para pymes de la Marina Alta, Valencia y la Safor.",
       "EPSIG Consultores: consultoria empresarial, transformació digital i implantació d'Odoo ERP per a pimes de la Marina Alta, València i la Safor.",
@@ -25,6 +25,7 @@ export default async function NosotrosPage() {
   return (
     <>
       <PageHero
+        path="/nosotros"
         eyebrow={t("Nosotros", "Nosaltres")}
         title={t("Ayudamos a las empresas a funcionar mejor", "Ajudem les empreses a funcionar millor")}
         lead={t(

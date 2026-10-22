@@ -6,7 +6,7 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/servicios/consultoria-empresarial", {
-    title: t("Consultoría Empresarial", "Consultoria Empresarial"),
+    title: t("Consultoría empresarial para pymes en Valencia y la Marina Alta", "Consultoria empresarial per a pimes a València i la Marina Alta"),
     description: t(
       "Asesoría económico-financiera, laboral y fiscal-contable, empresa familiar y protección de datos para pymes y particulares.",
       "Assessoria economicofinancera, laboral i fiscal-comptable, empresa familiar i protecció de dades per a pimes i particulars.",
@@ -18,6 +18,7 @@ export default async function ConsultoriaEmpresarialPage() {
   const t = await getT();
   return (
     <ServiceDetail
+      path="/servicios/consultoria-empresarial"
       eyebrow={t("Consultoría Empresarial", "Consultoria Empresarial")}
       title={t(
         "La asesoría de toda la vida, con la organización que necesita una empresa que crece",

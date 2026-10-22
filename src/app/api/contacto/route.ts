@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { sendContactConfirmation, sendContactEmail, type ContactRequest } from "@/lib/mailer";
 import { createLead, odooConfigured, type LeadOrigin } from "@/lib/odoo";
 import { clientIp, hit } from "@/lib/rate-limit";
-import { site } from "@/lib/site";
+import { contactInterests, site } from "@/lib/site";
 import { defaultLocale, isLocale, localizePath, splitLocale, translator, type Locale, type Translate } from "@/lib/i18n";
 
 const limits = { name: 120, email: 200, phone: 40, company: 160, message: 5000 };
@@ -127,6 +127,8 @@ function parseRequest(body: unknown, t: Translate): ContactRequest | string {
     message,
     phone: optionalField(data.phone, limits.phone),
     company: optionalField(data.company, limits.company),
+    // Solo una de las opciones del desplegable; cualquier otro valor se ignora.
+    interest: contactInterests.find((interest) => interest.id === data.interest)?.label.es,
     privacyAcceptedAt: new Date(),
   };
 }

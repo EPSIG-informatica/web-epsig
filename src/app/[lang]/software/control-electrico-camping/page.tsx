@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "@/components/link";
+import Breadcrumbs from "@/components/breadcrumbs";
 import Reveal from "@/components/reveal";
 import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
@@ -169,6 +170,7 @@ export default async function CampingSoftwarePage() {
         />
         <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 pb-20 sm:pb-24 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="hero-in">
+            <Breadcrumbs path="/software/control-electrico-camping" align="left" className="mb-6" />
             <div className="inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-mist-accent">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
               {t("Software propio · Campings", "Programari propi · Càmpings")}

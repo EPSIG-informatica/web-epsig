@@ -12,7 +12,7 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/servicios/odoo", {
-    title: "Odoo ERP",
+    title: t("Partner Odoo en Valencia y Alicante: implantación de Odoo ERP", "Partner Odoo a València i Alacant: implantació d'Odoo ERP"),
     description: t(
       "Implantación de Odoo ERP para pymes: diagnóstico, configuración, migración de datos, formación del equipo y soporte continuo.",
       "Implantació d'Odoo ERP per a pimes: diagnòstic, configuració, migració de dades, formació de l'equip i suport continu.",
@@ -68,6 +68,8 @@ export default async function OdooPage() {
   return (
     <>
       <PageHero
+        path="/servicios/odoo"
+        service={t("Implantación de Odoo ERP", "Implantació d'Odoo ERP")}
         eyebrow={t("Servicio · Partner oficial Odoo", "Servei · Partner oficial d'Odoo")}
         title={t(
           "Odoo ERP, implantado por quien entiende de empresa",

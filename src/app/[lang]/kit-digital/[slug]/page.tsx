@@ -35,6 +35,7 @@ export default async function KitDigitalCategoryPage({
 
   return (
     <CatalogDetail
+      path={`/kit-digital/${slug}`}
       eyebrow="Kit Digital"
       title={t(category.title)}
       lead={t(category.summary)}

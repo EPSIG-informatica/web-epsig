@@ -2,8 +2,9 @@
 
 import Link from "@/components/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { site } from "@/lib/site";
+import { contactInterests, site } from "@/lib/site";
 import { originForSubmit } from "@/lib/attribution";
+import { trackEvent } from "@/lib/analytics";
 import { useLang, useT } from "@/components/lang-provider";
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -51,6 +52,13 @@ export default function ContactForm() {
       }
 
       setStatus("success");
+      // Conversión para GA4: solicitud de contacto enviada.
+      const interest = new FormData(form).get("interest");
+      trackEvent("generate_lead", {
+        form_name: "contacto",
+        interest: typeof interest === "string" && interest ? interest : undefined,
+        page_path: window.location.pathname,
+      });
       form.reset();
     } catch (err) {
       setStatus("error");
@@ -101,6 +109,21 @@ export default function ContactForm() {
         <Field label={t("Teléfono", "Telèfon")} name="phone" type="tel" autoComplete="tel" />
         <Field label={t("Empresa", "Empresa")} name="company" autoComplete="organization" />
       </div>
+      <label className="flex flex-col gap-1.5 text-sm font-medium text-ink">
+        <span>{t("¿Qué te interesa?", "Què t'interessa?")}</span>
+        <select
+          name="interest"
+          defaultValue=""
+          className="rounded-xl border border-line bg-surface px-4 py-3 text-[15px] text-ink outline-none transition-colors focus:border-primary"
+        >
+          <option value="">{t("Selecciona una opción", "Tria una opció")}</option>
+          {contactInterests.map((interest) => (
+            <option key={interest.id} value={interest.id}>
+              {t(interest.label)}
+            </option>
+          ))}
+        </select>
+      </label>
       <label className="flex flex-col gap-1.5 text-sm font-medium text-ink">
         <span>
           {t("Cuéntanos qué necesitas", "Conta'ns què necessites")}

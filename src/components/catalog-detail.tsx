@@ -1,10 +1,12 @@
 import Link from "@/components/link";
 import PageHero from "@/components/page-hero";
+import { ServiceSchema } from "@/components/structured-data";
 import Reveal from "@/components/reveal";
 import CtaBand from "@/components/sections/cta-band";
 import { getT } from "@/lib/i18n-server";
 
 export default async function CatalogDetail({
+  path,
   eyebrow,
   title,
   lead,
@@ -18,6 +20,8 @@ export default async function CatalogDetail({
   ctaLabel,
   notice,
 }: {
+  /** Ruta interna de la página. */
+  path: string;
   eyebrow: string;
   title: string;
   lead?: string;
@@ -34,7 +38,8 @@ export default async function CatalogDetail({
   const t = await getT();
   return (
     <>
-      <PageHero eyebrow={eyebrow} title={title} lead={lead} />
+      <PageHero eyebrow={eyebrow} title={title} lead={lead} path={path} />
+      <ServiceSchema path={path} name={title} description={lead ?? body} />
 
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-3xl px-6">

@@ -565,6 +565,19 @@ export const kitDigitalCategories = [
   },
 ] as const;
 
+// Opciones del desplegable "¿Qué te interesa?" del formulario de contacto. Se envía el `id`; la
+// etiqueta en castellano llega al correo y a Odoo (como etiqueta de la oportunidad).
+export const contactInterests = [
+  { id: "odoo", label: { es: "Implantación de Odoo ERP", ca: "Implantació d'Odoo ERP" } },
+  { id: "asesoria", label: { es: "Asesoría fiscal, contable o laboral", ca: "Assessoria fiscal, comptable o laboral" } },
+  { id: "financiero", label: { es: "Asesoría económico-financiera", ca: "Assessoria economicofinancera" } },
+  { id: "digitalizacion", label: { es: "Digitalización, automatización e IA", ca: "Digitalització, automatització i IA" } },
+  { id: "ciberseguridad", label: { es: "Ciberseguridad", ca: "Ciberseguretat" } },
+  { id: "software", label: { es: "Software a medida o conectores", ca: "Programari a mida o connectors" } },
+  { id: "ayudas", label: { es: "Kit Digital o Kit Consulting", ca: "Kit Digital o Kit Consulting" } },
+  { id: "otro", label: { es: "Otro", ca: "Altre" } },
+] as const;
+
 /** Enlace tel: con prefijo internacional y sin espacios. */
 export function telHref(phone: string) {
   return `tel:+34${phone.replace(/\s/g, "")}`;
