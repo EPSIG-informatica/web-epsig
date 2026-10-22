@@ -13,11 +13,11 @@ const SRC = "/animaciones/viviendas-tuteladas.html";
 
 // Deben coincidir con NAMES y DUR del script de la animación.
 const etapas: { titulo: Localized; ms: number }[] = [
-  { titulo: { es: "Inicio", ca: "Inici" }, ms: 7300 },
-  { titulo: { es: "Entidades", ca: "Entitats" }, ms: 4850 },
-  { titulo: { es: "Empresas", ca: "Empreses" }, ms: 6100 },
-  { titulo: { es: "Documentos", ca: "Documents" }, ms: 2600 },
-  { titulo: { es: "Certificado en PDF", ca: "Certificat en PDF" }, ms: 25900 },
+  { titulo: { es: "Inicio", ca: "Inici", en: "Home" }, ms: 7300 },
+  { titulo: { es: "Entidades", ca: "Entitats", en: "Organisations" }, ms: 4850 },
+  { titulo: { es: "Empresas", ca: "Empreses", en: "Companies" }, ms: 6100 },
+  { titulo: { es: "Documentos", ca: "Documents", en: "Documents" }, ms: 2600 },
+  { titulo: { es: "Certificado en PDF", ca: "Certificat en PDF", en: "PDF certificate" }, ms: 25900 },
 ];
 
 type Estado = { stage: number; progress: number; paused: boolean };
@@ -98,8 +98,8 @@ export default function ViviendasAppDemo() {
 
   const reproduciendo = !estado.paused;
   const pantallaLabel = completa
-    ? t("Salir de pantalla completa", "Eixir de la pantalla completa")
-    : t("Ver en pantalla completa", "Veure en pantalla completa");
+    ? t("Salir de pantalla completa", "Eixir de la pantalla completa", "Exit full screen")
+    : t("Ver en pantalla completa", "Veure en pantalla completa", "View full screen");
 
   return (
     <figure className="m-0">
@@ -114,20 +114,21 @@ export default function ViviendasAppDemo() {
             <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
             <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
           </span>
-          <span className="truncate font-mono text-[11.5px] text-mist-soft">{t("viviendas tuteladas · gestión", "habitatges tutelats · gestió")}</span>
+          <span className="truncate font-mono text-[11.5px] text-mist-soft">{t("viviendas tuteladas · gestión", "habitatges tutelats · gestió", "supported housing · management")}</span>
           <span className="ml-auto flex shrink-0 items-center gap-1.5 font-mono text-[11px] text-accent">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-            {t("app real", "app real")}
+            {t("app real", "app real", "live app")}
           </span>
         </div>
 
         <div className="overflow-hidden rounded-[14px] bg-[#05070b] [:fullscreen_&]:mx-auto [:fullscreen_&]:aspect-video [:fullscreen_&]:w-full [:fullscreen_&]:max-w-[calc((100vh-8rem)*16/9)]">
           <iframe
             ref={iframeRef}
-            src={lang === "ca" ? `${SRC}?lang=ca` : SRC}
+            src={lang === "es" ? SRC : `${SRC}?lang=${lang}`}
             title={t(
               "Demostración animada del software de gestión de viviendas tuteladas: inicio, entidades, empresas, documentación y generación de un certificado en PDF",
               "Demostració animada del programari de gestió d'habitatges tutelats: inici, entitats, empreses, documentació i generació d'un certificat en PDF",
+              "Animated demo of the supported housing management software: home screen, organisations, companies, documentation and generating a PDF certificate",
             )}
             className="block aspect-video w-full border-0"
           />
@@ -140,7 +141,7 @@ export default function ViviendasAppDemo() {
               type="button"
               onClick={alternar}
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
-              aria-label={reproduciendo ? t("Pausar demostración", "Pausar la demostració") : t("Reproducir demostración", "Reproduir la demostració")}
+              aria-label={reproduciendo ? t("Pausar demostración", "Pausar la demostració", "Pause demo") : t("Reproducir demostración", "Reproduir la demostració", "Play demo")}
             >
               {reproduciendo ? (
                 <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="currentColor" aria-hidden>
@@ -186,7 +187,7 @@ export default function ViviendasAppDemo() {
                   onClick={() => irA(i)}
                   className="group py-1.5"
                   style={{ flexGrow: etapa.ms, flexBasis: 0 }}
-                  aria-label={`${t("Ir a", "Anar a")}: ${t(etapa.titulo)}`}
+                  aria-label={`${t("Ir a", "Anar a", "Go to")}: ${t(etapa.titulo)}`}
                   title={t(etapa.titulo)}
                 >
                   <span className="block h-1 overflow-hidden rounded-full bg-white/15 transition-colors group-hover:bg-white/30">
@@ -202,7 +203,7 @@ export default function ViviendasAppDemo() {
         </div>
       </div>
       <figcaption className="mt-3 text-center text-[12.5px] text-mist-faint">
-        {t("Recorrido real por el programa con datos de prueba.", "Recorregut real pel programa amb dades de prova.")}
+        {t("Recorrido real por el programa con datos de prueba.", "Recorregut real pel programa amb dades de prova.", "Real walkthrough of the software with test data.")}
       </figcaption>
     </figure>
   );

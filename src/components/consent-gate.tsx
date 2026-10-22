@@ -33,6 +33,7 @@ export function ConsentPlaceholder({ label }: { label?: string }) {
         {t(
           `${label ?? "Este contenido"} usa cookies de terceros que no has aceptado.`,
           `${label ?? "Este contingut"} usa cookies de tercers que no has acceptat.`,
+          `${label ?? "This content"} uses third-party cookies that you have not accepted.`,
         )}
       </p>
       <button
@@ -40,7 +41,7 @@ export function ConsentPlaceholder({ label }: { label?: string }) {
         onClick={openCookieSettings}
         className="rounded-full bg-ink px-5 py-2 text-[13px] font-semibold text-white hover:bg-primary"
       >
-        {t("Configurar cookies", "Configurar cookies")}
+        {t("Configurar cookies", "Configurar cookies", "Cookie settings")}
       </button>
     </div>
   );

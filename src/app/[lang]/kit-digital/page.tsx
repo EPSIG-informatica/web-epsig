@@ -15,6 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: t(
       "Soluciones del programa Kit Digital para pymes y autónomos: web, tienda online, CRM, factura electrónica, ciberseguridad y más, con EPSIG como Agente Digitalizador Adherido.",
       "Solucions del programa Kit Digital per a pimes i autònoms: web, botiga en línia, CRM, factura electrònica, ciberseguretat i més, amb EPSIG com a Agent Digitalitzador Adherit.",
+      "Kit Digital solutions for SMEs and the self-employed: website, online shop, CRM, e-invoicing and cybersecurity, from an accredited agent.",
     ),
   });
 }
@@ -24,11 +25,12 @@ export default async function KitDigitalPage() {
   return (
     <>
       <PageHero
-        eyebrow={t("Agente Digitalizador Adherido", "Agent Digitalitzador Adherit")}
-        title={t("Kit Digital: soluciones digitales para tu pyme", "Kit Digital: solucions digitals per a la teua pime")}
+        eyebrow={t("Agente Digitalizador Adherido", "Agent Digitalitzador Adherit", "Accredited Digitalisation Agent")}
+        title={t("Kit Digital: soluciones digitales para tu pyme", "Kit Digital: solucions digitals per a la teua pime", "Kit Digital: digital solutions for your SME")}
         lead={t(
           "Un programa del Gobierno de España, financiado por la Unión Europea – NextGenerationEU, para impulsar la digitalización de pymes y autónomos. Como Agente Digitalizador Adherido, implantamos todas sus soluciones.",
           "Un programa del Govern d'Espanya, finançat per la Unió Europea – NextGenerationEU, per a impulsar la digitalització de pimes i autònoms. Com a Agent Digitalitzador Adherit, implantem totes les seues solucions.",
+          "A Spanish Government programme, funded by the European Union – NextGenerationEU, to drive the digitalisation of SMEs and self-employed professionals. As an Accredited Digitalisation Agent, we implement all of its solutions.",
         )}
       />
 
@@ -39,11 +41,12 @@ export default async function KitDigitalPage() {
           </div>
 
           <SectionHeading
-            eyebrow={t("Categorías", "Categories")}
-            title={t("Nuestras soluciones del catálogo Kit Digital", "Les nostres solucions del catàleg Kit Digital")}
+            eyebrow={t("Categorías", "Categories", "Categories")}
+            title={t("Nuestras soluciones del catálogo Kit Digital", "Les nostres solucions del catàleg Kit Digital", "Our Kit Digital catalogue solutions")}
             body={t(
               "Cada categoría resuelve una necesidad concreta de tu negocio. Te ayudamos a elegir la combinación adecuada y la implantamos de principio a fin.",
               "Cada categoria resol una necessitat concreta del teu negoci. T'ajudem a triar la combinació adequada i la implantem de principi a fi.",
+              "Each category meets a specific need in your business. We help you choose the right combination and implement it from start to finish.",
             )}
             align="left"
           />
@@ -63,7 +66,7 @@ export default async function KitDigitalPage() {
                       {t(cat.priceFrom)}
                     </span>
                     <span className="shrink-0 text-sm font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 pointer-coarse:opacity-100">
-                      {t("Ver más →", "Veure'n més →")}
+                      {t("Ver más →", "Veure'n més →", "Learn more →")}
                     </span>
                   </div>
                 </TiltCard>
@@ -74,18 +77,20 @@ export default async function KitDigitalPage() {
             {t(
               "Precios orientativos, IVA no incluido. El importe final depende del tamaño de la empresa y de los puestos de trabajo a digitalizar.",
               "Preus orientatius, IVA no inclòs. L'import final depén de la grandària de l'empresa i dels llocs de treball que cal digitalitzar.",
+              "Guide prices, excluding VAT. The final amount depends on the size of the business and the number of workstations to be digitalised.",
             )}
           </p>
         </div>
       </section>
 
       <CtaBand
-        title={t("¿Qué solución necesita tu negocio?", "Quina solució necessita el teu negoci?")}
+        title={t("¿Qué solución necesita tu negocio?", "Quina solució necessita el teu negoci?", "What solution does your business need?")}
         body={t(
           "Te asesoramos sin compromiso y te avisamos en cuanto haya una nueva convocatoria de ayudas.",
           "T'assessorem sense compromís i t'avisem tan prompte com hi haja una nova convocatòria d'ajudes.",
+          "We offer no-obligation advice and will let you know as soon as a new funding call opens.",
         )}
-        ctaLabel={t("Solicitar información", "Sol·licitar informació")}
+        ctaLabel={t("Solicitar información", "Sol·licitar informació", "Request information")}
       />
     </>
   );

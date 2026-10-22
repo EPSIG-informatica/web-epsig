@@ -5,7 +5,7 @@ import { LOCALE_COOKIE, LOCALE_COOKIE_MAX_AGE, localeNames, localeShortNames, lo
 import { useLang, useT } from "@/components/lang-provider";
 
 /**
- * Selector Castellano / Valencià. Lleva a la misma página en el otro idioma y guarda la elección
+ * Selector Castellano / Valencià / English. Lleva a la misma página en otro idioma y guarda la elección
  * en una cookie para que la detección automática del navegador no vuelva a cambiarla.
  */
 export default function LanguageSwitcher({ className = "", onNavigate }: { className?: string; onNavigate?: () => void }) {
@@ -17,7 +17,7 @@ export default function LanguageSwitcher({ className = "", onNavigate }: { class
   return (
     <div
       role="group"
-      aria-label={t("Idioma", "Idioma")}
+      aria-label={t("Idioma", "Idioma", "Language")}
       className={`inline-flex items-center rounded-full border border-line p-0.5 text-[12px] font-semibold ${className}`}
     >
       {locales.map((locale) => {

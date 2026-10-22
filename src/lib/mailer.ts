@@ -194,7 +194,7 @@ export async function sendContactEmail(request: ContactRequest, lang: Locale = d
     ["Correo", request.email],
     ["Teléfono", request.phone],
     ["Empresa", request.company],
-    ["Idioma", lang === "ca" ? "valenciano" : "castellano"],
+    ["Idioma", { es: "castellano", ca: "valenciano", en: "inglés" }[lang]],
     [
       "Privacidad",
       `Aceptada el ${request.privacyAcceptedAt.toLocaleString("es-ES", { timeZone: "Europe/Madrid" })}`,
@@ -246,7 +246,7 @@ export async function sendContactConfirmation(request: ContactRequest, lang: Loc
   const from = senderAddress();
   const t = translator(lang);
   const first = firstName(request.name);
-  const greeting = first ? `${t("Hola", "Hola")}, ${first}:` : `${t("Hola", "Hola")}:`;
+  const greeting = first ? `${t("Hola", "Hola", "Hello")}, ${first}:` : `${t("Hola", "Hola", "Hello")}:`;
   const phones = site.phones.join(" · ");
   const webUrl = `${site.url}${localizePath("/", lang)}`;
   const privacyUrl = `${site.url}${localizePath("/politica-de-privacidad/", lang)}`;
@@ -257,21 +257,24 @@ export async function sendContactConfirmation(request: ContactRequest, lang: Loc
     t(
       `Gracias por contactar con ${site.name}. Hemos recibido tu mensaje y te responderemos lo antes posible, normalmente en un plazo de 24 a 48 horas laborables.`,
       `Gràcies per contactar amb ${site.name}. Hem rebut el teu missatge i et respondrem al més prompte possible, normalment en un termini de 24 a 48 hores laborables.`,
+      `Thank you for contacting ${site.name}. We have received your message and will get back to you as soon as possible, usually within 24 to 48 working hours.`,
     ),
     "",
     t(
       `Si es urgente, puedes llamarnos a cualquiera de estos teléfonos: ${phones} (de lunes a viernes por la mañana).`,
       `Si és urgent, pots telefonar-nos a qualsevol d'estos telèfons: ${phones} (de dilluns a divendres pel matí).`,
+      `If it's urgent, you can call us on either of these numbers: ${phones} (Monday to Friday, mornings).`,
     ),
     "",
-    t("Un saludo,", "Una salutació,"),
-    t(`El equipo de ${site.name}`, `L'equip d'${site.name}`),
+    t("Un saludo,", "Una salutació,", "Kind regards,"),
+    t(`El equipo de ${site.name}`, `L'equip d'${site.name}`, `The ${site.name} team`),
     webUrl,
     "",
     "---",
     t(
       `Recibes este correo porque se ha enviado el formulario de contacto de ${site.url} con esta dirección. Si no has sido tú, ignóralo: no volveremos a escribirte. Responsable del tratamiento: ${site.legalName}. Más información: ${privacyUrl}`,
       `Reps este correu perquè s'ha enviat el formulari de contacte de ${site.url} amb esta adreça. Si no has sigut tu, ignora'l: no et tornarem a escriure. Responsable del tractament: ${site.legalName}. Més informació: ${privacyUrl}`,
+      `You are receiving this email because the contact form on ${site.url} was submitted with this address. If it wasn't you, please ignore it: we won't write to you again. Data controller: ${site.legalName}. More information: ${privacyUrl}`,
     ),
   ].join("\n");
 
@@ -284,24 +287,27 @@ export async function sendContactConfirmation(request: ContactRequest, lang: Loc
         <p style="margin:0 0 14px">${t(
           `Gracias por contactar con <strong>${site.name}</strong>. Hemos recibido tu mensaje y te responderemos lo antes posible, normalmente en un plazo de <strong>24 a 48 horas laborables</strong>.`,
           `Gràcies per contactar amb <strong>${site.name}</strong>. Hem rebut el teu missatge i et respondrem al més prompte possible, normalment en un termini de <strong>24 a 48 hores laborables</strong>.`,
+          `Thank you for contacting <strong>${site.name}</strong>. We have received your message and will get back to you as soon as possible, usually within <strong>24 to 48 working hours</strong>.`,
         )}</p>
         <p style="margin:0 0 14px">${t(
           `Si es urgente, puedes llamarnos a cualquiera de estos teléfonos: <strong>${phones}</strong> (de lunes a viernes por la mañana).`,
           `Si és urgent, pots telefonar-nos a qualsevol d'estos telèfons: <strong>${phones}</strong> (de dilluns a divendres pel matí).`,
+          `If it's urgent, you can call us on either of these numbers: <strong>${phones}</strong> (Monday to Friday, mornings).`,
         )}</p>
-        <p style="margin:0 0 4px">${t("Un saludo,", "Una salutació,")}</p>
-        <p style="margin:0">${t(`El equipo de ${site.name}`, `L'equip d'${site.name}`)}</p>
+        <p style="margin:0 0 4px">${t("Un saludo,", "Una salutació,", "Kind regards,")}</p>
+        <p style="margin:0">${t(`El equipo de ${site.name}`, `L'equip d'${site.name}`, `The ${site.name} team`)}</p>
       </td></tr>
       <tr><td style="padding:20px 32px 28px">
-        <a href="${webUrl}" style="display:inline-block;background:#0b1220;color:#ffffff;text-decoration:none;font-size:13px;font-weight:bold;padding:11px 22px;border-radius:999px">${t("Visitar la web", "Visitar la web")}</a>
+        <a href="${webUrl}" style="display:inline-block;background:#0b1220;color:#ffffff;text-decoration:none;font-size:13px;font-weight:bold;padding:11px 22px;border-radius:999px">${t("Visitar la web", "Visitar la web", "Visit our website")}</a>
       </td></tr>
       <tr><td style="padding:18px 32px;background:#f2f5fb;color:#8c98ad;font-size:11.5px;line-height:1.5">
         ${site.legalName} · ${escapeHtml(site.registeredAddress)} · ${site.email}<br><br>
         ${t(
           "Recibes este correo porque se ha enviado el formulario de contacto de nuestra web con esta dirección. Si no has sido tú, ignóralo: no volveremos a escribirte.",
           "Reps este correu perquè s'ha enviat el formulari de contacte de la nostra web amb esta adreça. Si no has sigut tu, ignora'l: no et tornarem a escriure.",
+          "You are receiving this email because the contact form on our website was submitted with this address. If it wasn't you, please ignore it: we won't write to you again.",
         )}
-        ${t("Responsable del tratamiento", "Responsable del tractament")}: ${site.legalName}. <a href="${privacyUrl}" style="color:#8c98ad">${t("Política de privacidad", "Política de privacitat")}</a>.
+        ${t("Responsable del tratamiento", "Responsable del tractament", "Data controller")}: ${site.legalName}. <a href="${privacyUrl}" style="color:#8c98ad">${t("Política de privacidad", "Política de privacitat", "Privacy policy")}</a>.
       </td></tr>
     </table>
   </div>`;
@@ -311,7 +317,7 @@ export async function sendContactConfirmation(request: ContactRequest, lang: Loc
     from,
     to: singleLine(request.email),
     replyTo: { address: site.email },
-    subject: t(`Hemos recibido tu mensaje — ${site.name}`, `Hem rebut el teu missatge — ${site.name}`),
+    subject: t(`Hemos recibido tu mensaje — ${site.name}`, `Hem rebut el teu missatge — ${site.name}`, `We've received your message — ${site.name}`),
     // Evita respuestas automáticas en bucle (fuera de oficina, etc.).
     headers: { "Auto-Submitted": "auto-replied", "X-Auto-Response-Suppress": "All" },
     text,

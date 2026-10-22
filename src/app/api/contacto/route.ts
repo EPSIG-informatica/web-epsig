@@ -24,11 +24,13 @@ const tooMany = (t: Translate) =>
   t(
     "Has enviado demasiadas solicitudes. Inténtalo de nuevo en unos minutos o llámanos.",
     "Has enviat massa sol·licituds. Torna-ho a provar d'ací a uns minuts o telefona'ns.",
+    "You've sent too many requests. Please try again in a few minutes or give us a call.",
   );
 const sendFailed = (t: Translate) =>
   t(
     `No hemos podido enviar tu mensaje. Escríbenos a ${site.email} o llámanos.`,
     `No hem pogut enviar el teu missatge. Escriu-nos a ${site.email} o telefona'ns.`,
+    `We couldn't send your message. Email us at ${site.email} or give us a call.`,
   );
 
 // Lee el cuerpo por partes y corta en cuanto supera el límite (no se carga entero en memoria).
@@ -101,7 +103,7 @@ function parseOrigin(value: unknown): LeadOrigin {
 }
 
 function parseRequest(body: unknown, t: Translate): ContactRequest | string {
-  const missing = t("Faltan campos obligatorios.", "Falten camps obligatoris.");
+  const missing = t("Faltan campos obligatorios.", "Falten camps obligatoris.", "Some required fields are missing.");
   if (!body || typeof body !== "object") return missing;
   const data = body as Record<string, unknown>;
 
@@ -114,12 +116,13 @@ function parseRequest(body: unknown, t: Translate): ContactRequest | string {
     return t(
       "Debes aceptar la política de privacidad para enviar el formulario.",
       "Has d'acceptar la política de privacitat per a enviar el formulari.",
+      "You must accept the privacy policy to submit the form.",
     );
   }
   if (name.length > limits.name || email.length > limits.email || message.length > limits.message) {
-    return t("Alguno de los campos es demasiado largo.", "Algun dels camps és massa llarg.");
+    return t("Alguno de los campos es demasiado largo.", "Algun dels camps és massa llarg.", "One of the fields is too long.");
   }
-  if (!emailPattern.test(email)) return t("El correo electrónico no es válido.", "El correu electrònic no és vàlid.");
+  if (!emailPattern.test(email)) return t("El correo electrónico no es válido.", "El correu electrònic no és vàlid.", "The email address is not valid.");
 
   return {
     name,
@@ -148,7 +151,7 @@ export async function POST(request: Request) {
   const origin = allowedOrigin(request);
   if (!origin) {
     return NextResponse.json(
-      { error: t("Solicitud no permitida.", "Sol·licitud no permesa.") },
+      { error: t("Solicitud no permitida.", "Sol·licitud no permesa.", "Request not allowed.") },
       { status: 403 },
     );
   }
@@ -165,7 +168,7 @@ export async function POST(request: Request) {
   if (!hit(`ip:${clientIp(request)}`, PER_IP.limit, PER_IP.windowMs)) return reply(429, tooMany(t));
 
   const raw = await readBody(request);
-  if (raw === null) return reply(413, t("La solicitud es demasiado grande.", "La sol·licitud és massa gran."));
+  if (raw === null) return reply(413, t("La solicitud es demasiado grande.", "La sol·licitud és massa gran.", "The request is too large."));
 
   let body: unknown = null;
   if (fromScript) {

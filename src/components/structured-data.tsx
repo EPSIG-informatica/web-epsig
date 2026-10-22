@@ -57,7 +57,7 @@ const dataFor = (lang: Locale) => ({
         telephone: `+34 ${phone}`,
         contactType: "customer service",
         areaServed: "ES",
-        availableLanguage: ["es", "ca"],
+        availableLanguage: ["es", "ca", "en"],
       })),
       sameAs: [site.social.facebook, site.social.instagram, ...site.offices.map((o) => o.mapsUrl)],
       department: offices.map((office) => ({ "@id": office["@id"] })),

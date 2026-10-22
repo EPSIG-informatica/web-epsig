@@ -17,6 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t(
       `${site.name} — Partner Odoo y consultoría para pymes en Gata de Gorgos y Valencia`,
       `${site.name} — Partner Odoo i consultoria per a pimes a Gata de Gorgos i València`,
+      `Odoo Partner and Business Consultancy in Spain | ${site.name}`,
     ),
     description: t(site.description),
     absoluteTitle: true,

@@ -7,7 +7,7 @@ export default function CookieSettingsButton({ className }: { className?: string
   const t = useT();
   return (
     <button type="button" onClick={openCookieSettings} className={className}>
-      {t("Configurar cookies", "Configurar cookies")}
+      {t("Configurar cookies", "Configurar cookies", "Cookie settings")}
     </button>
   );
 }

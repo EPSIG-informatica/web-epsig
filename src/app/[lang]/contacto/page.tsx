@@ -8,10 +8,11 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/contacto", {
-    title: t("Contacto", "Contacte"),
+    title: t("Contacto", "Contacte", "Contact Us for a Free Assessment"),
     description: t(
       "Solicita tu diagnóstico gratuito o contacta con EPSIG Consultores en Gata de Gorgos (Alicante) o Valencia.",
       "Sol·licita el teu diagnòstic gratuït o contacta amb EPSIG Consultores a Gata de Gorgos (Alacant) o València.",
+      "Request your free assessment or get in touch with EPSIG Consultores in Gata de Gorgos (Alicante) or Valencia.",
     ),
   });
 }
@@ -21,22 +22,23 @@ export default async function ContactoPage() {
   return (
     <>
       <PageHero
-        eyebrow={t("Contacto", "Contacte")}
-        title={t("Hablemos de tu empresa", "Parlem de la teua empresa")}
+        eyebrow={t("Contacto", "Contacte", "Contact")}
+        title={t("Hablemos de tu empresa", "Parlem de la teua empresa", "Let's talk about your business")}
         lead={t(
           "Una conversación de 30 minutos, sin compromiso, para ver qué necesita tu negocio primero.",
           "Una conversa de 30 minuts, sense compromís, per a veure què necessita primer el teu negoci.",
+          "A 30-minute, no-obligation conversation to see what your business needs first.",
         )}
       />
 
       <section id="diagnostico" className="scroll-mt-24 py-20 sm:py-24">
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-6 lg:grid-cols-[1fr_1.2fr]">
           <Reveal>
-            <h2 className="mb-6 text-2xl">{t("Información de contacto", "Informació de contacte")}</h2>
+            <h2 className="mb-6 text-2xl">{t("Información de contacto", "Informació de contacte", "Contact details")}</h2>
             <div className="flex flex-col gap-6 text-[15px] leading-relaxed">
               <div>
                 <h3 className="mb-1 text-xs font-semibold uppercase tracking-widest text-ink-soft">
-                  {t("Correo electrónico", "Correu electrònic")}
+                  {t("Correo electrónico", "Correu electrònic", "Email")}
                 </h3>
                 <a href={`mailto:${site.email}`} className="font-medium text-primary">
                   {site.email}
@@ -45,7 +47,7 @@ export default async function ContactoPage() {
 
               <div>
                 <h3 className="mb-1 text-xs font-semibold uppercase tracking-widest text-ink-soft">
-                  {t("Teléfonos", "Telèfons")}
+                  {t("Teléfonos", "Telèfons", "Phone numbers")}
                 </h3>
                 <div className="flex flex-col gap-0.5">
                   {site.phoneContacts.map((phone) => (
@@ -63,7 +65,7 @@ export default async function ContactoPage() {
 
               <div>
                 <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-ink-soft">
-                  {t("Oficinas y horario", "Oficines i horari")}
+                  {t("Oficinas y horario", "Oficines i horari", "Offices and opening hours")}
                 </h3>
                 <div className="flex flex-col gap-4">
                   {site.offices.map((office) => (

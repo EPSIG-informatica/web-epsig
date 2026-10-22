@@ -11,8 +11,8 @@ export default async function Sectors() {
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <SectionHeading
-            eyebrow={t("Sectores", "Sectors")}
-            title={t("Adaptado al día a día de tu negocio", "Adaptat al dia a dia del teu negoci")}
+            eyebrow={t("Sectores", "Sectors", "Sectors")}
+            title={t("Adaptado al día a día de tu negocio", "Adaptat al dia a dia del teu negoci", "Tailored to the day-to-day running of your business")}
           />
         </Reveal>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

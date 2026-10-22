@@ -1,18 +1,19 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { defaultLocale, isLocale, LOCALE_COOKIE, negotiateLocale } from "@/lib/i18n";
+import { defaultLocale, fromEnglishPath, isLocale, LOCALE_COOKIE, negotiateLocale, toEnglishPath } from "@/lib/i18n";
 
 // Idioma de cada visita:
-// - /ca/... → valenciano, tal cual.
+// - /ca/... y /en/... → valenciano e inglés, tal cual.
 // - /es/... → no es una URL pública: redirige a la misma ruta sin prefijo.
 // - Sin prefijo → castellano (reescrito internamente a /es/...), salvo que el usuario prefiera
-//   valenciano: lo ha elegido en el selector (cookie) o, si no ha elegido, su navegador está en
-//   catalán/valenciano. En ese caso se le redirige a /ca/... (redirección temporal, para que
-//   Google, que no envía Accept-Language, siga indexando la versión en castellano).
+//   otro idioma: lo ha elegido en el selector (cookie) o, si no ha elegido, su navegador está en
+//   catalán/valenciano o en inglés. En ese caso se le redirige a /ca/... o /en/... (redirección
+//   temporal, para que Google, que no envía Accept-Language, siga indexando el castellano).
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const first = pathname.split("/")[1];
 
-  if (first === "ca") return NextResponse.next();
+  if (first === "en") return englishRoute(request);
+  if (isLocale(first) && first !== defaultLocale) return NextResponse.next();
 
   if (first === defaultLocale) {
     const url = request.nextUrl.clone();
@@ -24,9 +25,9 @@ export function proxy(request: NextRequest) {
   const preferred = isLocale(chosen) ? chosen : negotiateLocale(request.headers.get("accept-language"));
 
   let response: NextResponse;
-  if (preferred === "ca") {
+  if (preferred !== defaultLocale) {
     const url = request.nextUrl.clone();
-    url.pathname = `/ca${pathname}`;
+    url.pathname = `/${preferred}${pathname}`;
     response = NextResponse.redirect(url, 307);
   } else {
     const url = request.nextUrl.clone();
@@ -36,6 +37,27 @@ export function proxy(request: NextRequest) {
   // La respuesta de una URL sin prefijo depende del idioma del navegador y de la cookie.
   response.headers.set("Vary", "Accept-Language, Cookie");
   return response;
+}
+
+// Inglés: las URLs públicas van en inglés (/en/services/...) y se sirven desde las páginas internas
+// en castellano (/en/servicios/...). Si alguien entra por la ruta en castellano bajo /en/, se le
+// redirige de forma permanente a la de inglés para que Google solo indexe una dirección.
+function englishRoute(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const rest = pathname.slice("/en".length) || "/";
+  const internal = fromEnglishPath(rest);
+  const canonical = toEnglishPath(internal);
+  if (canonical !== rest) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/en${canonical}`;
+    return NextResponse.redirect(url, 308);
+  }
+  if (internal !== rest) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/en${internal}`;
+    return NextResponse.rewrite(url);
+  }
+  return NextResponse.next();
 }
 
 export const config = {

@@ -7,28 +7,31 @@ import type { Localized } from "@/lib/i18n";
 export const consentCategories = [
   {
     id: "functional",
-    title: { es: "Funcionales", ca: "Funcionals" },
+    title: { es: "Funcionales", ca: "Funcionals", en: "Functional" },
     body: {
       es: "Permiten servicios integrados de terceros, como mapas, vídeos o chat de atención.",
       ca: "Permeten serveis integrats de tercers, com ara mapes, vídeos o xat d'atenció.",
+      en: "They enable embedded third-party services such as maps, videos or customer support chat.",
     },
     cookiePrefixes: [],
   },
   {
     id: "analytics",
-    title: { es: "Analíticas", ca: "Analítiques" },
+    title: { es: "Analíticas", ca: "Analítiques", en: "Analytics" },
     body: {
       es: "Nos ayudan a entender, de forma agregada, cómo se usa la web para mejorarla (Google Analytics).",
       ca: "Ens ajuden a entendre, de manera agregada, com s'usa la web per a millorar-la (Google Analytics).",
+      en: "They help us understand, in aggregate, how the website is used so we can improve it (Google Analytics).",
     },
     cookiePrefixes: ["_ga", "_gid", "_gat"],
   },
   {
     id: "marketing",
-    title: { es: "Marketing", ca: "Màrqueting" },
+    title: { es: "Marketing", ca: "Màrqueting", en: "Marketing" },
     body: {
       es: "Permiten medir campañas y saber por qué canal nos conociste si nos escribes por el formulario.",
       ca: "Permeten mesurar campanyes i saber per quin canal ens vas conéixer si ens escrius pel formulari.",
+      en: "They let us measure campaigns and find out how you heard about us if you write to us through the form.",
     },
     cookiePrefixes: ["_gcl", "_fbp", "_fbc"],
   },

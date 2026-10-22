@@ -161,7 +161,7 @@ export async function createLead(lead: LeadInput) {
   ]);
 
   const originRows: [string, string | undefined][] = [
-    ["Idioma de la web", lead.lang ? (lead.lang === "ca" ? "valenciano" : "castellano") : undefined],
+    ["Idioma de la web", lead.lang ? { es: "castellano", ca: "valenciano", en: "inglés" }[lead.lang] : undefined],
     ["Página del formulario", origin.formPage],
     ["Primera página visitada", origin.landing],
     ["Primera visita", origin.firstVisit],

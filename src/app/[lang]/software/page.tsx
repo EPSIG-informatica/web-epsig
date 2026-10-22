@@ -9,10 +9,11 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/software", {
-    title: "Software",
+    title: t("Software", "Software", "Business Software and Integrations"),
     description: t(
       "Software propio de EPSIG: gestión y control eléctrico para campings, gestión de viviendas tuteladas y conectores que integran Forvenues, Ágora, Sage y FACe.",
       "Programari propi d'EPSIG: gestió i control elèctric per a càmpings, gestió d'habitatges tutelats i connectors que integren Forvenues, Ágora, Sage i FACe.",
+      "Our own software: electricity management for campsites, supported housing management and connectors for Forvenues, Ágora, Sage and FACe.",
     ),
   });
 }
@@ -20,18 +21,19 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function SoftwarePage() {
   const t = await getT();
   const viviendasFolders = [
-    t("1. Vivienda", "1. Habitatge"),
-    t("2. Residentes", "2. Residents"),
-    t("7. Protocolo VT", "7. Protocol VT"),
+    t("1. Vivienda", "1. Habitatge", "1. Home"),
+    t("2. Residentes", "2. Residents", "2. Residents"),
+    t("7. Protocolo VT", "7. Protocol VT", "7. VT Protocol"),
   ];
   return (
     <>
       <PageHero
-        eyebrow={t("Software propio", "Programari propi")}
-        title={t("Software que resuelve problemas reales", "Programari que resol problemes reals")}
+        eyebrow={t("Software propio", "Programari propi", "Our own software")}
+        title={t("Software que resuelve problemas reales", "Programari que resol problemes reals", "Software that solves real problems")}
         lead={t(
           "Desarrollamos herramientas para los problemas que vemos cada día en nuestros clientes: la luz que no se cobra en un camping, los certificados de una vivienda tutelada hechos a mano o las ventas que se teclean tres veces.",
           "Desenvolupem eines per als problemes que veiem cada dia en els nostres clients: la llum que no es cobra en un càmping, els certificats d'un habitatge tutelat fets a mà o les vendes que es teclegen tres vegades.",
+          "We build tools for the problems we see every day at our clients: unbilled electricity at a campsite, supported-home certificates filled in by hand, or sales keyed in three times over.",
         )}
       />
 
@@ -58,22 +60,23 @@ export default async function SoftwarePage() {
                   ))}
                 </div>
                 <span className="mt-4 block font-mono text-[11px] text-mist-soft">
-                  {t("12 parcelas · 9 conectadas · caja al día", "12 parcel·les · 9 connectades · caixa al dia")}
+                  {t("12 parcelas · 9 conectadas · caja al día", "12 parcel·les · 9 connectades · caixa al dia", "12 pitches · 9 connected · cash up to date")}
                 </span>
               </div>
               <div className="flex flex-1 flex-col p-7">
                 <span className="text-[11.5px] font-bold uppercase tracking-[0.12em] text-primary">
-                  {t("Campings", "Càmpings")}
+                  {t("Campings", "Càmpings", "Campsites")}
                 </span>
                 <h2 className="mt-2 text-[24px] text-ink">{t(software.camping.title)}</h2>
                 <p className="mt-2 flex-1 text-[15px] leading-relaxed text-ink-soft">
                   {t(
                     "Un CRM para la recepción de tu camping: check-in, clientes, electricidad por parcela, tickets de luz, horarios, gráficos e informes de caja en un solo panel.",
                     "Un CRM per a la recepció del teu càmping: check-in, clients, electricitat per parcel·la, tiquets de llum, horaris, gràfics i informes de caixa en un sol panell.",
+                    "A CRM for your campsite reception: check-in, guests, electricity per pitch, electricity tickets, schedules, charts and cash reports in a single dashboard.",
                   )}
                 </p>
                 <span className="mt-5 text-sm font-semibold text-primary">
-                  {t("Descubrir el software →", "Descobrir el programari →")}
+                  {t("Descubrir el software →", "Descobrir el programari →", "Discover the software →")}
                 </span>
               </div>
             </Link>
@@ -97,22 +100,23 @@ export default async function SoftwarePage() {
                   ))}
                 </div>
                 <span className="mt-4 block font-mono text-[11px] text-mist-soft">
-                  {t("Certificado listo · PDF generado", "Certificat preparat · PDF generat")}
+                  {t("Certificado listo · PDF generado", "Certificat preparat · PDF generat", "Certificate ready · PDF generated")}
                 </span>
               </div>
               <div className="flex flex-1 flex-col p-7">
                 <span className="text-[11.5px] font-bold uppercase tracking-[0.12em] text-primary">
-                  {t("Viviendas tuteladas", "Habitatges tutelats")}
+                  {t("Viviendas tuteladas", "Habitatges tutelats", "Supported housing")}
                 </span>
                 <h2 className="mt-2 text-[24px] text-ink">{t(software.viviendas.title)}</h2>
                 <p className="mt-2 flex-1 text-[15px] leading-relaxed text-ink-soft">
                   {t(
                     "Entidades, empresas, viviendas, residentes, planning de tareas y documentación ordenada en un solo panel, con el certificado de ingreso y coste de plaza en PDF.",
                     "Entitats, empreses, habitatges, residents, planificació de tasques i documentació ordenada en un sol panell, amb el certificat d'ingrés i cost de plaça en PDF.",
+                    "Organisations, companies, homes, residents, task planning and well-organised documentation in a single dashboard, with the admission and place cost certificate as a PDF.",
                   )}
                 </p>
                 <span className="mt-5 text-sm font-semibold text-primary">
-                  {t("Ver el software →", "Veure el programari →")}
+                  {t("Ver el software →", "Veure el programari →", "See the software →")}
                 </span>
               </div>
             </Link>
@@ -135,17 +139,18 @@ export default async function SoftwarePage() {
               </div>
               <div className="flex flex-1 flex-col p-7">
                 <span className="text-[11.5px] font-bold uppercase tracking-[0.12em] text-primary">
-                  {t("Integraciones", "Integracions")}
+                  {t("Integraciones", "Integracions", "Integrations")}
                 </span>
                 <h2 className="mt-2 text-[24px] text-ink">{t(software.conectores.title)}</h2>
                 <p className="mt-2 flex-1 text-[15px] leading-relaxed text-ink-soft">
                   {t(
                     `${connectors.length} conectores que llevan tus ventas de Forvenues a Ágora, de Ágora a Sage cada día y de Sage a la factura electrónica FACe. Por separado o encadenados.`,
                     `${connectors.length} connectors que porten les teues vendes de Forvenues a Ágora, d'Ágora a Sage cada dia i de Sage a la factura electrònica FACe. Per separat o encadenats.`,
+                    `${connectors.length} connectors that take your sales from Forvenues to Ágora, from Ágora to Sage every day, and from Sage to FACe e-invoicing. Individually or chained together.`,
                   )}
                 </p>
                 <span className="mt-5 text-sm font-semibold text-primary">
-                  {t("Ver los conectores →", "Veure els connectors →")}
+                  {t("Ver los conectores →", "Veure els connectors →", "See the connectors →")}
                 </span>
               </div>
             </Link>
@@ -154,12 +159,13 @@ export default async function SoftwarePage() {
       </section>
 
       <CtaBand
-        title={t("¿Tienes un problema que ningún programa resuelve?", "Tens un problema que cap programa resol?")}
+        title={t("¿Tienes un problema que ningún programa resuelve?", "Tens un problema que cap programa resol?", "Got a problem no software can solve?")}
         body={t(
           "Cuéntanoslo: si podemos automatizarlo o conectarlo, te proponemos cómo.",
           "Conta-nos-ho: si podem automatitzar-lo o connectar-lo, et proposem com.",
+          "Tell us about it: if we can automate it or connect it, we'll suggest how.",
         )}
-        ctaLabel={t("Hablar con nosotros", "Parlar amb nosaltres")}
+        ctaLabel={t("Hablar con nosotros", "Parlar amb nosaltres", "Talk to us")}
       />
     </>
   );

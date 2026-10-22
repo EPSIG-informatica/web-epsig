@@ -8,42 +8,43 @@ import type { Localized } from "@/lib/i18n";
 // Next.js ya añade "noindex" a las respuestas 404. Sin canónica ni hreflang: no tiene ruta propia.
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
-  return { title: t("Página no encontrada", "Pàgina no trobada") };
+  return { title: t("Página no encontrada", "Pàgina no trobada", "Page not found") };
 }
 
 const shortcuts: { href: string; title: Localized; body: Localized }[] = [
   {
     href: "/servicios",
-    title: { es: "Servicios", ca: "Serveis" },
-    body: { es: "Consultoría, digitalización y ciberseguridad", ca: "Consultoria, digitalització i ciberseguretat" },
+    title: { es: "Servicios", ca: "Serveis", en: "Services" },
+    body: { es: "Consultoría, digitalización y ciberseguridad", ca: "Consultoria, digitalització i ciberseguretat", en: "Consulting, digitalisation and cybersecurity" },
   },
   {
     href: "/servicios/odoo",
-    title: { es: "Odoo ERP", ca: "Odoo ERP" },
-    body: { es: "Implantación completa de tu sistema de gestión", ca: "Implantació completa del teu sistema de gestió" },
+    title: { es: "Odoo ERP", ca: "Odoo ERP", en: "Odoo ERP" },
+    body: { es: "Implantación completa de tu sistema de gestión", ca: "Implantació completa del teu sistema de gestió", en: "Full implementation of your management system" },
   },
   {
     href: "/kit-digital",
-    title: { es: "Kit Digital", ca: "Kit Digital" },
-    body: { es: "Web, tienda online, CRM y ciberseguridad", ca: "Web, botiga en línia, CRM i ciberseguretat" },
+    title: { es: "Kit Digital", ca: "Kit Digital", en: "Kit Digital" },
+    body: { es: "Web, tienda online, CRM y ciberseguridad", ca: "Web, botiga en línia, CRM i ciberseguretat", en: "Website, online shop, CRM and cybersecurity" },
   },
   {
     href: "/kit-consulting",
-    title: { es: "Kit Consulting", ca: "Kit Consulting" },
-    body: { es: "Asesoramiento en IA, datos y procesos", ca: "Assessorament en IA, dades i processos" },
+    title: { es: "Kit Consulting", ca: "Kit Consulting", en: "Kit Consulting" },
+    body: { es: "Asesoramiento en IA, datos y procesos", ca: "Assessorament en IA, dades i processos", en: "Advice on AI, data and processes" },
   },
   {
     href: "/servicios/consultoria-empresarial",
-    title: { es: "Consultoría Empresarial", ca: "Consultoria Empresarial" },
+    title: { es: "Consultoría Empresarial", ca: "Consultoria Empresarial", en: "Business Consulting" },
     body: {
       es: "Asesoría económico-financiera, laboral y fiscal",
       ca: "Assessoria economicofinancera, laboral i fiscal",
+      en: "Financial, employment and tax advisory",
     },
   },
   {
     href: "/nosotros",
-    title: { es: "Nosotros", ca: "Nosaltres" },
-    body: { es: "Quiénes somos y cómo trabajamos", ca: "Qui som i com treballem" },
+    title: { es: "Nosotros", ca: "Nosaltres", en: "About us" },
+    body: { es: "Quiénes somos y cómo trabajamos", ca: "Qui som i com treballem", en: "Who we are and how we work" },
   },
 ];
 
@@ -87,12 +88,13 @@ export default async function NotFound() {
           </p>
 
           <h1 className="mt-4 text-[28px] leading-[1.2] text-white sm:text-[36px]">
-            {t("Esta página no existe o ha cambiado de sitio", "Esta pàgina no existix o ha canviat de lloc")}
+            {t("Esta página no existe o ha cambiado de sitio", "Esta pàgina no existix o ha canviat de lloc", "This page doesn't exist or has moved")}
           </h1>
           <p className="mx-auto mt-4 max-w-[48ch] text-base leading-relaxed text-mist-soft">
             {t(
               "Puede que el enlace esté mal escrito o que hayamos reorganizado la web. Desde aquí puedes volver al inicio o ir directamente a lo que buscabas.",
               "Pot ser que l'enllaç estiga mal escrit o que hàgem reorganitzat la web. Des d'ací pots tornar a l'inici o anar directament al que buscaves.",
+              "The link may be mistyped, or we may have reorganised the website. From here you can go back to the home page or straight to what you were looking for.",
             )}
           </p>
 
@@ -101,13 +103,13 @@ export default async function NotFound() {
               href="/"
               className="w-full rounded-full bg-white px-6 py-3 text-[14px] font-semibold text-ink transition-colors hover:bg-mist sm:w-auto"
             >
-              {t("Volver al inicio", "Torna a l'inici")}
+              {t("Volver al inicio", "Torna a l'inici", "Back to home")}
             </Link>
             <Link
               href="/contacto"
               className="w-full rounded-full border-[1.5px] border-white/25 px-6 py-3 text-[14px] font-semibold text-white transition-colors hover:border-white sm:w-auto"
             >
-              {t("Contactar", "Contacta")}
+              {t("Contactar", "Contacta", "Contact us")}
             </Link>
           </div>
         </Reveal>
@@ -116,9 +118,9 @@ export default async function NotFound() {
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-6">
           <Reveal>
-            <h2 className="mb-2 text-center text-xl text-ink sm:text-2xl">{t("Quizá te interese", "Potser t'interessa")}</h2>
+            <h2 className="mb-2 text-center text-xl text-ink sm:text-2xl">{t("Quizá te interese", "Potser t'interessa", "You might be interested in")}</h2>
             <p className="mb-10 text-center text-[15px] text-ink-soft">
-              {t(`Las secciones más visitadas de ${site.name}.`, `Les seccions més visitades d'${site.name}.`)}
+              {t(`Las secciones más visitadas de ${site.name}.`, `Les seccions més visitades d'${site.name}.`, `The most visited sections of ${site.name}.`)}
             </p>
           </Reveal>
 
@@ -147,11 +149,11 @@ export default async function NotFound() {
           </div>
 
           <p className="mt-10 text-center text-sm text-ink-soft">
-            {t("¿No encuentras lo que buscas? Escríbenos a", "No trobes el que busques? Escriu-nos a")}{" "}
+            {t("¿No encuentras lo que buscas? Escríbenos a", "No trobes el que busques? Escriu-nos a", "Can't find what you're looking for? Email us at")}{" "}
             <a href={`mailto:${site.email}`} className="font-medium text-primary underline underline-offset-2 hover:no-underline">
               {site.email}
             </a>{" "}
-            {t("o llámanos al", "o telefona'ns al")}{" "}
+            {t("o llámanos al", "o telefona'ns al", "or call us on")}{" "}
             <a href={telHref(site.phones[0])} className="font-medium text-primary underline underline-offset-2 hover:no-underline">
               {site.phones[0]}
             </a>

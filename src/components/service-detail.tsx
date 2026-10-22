@@ -37,8 +37,8 @@ export default async function ServiceDetail({
           </div>
 
           <SectionHeading
-            eyebrow={t("Qué incluye", "Què inclou")}
-            title={t("Servicios dentro de esta área", "Serveis dins d'esta àrea")}
+            eyebrow={t("Qué incluye", "Què inclou", "What's included")}
+            title={t("Servicios dentro de esta área", "Serveis dins d'esta àrea", "Services in this area")}
             align="left"
           />
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -54,7 +54,7 @@ export default async function ServiceDetail({
                   <h3 className="mb-2 text-[17px]">{feature.title}</h3>
                   <p className="text-[14.5px] leading-relaxed text-ink-soft">{feature.body}</p>
                   {feature.href && (
-                    <span className="mt-3 inline-block text-sm font-semibold text-primary">{t("Ver más →", "Veure'n més →")}</span>
+                    <span className="mt-3 inline-block text-sm font-semibold text-primary">{t("Ver más →", "Veure'n més →", "Learn more →")}</span>
                   )}
                 </TiltCard>
               </Reveal>

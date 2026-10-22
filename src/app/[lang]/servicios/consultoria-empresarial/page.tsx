@@ -6,10 +6,11 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/servicios/consultoria-empresarial", {
-    title: t("Consultoría Empresarial", "Consultoria Empresarial"),
+    title: t("Consultoría Empresarial", "Consultoria Empresarial", "Business Consulting for SMEs in Valencia"),
     description: t(
       "Asesoría económico-financiera, laboral y fiscal-contable, empresa familiar y protección de datos para pymes y particulares.",
       "Assessoria economicofinancera, laboral i fiscal-comptable, empresa familiar i protecció de dades per a pimes i particulars.",
+      "Financial, payroll, tax and accounting advisory for SMEs, the self-employed and individuals, plus family business and data protection.",
     ),
   });
 }
@@ -18,26 +19,29 @@ export default async function ConsultoriaEmpresarialPage() {
   const t = await getT();
   return (
     <ServiceDetail
-      eyebrow={t("Consultoría Empresarial", "Consultoria Empresarial")}
+      eyebrow={t("Consultoría Empresarial", "Consultoria Empresarial", "Business Consulting")}
       title={t(
         "La asesoría de toda la vida, con la organización que necesita una empresa que crece",
         "L'assessoria de tota la vida, amb l'organització que necessita una empresa que creix",
+        "Traditional, trusted advisory — with the organisation a growing business needs",
       )}
       lead={t(
         "Antes de digitalizar o proteger nada, hay que tener claro cómo está tu empresa hoy: sus cuentas, su personal y su cumplimiento normativo.",
         "Abans de digitalitzar o protegir res, cal tindre clar com està hui la teua empresa: els seus comptes, el seu personal i el seu compliment normatiu.",
+        "Before digitalising or protecting anything, you need a clear picture of where your business stands today: its accounts, its people and its regulatory compliance.",
       )}
       features={asesoriaAreas.map((area) => ({
         title: t(area.title),
         body: t(area.body),
         href: "slug" in area ? `/${area.slug}` : undefined,
       }))}
-      ctaTitle={t("¿Hablamos de la organización de tu empresa?", "Parlem de l'organització de la teua empresa?")}
+      ctaTitle={t("¿Hablamos de la organización de tu empresa?", "Parlem de l'organització de la teua empresa?", "Shall we talk about how your business is organised?")}
       ctaBody={t(
         "Una primera conversación gratuita para entender dónde estás y qué necesitas.",
         "Una primera conversa gratuïta per a entendre on estàs i què necessites.",
+        "A free initial conversation to understand where you are and what you need.",
       )}
-      ctaLabel={t("Solicitar diagnóstico", "Sol·licitar diagnòstic")}
+      ctaLabel={t("Solicitar diagnóstico", "Sol·licitar diagnòstic", "Request an assessment")}
     />
   );
 }

@@ -21,6 +21,7 @@ export async function generateMetadata({
     description: t(
       `${category.summary.es} ${category.priceFrom.es}. Solución del catálogo Kit Digital implantada por ${site.name}.`,
       `${category.summary.ca} ${category.priceFrom.ca}. Solució del catàleg Kit Digital implantada per ${site.name}.`,
+      `${category.summary.en} ${category.priceFrom.en}. A Kit Digital catalogue solution implemented by ${site.name}.`,
     ),
   });
 }
@@ -42,14 +43,15 @@ export default async function KitDigitalCategoryPage({
       features={category.features.map((f) => t(f))}
       price={t(category.priceFrom)}
       backHref="/kit-digital"
-      backLabel={t("Ver todas las categorías de Kit Digital", "Veure totes les categories de Kit Digital")}
+      backLabel={t("Ver todas las categorías de Kit Digital", "Veure totes les categories de Kit Digital", "See all Kit Digital categories")}
       notice={<ProgramStatus program="Kit Digital" open={programStatus.kitDigital} compact />}
-      ctaTitle={t("¿Te interesa esta solución?", "T'interessa esta solució?")}
+      ctaTitle={t("¿Te interesa esta solución?", "T'interessa esta solució?", "Interested in this solution?")}
       ctaBody={t(
         "Te asesoramos sin compromiso y te avisamos en cuanto haya una nueva convocatoria de ayudas.",
         "T'assessorem sense compromís i t'avisem tan prompte com hi haja una nova convocatòria d'ajudes.",
+        "We offer no-obligation advice and will let you know as soon as a new funding call opens.",
       )}
-      ctaLabel={t("Solicitar información", "Sol·licitar informació")}
+      ctaLabel={t("Solicitar información", "Sol·licitar informació", "Request information")}
     />
   );
 }

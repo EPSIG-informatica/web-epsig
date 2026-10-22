@@ -38,7 +38,7 @@ export default async function Hero() {
           <div className="hero-in">
             <div className="inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-mist-accent">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-              {t("Partner oficial de Odoo · Agente Digitalizador", "Partner oficial d'Odoo · Agent Digitalitzador")}
+              {t("Partner oficial de Odoo · Agente Digitalizador", "Partner oficial d'Odoo · Agent Digitalitzador", "Official Odoo Partner · Digitalisation Agent")}
             </div>
           </div>
           <div className="hero-in" style={{ animationDelay: "80ms" }}>
@@ -52,6 +52,10 @@ export default async function Hero() {
                   El sistema que ajuda la teua empresa a{" "}
                   <em className="text-accent not-italic">funcionar millor.</em>
                 </>,
+                <>
+                  The system that helps your business{" "}
+                  <em className="text-accent not-italic">run better.</em>
+                </>,
               )}
             </h1>
           </div>
@@ -60,6 +64,7 @@ export default async function Hero() {
               {t(
                 "Implantamos Odoo ERP y acompañamos a pymes de la Marina Alta, Valencia y la Safor a gestionar, digitalizar y proteger su negocio — en un solo sitio, no en tres proveedores distintos.",
                 "Implantem Odoo ERP i acompanyem pimes de la Marina Alta, València i la Safor a gestionar, digitalitzar i protegir el seu negoci — en un sol lloc, no en tres proveïdors diferents.",
+                "We implement Odoo ERP and help SMEs across the Marina Alta, Valencia and La Safor manage, digitalise and protect their business — all in one place, not spread across three different providers.",
               )}
             </p>
           </div>
@@ -68,13 +73,13 @@ export default async function Hero() {
               href="/contacto#diagnostico"
               className="inline-block rounded-full bg-accent-strong px-6.5 py-3.5 text-[14.5px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(90,169,230,.6)] transition-transform hover:scale-[1.04] active:scale-[0.96]"
             >
-              {t("Solicita un diagnóstico gratuito", "Sol·licita un diagnòstic gratuït")}
+              {t("Solicita un diagnóstico gratuito", "Sol·licita un diagnòstic gratuït", "Request a free assessment")}
             </Link>
             <Link
               href="/servicios/odoo"
               className="inline-block rounded-full border-[1.5px] border-white/25 px-5 py-2.5 text-[13.5px] font-semibold text-white transition hover:scale-[1.04] hover:border-white/50 active:scale-[0.96]"
             >
-              {t("Cómo implantamos Odoo →", "Com implantem Odoo →")}
+              {t("Cómo implantamos Odoo →", "Com implantem Odoo →", "How we implement Odoo →")}
             </Link>
           </div>
         </div>

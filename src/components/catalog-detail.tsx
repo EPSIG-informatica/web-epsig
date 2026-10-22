@@ -71,6 +71,7 @@ export default async function CatalogDetail({
                   {t(
                     "Precio orientativo, IVA no incluido. Consulta tu caso concreto.",
                     "Preu orientatiu, IVA no inclòs. Consulta el teu cas concret.",
+                    "Guide price, excluding VAT. Ask us about your specific case.",
                   )}
                 </p>
               </div>

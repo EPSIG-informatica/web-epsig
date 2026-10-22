@@ -2,11 +2,11 @@ import { getT } from "@/lib/i18n-server";
 
 // Nodos del diagrama: posición en % del lienzo (coinciden con los extremos de las líneas del SVG).
 const nodes = [
-  { key: "hub", label: { es: "Odoo ERP", ca: "Odoo ERP" }, sub: { es: "Núcleo", ca: "Nucli" }, x: "50%", y: "22%" },
-  { key: "n2", label: { es: "CRM", ca: "CRM" }, sub: { es: "Leads", ca: "Leads" }, x: "19%", y: "51%" },
-  { key: "n3", label: { es: "Ventas", ca: "Vendes" }, sub: { es: "Pedidos", ca: "Comandes" }, x: "81%", y: "51%" },
-  { key: "n4", label: { es: "Inventario", ca: "Inventari" }, sub: { es: "Stock", ca: "Estoc" }, x: "24%", y: "85%" },
-  { key: "n5", label: { es: "Contabilidad", ca: "Comptabilitat" }, sub: { es: "Asientos", ca: "Assentaments" }, x: "76%", y: "85%" },
+  { key: "hub", label: { es: "Odoo ERP", ca: "Odoo ERP", en: "Odoo ERP" }, sub: { es: "Núcleo", ca: "Nucli", en: "Core" }, x: "50%", y: "22%" },
+  { key: "n2", label: { es: "CRM", ca: "CRM", en: "CRM" }, sub: { es: "Leads", ca: "Leads", en: "Leads" }, x: "19%", y: "51%" },
+  { key: "n3", label: { es: "Ventas", ca: "Vendes", en: "Sales" }, sub: { es: "Pedidos", ca: "Comandes", en: "Orders" }, x: "81%", y: "51%" },
+  { key: "n4", label: { es: "Inventario", ca: "Inventari", en: "Inventory" }, sub: { es: "Stock", ca: "Estoc", en: "Stock" }, x: "24%", y: "85%" },
+  { key: "n5", label: { es: "Contabilidad", ca: "Comptabilitat", en: "Accounting" }, sub: { es: "Asientos", ca: "Assentaments", en: "Entries" }, x: "76%", y: "85%" },
 ] as const;
 
 export default async function SystemPanel() {
@@ -14,7 +14,7 @@ export default async function SystemPanel() {
   return (
     <div className="rounded-panel border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md">
       <div className="mb-4.5 flex items-center justify-between">
-        <span className="font-mono text-xs text-mist-soft">{t("tu-empresa.odoo", "la-teua-empresa.odoo")}</span>
+        <span className="font-mono text-xs text-mist-soft">{t("tu-empresa.odoo", "la-teua-empresa.odoo", "your-business.odoo")}</span>
         <div className="flex gap-1.5">
           <i className="block h-2 w-2 rounded-full bg-white/20" />
           <i className="block h-2 w-2 rounded-full bg-white/20" />
@@ -46,9 +46,9 @@ export default async function SystemPanel() {
       <div className="mt-4 flex justify-between font-mono text-[11.5px] text-mist-faint">
         <span className="flex items-center gap-1.5">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" aria-hidden />
-          {t("Estado: conectado", "Estat: connectat")}
+          {t("Estado: conectado", "Estat: connectat", "Status: connected")}
         </span>
-        <span>{t("5 módulos activos", "5 mòduls actius")}</span>
+        <span>{t("5 módulos activos", "5 mòduls actius", "5 active modules")}</span>
       </div>
     </div>
   );

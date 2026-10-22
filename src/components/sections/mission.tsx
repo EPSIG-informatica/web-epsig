@@ -20,10 +20,16 @@ export default async function Mission() {
               <span className="text-primary">digitalitzar els seus processos</span> i{" "}
               <span className="text-accent-strong">protegir el seu negoci</span>.
             </>,
+            <>
+              We help businesses{" "}
+              <span className="text-primary">improve their management</span>,{" "}
+              <span className="text-primary">digitalise their processes</span> and{" "}
+              <span className="text-accent-strong">protect their operations</span>.
+            </>,
           )}
         </p>
         <small className="mt-5.5 block font-mono text-[13px] tracking-wide text-ink-soft">
-          {t("ESTE ES EL PORQUÉ DETRÁS DE CADA SERVICIO DE EPSIG", "ESTE ÉS EL PERQUÈ DE CADA SERVEI D'EPSIG")}
+          {t("ESTE ES EL PORQUÉ DETRÁS DE CADA SERVICIO DE EPSIG", "ESTE ÉS EL PERQUÈ DE CADA SERVEI D'EPSIG", "THIS IS THE WHY BEHIND EVERY EPSIG SERVICE")}
         </small>
       </Reveal>
     </section>

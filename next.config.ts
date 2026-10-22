@@ -102,6 +102,8 @@ const embeddableHeaders = [
     value: contentSecurityPolicy.replace("frame-ancestors 'none'", "frame-ancestors 'self'"),
   },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  // Son piezas para incrustar, no páginas: que Google no las indexe como URLs sueltas.
+  { key: "X-Robots-Tag", value: "noindex" },
 ];
 
 const nextConfig: NextConfig = {

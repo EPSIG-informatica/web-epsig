@@ -11,10 +11,11 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/servicios", {
-    title: t("Servicios", "Serveis"),
+    title: t("Servicios", "Serveis", "Business Consulting, ERP and Cybersecurity"),
     description: t(
       "Consultoría empresarial, transformación digital e implantación de Odoo ERP, y protección del negocio con ciberseguridad gestionada.",
       "Consultoria empresarial, transformació digital i implantació d'Odoo ERP, i protecció del negoci amb ciberseguretat gestionada.",
+      "Business consulting, digital transformation and Odoo ERP implementation, plus business protection with managed cybersecurity.",
     ),
   });
 }
@@ -24,11 +25,12 @@ export default async function ServiciosPage() {
   return (
     <>
       <PageHero
-        eyebrow={t("Servicios", "Serveis")}
-        title={t("Tres formas de ayudarte a funcionar mejor", "Tres maneres d'ajudar-te a funcionar millor")}
+        eyebrow={t("Servicios", "Serveis", "Services")}
+        title={t("Tres formas de ayudarte a funcionar mejor", "Tres maneres d'ajudar-te a funcionar millor", "Three ways to help your business run better")}
         lead={t(
           "Consultoría, digitalización y protección — nunca por separado. Cada proyecto se diseña a partir de dónde está tu empresa hoy.",
           "Consultoria, digitalització i protecció — mai per separat. Cada projecte es dissenya a partir d'on està hui la teua empresa.",
+          "Consulting, digitalisation and protection — never in isolation. Every project is designed around where your business is today.",
         )}
       />
 
@@ -47,7 +49,7 @@ export default async function ServiciosPage() {
                     {t(pillar.summary)}
                   </p>
                   <span className="mt-4 inline-block text-sm font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 pointer-coarse:opacity-100">
-                    {t("Ver servicio →", "Veure el servei →")}
+                    {t("Ver servicio →", "Veure el servei →", "View service →")}
                   </span>
                 </TiltCard>
               </Reveal>
@@ -59,15 +61,16 @@ export default async function ServiciosPage() {
               <div>
                 <span className="inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-primary">
                   <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-                  {t("Servicio estrella", "Servei estrella")}
+                  {t("Servicio estrella", "Servei estrella", "Flagship service")}
                 </span>
                 <h2 className="mt-3 text-xl">
-                  {t("Odoo ERP, implantado de principio a fin", "Odoo ERP, implantat de principi a fi")}
+                  {t("Odoo ERP, implantado de principio a fin", "Odoo ERP, implantat de principi a fi", "Odoo ERP, implemented from start to finish")}
                 </h2>
                 <p className="mt-2 max-w-xl text-[14.5px] leading-relaxed text-ink-soft">
                   {t(
                     "Diagnóstico, configuración, migración de datos, formación del equipo y soporte continuo — el hilo conductor que conecta las otras tres áreas.",
                     "Diagnòstic, configuració, migració de dades, formació de l'equip i suport continu — el fil conductor que connecta les altres tres àrees.",
+                    "Assessment, configuration, data migration, team training and ongoing support — the common thread that connects the other three areas.",
                   )}
                 </p>
               </div>
@@ -75,7 +78,7 @@ export default async function ServiciosPage() {
                 href="/servicios/odoo"
                 className="shrink-0 rounded-full bg-ink px-6 py-3 text-[13.5px] font-semibold text-white transition-colors hover:bg-primary"
               >
-                {t("Descubrir Odoo ERP", "Descobrir Odoo ERP")}
+                {t("Descubrir Odoo ERP", "Descobrir Odoo ERP", "Discover Odoo ERP")}
               </Link>
             </div>
           </Reveal>
@@ -87,18 +90,20 @@ export default async function ServiciosPage() {
           <div className="mx-auto mb-10 max-w-2xl text-center">
             <div className="inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-primary">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-              {t("Programas públicos", "Programes públics")}
+              {t("Programas públicos", "Programes públics", "Public programmes")}
             </div>
             <h2 className="mt-3 text-[28px]">
               {t(
                 "Agente Digitalizador Adherido y Asesor Digital",
                 "Agent Digitalitzador Adherit i Assessor Digital",
+                "Accredited Digitalisation Agent and Accredited Digital Advisor",
               )}
             </h2>
             <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">
               {t(
                 "Implantamos las soluciones de los catálogos Kit Digital y Kit Consulting. Las convocatorias están cerradas ahora mismo, pero puedes contratar estos servicios directamente y te avisamos cuando se abran de nuevo.",
                 "Implantem les solucions dels catàlegs Kit Digital i Kit Consulting. Les convocatòries estan tancades ara mateix, però pots contractar estos serveis directament i t'avisem quan es tornen a obrir.",
+                "We implement the solutions in the Kit Digital and Kit Consulting catalogues. Applications are currently closed, but you can hire these services directly and we'll let you know as soon as they reopen.",
               )}
             </p>
           </div>
@@ -113,10 +118,11 @@ export default async function ServiciosPage() {
                   {t(
                     "Web, comercio electrónico, CRM, ciberseguridad y más soluciones digitales para tu pyme.",
                     "Web, comerç electrònic, CRM, ciberseguretat i més solucions digitals per a la teua pime.",
+                    "Websites, e-commerce, CRM, cybersecurity and more digital solutions for your SME.",
                   )}
                 </p>
                 <span className="mt-3 inline-block text-sm font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 pointer-coarse:opacity-100">
-                  {t("Ver categorías →", "Veure les categories →")}
+                  {t("Ver categorías →", "Veure les categories →", "View categories →")}
                 </span>
               </TiltCard>
             </Reveal>
@@ -130,10 +136,11 @@ export default async function ServiciosPage() {
                   {t(
                     "Asesoramiento en inteligencia artificial, datos, procesos, estrategia y ciberseguridad para empresas de 10 a 249 empleados.",
                     "Assessorament en intel·ligència artificial, dades, processos, estratègia i ciberseguretat per a empreses de 10 a 249 empleats.",
+                    "Advisory on artificial intelligence, data, processes, strategy and cybersecurity for companies with 10 to 249 employees.",
                   )}
                 </p>
                 <span className="mt-3 inline-block text-sm font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 pointer-coarse:opacity-100">
-                  {t("Ver servicios →", "Veure els serveis →")}
+                  {t("Ver servicios →", "Veure els serveis →", "View services →")}
                 </span>
               </TiltCard>
             </Reveal>

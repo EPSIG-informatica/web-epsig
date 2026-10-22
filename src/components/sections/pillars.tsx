@@ -12,11 +12,12 @@ export default async function Pillars() {
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <SectionHeading
-            eyebrow={t("Cómo trabajamos", "Com treballem")}
-            title={t("Tres formas de ayudarte a funcionar mejor", "Tres maneres d'ajudar-te a funcionar millor")}
+            eyebrow={t("Cómo trabajamos", "Com treballem", "How we work")}
+            title={t("Tres formas de ayudarte a funcionar mejor", "Tres maneres d'ajudar-te a funcionar millor", "Three ways to help your business run better")}
             body={t(
               "Ninguna vive aislada: cada proyecto de Odoo puede apoyarse en las tres.",
               "Cap no viu aïllada: cada projecte d'Odoo pot recolzar-se en les tres.",
+              "None of them stands alone: every Odoo project can draw on all three.",
             )}
           />
         </Reveal>
@@ -31,7 +32,7 @@ export default async function Pillars() {
                 <h3 className="mb-2.5 text-xl">{t(pillar.title)}</h3>
                 <p className="text-[14.5px] leading-relaxed text-ink-soft">{t(pillar.summary)}</p>
                 <span className="mt-4 inline-block text-sm font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 pointer-coarse:opacity-100">
-                  {t("Saber más →", "Saber-ne més →")}
+                  {t("Saber más →", "Saber-ne més →", "Learn more →")}
                 </span>
               </TiltCard>
             </Reveal>

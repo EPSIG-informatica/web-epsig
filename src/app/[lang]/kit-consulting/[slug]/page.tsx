@@ -21,6 +21,7 @@ export async function generateMetadata({
     description: t(
       `${service.summary.es} Servicio de asesoramiento del catálogo Kit Consulting prestado por ${site.name}.`,
       `${service.summary.ca} Servei d'assessorament del catàleg Kit Consulting prestat per ${site.name}.`,
+      `${service.summary.en} A Kit Consulting catalogue advisory service provided by ${site.name}.`,
     ),
   });
 }
@@ -40,14 +41,15 @@ export default async function KitConsultingServicePage({
       lead={t(service.summary)}
       body={t(service.body)}
       backHref="/kit-consulting"
-      backLabel={t("Ver todos los servicios de Kit Consulting", "Veure tots els serveis de Kit Consulting")}
+      backLabel={t("Ver todos los servicios de Kit Consulting", "Veure tots els serveis de Kit Consulting", "See all Kit Consulting services")}
       notice={<ProgramStatus program="Kit Consulting" open={programStatus.kitConsulting} compact />}
-      ctaTitle={t("¿Te interesa este servicio?", "T'interessa este servei?")}
+      ctaTitle={t("¿Te interesa este servicio?", "T'interessa este servei?", "Interested in this service?")}
       ctaBody={t(
         "Te asesoramos sin compromiso y te avisamos en cuanto haya una nueva convocatoria de ayudas.",
         "T'assessorem sense compromís i t'avisem tan prompte com hi haja una nova convocatòria d'ajudes.",
+        "We offer no-obligation advice and will let you know as soon as a new funding call opens.",
       )}
-      ctaLabel={t("Solicitar información", "Sol·licitar informació")}
+      ctaLabel={t("Solicitar información", "Sol·licitar informació", "Request information")}
     />
   );
 }

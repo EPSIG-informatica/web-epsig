@@ -351,9 +351,9 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-l
 </div>
 
 <script>
-// Idioma de la animación: castellano por defecto; ?lang=ca la muestra en valenciano.
+// Idioma de la animación: castellano por defecto; ?lang=ca la muestra en valenciano y ?lang=en en inglés.
 // Se traduce el texto visible (nodos de texto exactos) y las cadenas que escribe la animación (L()).
-const LANG=new URLSearchParams(location.search).get('lang')==='ca'?'ca':'es';
+const LANG=(q=>q==='ca'||q==='en'?q:'es')(new URLSearchParams(location.search).get('lang'));
 const CA={
 'Entidades':'Entitats','Empresas':'Empreses','Viviendas':'Habitatges','Usuarios':'Usuaris',
 'Planing dia tareas':'Planificació dia tasques','Tareas Trabajador':'Tasques Treballador',
@@ -421,9 +421,76 @@ const CA={
 'DOS MIL CIENTO SESENTA EUROS (2160,00 €uros, I.V.A. incluido)':'DOS MIL CENT SEIXANTA EUROS (2160,00 €uros, IVA inclòs)',
 'Residente de pruebas':'Resident de proves','15 de marzo de 2026':'15 de març de 2026'
 };
-const L=t=>LANG==='ca'?(CA[t]||t).replace(/\[PRUEBAS\]/g,'[PROVES]'):t;
-if(LANG==='ca'){
-  document.documentElement.lang='ca';
+const EN={
+'Entidades':'Organisations','Empresas':'Companies','Viviendas':'Homes','Usuarios':'Users',
+'Planing dia tareas':'Daily task planner','Tareas Trabajador':'Staff Tasks',
+'Presupuestos':'Budgets','Contactos':'Contacts','Configuración':'Settings','Inicio':'Home',
+'[PRUEBAS] Entidad De...':'[TEST] Demo Org...',
+'¡Hola de nuevo, EPSIG! 👋':'Welcome back, EPSIG! 👋',
+'Martes, 29 De Septiembre De 2026':'Tuesday, 29 September 2026',
+'TOTAL VIVIENDAS':'TOTAL HOMES','TAREAS PENDIENTES':'PENDING TASKS',
+'VIVIENDAS CON TAREAS':'HOMES WITH TASKS','ESTADO GENERAL':'OVERALL STATUS',
+'Sin Pendientes 🎉':'Nothing Pending 🎉',
+'Viviendas Registradas (1)':'Registered Homes (1)',
+'Explora y gestiona las viviendas asociadas a la empresa.':'Browse and manage the homes linked to the company.',
+'Buscar por nombre o dirección...':'Search by name or address...',
+'Calle de pruebas 1':'1 Test Street',
+'Mis Tareas Pendientes (0)':'My Pending Tasks (0)',
+'Actividades de mantenimiento o servicio pendientes de completar.':'Maintenance or service activities still to be completed.',
+'Todas':'All','Recientes (últimos 3 días)':'Recent (last 3 days)',
+'¡Todo al día!':'All up to date!',
+'No tienes tareas pendientes asignadas en este momento.':'You have no pending tasks assigned right now.',
+'Buscar entidad o empresa...':'Search organisation or company...','3 entidades':'3 organisations','Nueva entidad':'New organisation',
+'[PRUEBAS] Entidad Demo':'[TEST] Demo Organisation','[PRUEBAS] Entidad Demo 2':'[TEST] Demo Organisation 2',
+'2 empresas':'2 companies','5 empresas':'5 companies','Persona de pruebas':'Test person',
+'Ver empresas →':'View companies →','Sin CIF':'No CIF',
+'Contacto...':'Contact...','Teléfono...':'Phone...','Nueva empresa':'New company',
+'Contacto de pruebas':'Test contact',
+'Documentos - [PRUEBAS] Demo 2 Norte S.L.':'Documents - [TEST] Demo 2 Norte S.L.',
+'1. VIVIENDA-Documentación':'1. HOME-Documentation','2. RESIDENTES-Documentación':'2. RESIDENTS-Documentation',
+'3. TRABAJADORES-Documentación':'3. STAFF-Documentation','4. Documentos Varios':'4. Miscellaneous Documents',
+'5. Normativa Vigente':'5. Current Regulations','6. Inspecciones':'6. Inspections',
+'7. Protocolo Funcionamiento VT':'7. VT Operating Protocol',
+'8. Textos LPD (Protección de datos)':'8. LPD Texts (Data Protection)',
+'Certificado Ingreso y Coste Plaza':'Admission and Place Cost Certificate',
+'Nombre del representante':"Representative's name",'DNI del representante':"Representative's DNI",
+'Ej: 12345678A':'E.g. 12345678A','Domicilio social':'Registered office',
+'Ej: Gandia (València), C/ Sant Rafael Nº':'E.g. Gandia (València), C/ Sant Rafael No.',
+'Vivienda tutelada':'Supported home','Selecciona una vivienda':'Select a home',
+'Número de registro':'Registration number','Año del ejercicio económico':'Financial year',
+'Ej: 2026':'E.g. 2026','Presupuesto mensual (en letra e importe)':'Monthly budget (in words and figures)',
+'Ej: DOS MIL CIENTO SESENTA EUROS (2160,00 €uros, I.V.A. incluido)':'E.g. TWO THOUSAND ONE HUNDRED AND SIXTY EUROS (€2,160.00, VAT included)',
+'Nombre del residente':"Resident's name",'Escribe para buscar...':'Type to search...',
+'DNI del residente':"Resident's DNI",'Ej: 87654321Z':'E.g. 87654321Z',
+'Fecha de ingreso':'Admission date','Número de cuenta (IBAN)':'Account number (IBAN)',
+'Ej: ES12 3456 7890 1234...':'E.g. ES12 3456 7890 1234...',
+'CERTIFICADO INGRESO Y COSTE PLAZA':'ADMISSION AND PLACE COST CERTIFICATE','VIVIENDA SALUD MENTAL':'MENTAL HEALTH SUPPORTED HOME',
+'Contacto de pruebas, con DNI':'Test contact, holder of DNI',
+'[DNI del representante]':"[Representative's DNI]",
+'y, en calidad de representante de la entidad':'and, as representative of the organisation',
+', con domicilio social en':', with registered office at','[Domicilio social]':'[Registered office]',
+', y CIF nº B00000000, entidad titular de la vivienda tutelada:':', and CIF no. B00000000, the organisation that holds the supported home:',
+'Vivienda Tutelada':'Supported Home','[Vivienda tutelada]':'[Supported home]',
+'. Número de Registro:':'. Registration Number:','[Número de registro]':'[Registration number]',
+'CERTIFICO QUE:':'I HEREBY CERTIFY THAT:',
+'El Presupuesto mensual por la estancia y atención en nuestros Centros, cuya normativa de actividad y funcionamiento queda regulada según lo dispuesto en la ley 11/2003 de 10 de abril, el decreto 27/2023 de 10 de marzo del Consell, así como en el Decreto 91/2002, de 30 de Mayo del Gobierno Valenciano, durante el ejercicio económico del año':
+'The monthly fee for residence and care in our Centres, whose activity and operation are regulated under Law 11/2003 of 10 April, Decree 27/2023 of 10 March of the Consell, and Decree 91/2002 of 30 May of the Valencian Government, during the financial year',
+'[Año del ejercicio económico]':'[Financial year]',
+', asciende mensualmente a un total de:':', amounts to a monthly total of:',
+'[Presupuesto mensual]':'[Monthly budget]','[Nombre del residente]':"[Resident's name]",
+'con DNI':'holder of DNI','[DNI del residente]':"[Resident's DNI]",
+', ingresó en la citada Vivienda el día':', was admitted to the aforementioned Home on',
+'[Fecha de ingreso]':'[Admission date]',
+', y a fecha de la firma del presente certificado se encuentra ocupando plaza en la citada Vivienda.':', and, as of the date this certificate is signed, occupies a place in the aforementioned Home.',
+'El número de cuenta para abonar factura es:':'The account number for invoice payments is:',
+'[Número de cuenta]':'[Account number]',
+'Se expide el presente certificado para que se pueda tramitar las ayudas correspondientes.':'This certificate is issued so that the corresponding grants can be processed.',
+'DOS MIL CIENTO SESENTA EUROS (2160,00 €uros, I.V.A. incluido)':'TWO THOUSAND ONE HUNDRED AND SIXTY EUROS (€2,160.00, VAT included)',
+'Residente de pruebas':'Test resident','15 de marzo de 2026':'15 March 2026'
+};
+const L=t=>LANG==='ca'?(CA[t]||t).replace(/\[PRUEBAS\]/g,'[PROVES]'):LANG==='en'?(EN[t]||t).replace(/\[PRUEBAS\]/g,'[TEST]'):t;
+if(LANG!=='es'){
+  document.documentElement.lang=LANG;
   const w=document.createTreeWalker(document.getElementById('stage'),NodeFilter.SHOW_TEXT);
   for(let n=w.nextNode();n;n=w.nextNode()){
     const m=n.data.match(/^(\s*)([\s\S]*?)(\s*)$/);

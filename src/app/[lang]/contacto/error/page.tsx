@@ -7,7 +7,7 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/contacto/error", {
-    title: t("No se ha podido enviar el mensaje", "No s'ha pogut enviar el missatge"),
+    title: t("No se ha podido enviar el mensaje", "No s'ha pogut enviar el missatge", "Your message could not be sent"),
     robots: { index: false },
   });
 }
@@ -17,11 +17,12 @@ export default async function ContactoErrorPage() {
   return (
     <>
       <PageHero
-        eyebrow={t("Contacto", "Contacte")}
-        title={t("No hemos podido enviar tu mensaje", "No hem pogut enviar el teu missatge")}
+        eyebrow={t("Contacto", "Contacte", "Contact")}
+        title={t("No hemos podido enviar tu mensaje", "No hem pogut enviar el teu missatge", "We couldn't send your message")}
         lead={t(
           "Puede que falte algún dato obligatorio o que se hayan enviado demasiadas solicitudes seguidas.",
           "Pot ser que falte alguna dada obligatòria o que s'hagen enviat massa sol·licituds seguides.",
+          "A required field may be missing, or too many requests may have been sent in a short time.",
         )}
       />
       <section className="py-16 sm:py-20">
@@ -30,11 +31,12 @@ export default async function ContactoErrorPage() {
             {t(
               "Vuelve a intentarlo en unos minutos o, si lo prefieres, escríbenos directamente a",
               "Torna-ho a provar d'ací a uns minuts o, si ho prefereixes, escriu-nos directament a",
+              "Please try again in a few minutes or, if you prefer, email us directly at",
             )}{" "}
             <a href={`mailto:${site.email}`} className="font-medium text-primary underline underline-offset-2 hover:no-underline">
               {site.email}
             </a>{" "}
-            {t("o llámanos al", "o telefona'ns al")}{" "}
+            {t("o llámanos al", "o telefona'ns al", "or call us on")}{" "}
             <a href={telHref(site.phones[0])} className="font-medium text-primary underline underline-offset-2 hover:no-underline">
               {site.phones[0]}
             </a>
@@ -44,7 +46,7 @@ export default async function ContactoErrorPage() {
             href="/contacto"
             className="rounded-full bg-ink px-6 py-3 text-[14px] font-semibold text-white transition-colors hover:bg-primary"
           >
-            {t("Volver al formulario", "Torna al formulari")}
+            {t("Volver al formulario", "Torna al formulari", "Back to the form")}
           </Link>
         </div>
       </section>

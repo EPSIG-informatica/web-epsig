@@ -12,10 +12,11 @@ import { getT, pageMetadata } from "@/lib/i18n-server";
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return pageMetadata("/nosotros", {
-    title: t("Nosotros", "Nosaltres"),
+    title: t("Nosotros", "Nosaltres", "About Us: Business Consultancy since 2017"),
     description: t(
       "EPSIG Consultores: consultoría empresarial, transformación digital e implantación de Odoo ERP para pymes de la Marina Alta, Valencia y la Safor.",
       "EPSIG Consultores: consultoria empresarial, transformació digital i implantació d'Odoo ERP per a pimes de la Marina Alta, València i la Safor.",
+      "EPSIG Consultores: business consulting, digital transformation and Odoo ERP implementation for SMEs in the Marina Alta, Valencia and La Safor.",
     ),
   });
 }
@@ -25,11 +26,12 @@ export default async function NosotrosPage() {
   return (
     <>
       <PageHero
-        eyebrow={t("Nosotros", "Nosaltres")}
-        title={t("Ayudamos a las empresas a funcionar mejor", "Ajudem les empreses a funcionar millor")}
+        eyebrow={t("Nosotros", "Nosaltres", "About us")}
+        title={t("Ayudamos a las empresas a funcionar mejor", "Ajudem les empreses a funcionar millor", "We help businesses run better")}
         lead={t(
           "Mejorar su gestión, digitalizar sus procesos y proteger su negocio — ese es el porqué detrás de cada servicio de EPSIG.",
           "Millorar la seua gestió, digitalitzar els seus processos i protegir el seu negoci: este és el perquè de cada servei d'EPSIG.",
+          "Better management, digitalised processes and a protected business — that is the why behind every EPSIG service.",
         )}
       />
 
@@ -46,20 +48,23 @@ export default async function NosotrosPage() {
                 {t(
                   `EPSIG Consultores inició su actividad en ${site.foundedYear} con la intención de prestar un servicio integral de consultoría a empresas, especialmente en digitalización. Nos implicamos en su desarrollo hasta cumplir el objetivo.`,
                   `EPSIG Consultores va iniciar la seua activitat en ${site.foundedYear} amb la intenció d'oferir un servei integral de consultoria a empreses, especialment en digitalització. Ens impliquem en el seu desenvolupament fins a complir l'objectiu.`,
+                  `EPSIG Consultores was founded in ${site.foundedYear} to provide businesses with a comprehensive consulting service, with a particular focus on digitalisation. We get involved in their development until the goal is achieved.`,
                 )}
               </p>
             </Reveal>
           </div>
 
           <SectionHeading
-            eyebrow={t("Cómo trabajamos", "Com treballem")}
+            eyebrow={t("Cómo trabajamos", "Com treballem", "How we work")}
             title={t(
               "Consultoría, digitalización y protección, en un solo equipo",
               "Consultoria, digitalització i protecció, en un sol equip",
+              "Consulting, digitalisation and protection, in a single team",
             )}
             body={t(
               "La mayoría de pymes acaban con un gestor para la contabilidad, un informático para el ERP y una empresa distinta para la ciberseguridad — y ninguno habla con los demás. Nosotros unimos las tres cosas.",
               "La majoria de pimes acaben amb un gestor per a la comptabilitat, un informàtic per a l'ERP i una empresa diferent per a la ciberseguretat, i cap no parla amb els altres. Nosaltres unim les tres coses.",
+              "Most SMEs end up with one adviser for the accounts, an IT person for the ERP and a separate company for cybersecurity — and none of them talk to each other. We bring all three together.",
             )}
           />
           <div className="grid grid-cols-1 gap-5.5 sm:grid-cols-3">
@@ -79,8 +84,8 @@ export default async function NosotrosPage() {
       <section className="bg-surface-alt py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <SectionHeading
-            eyebrow={t("Confianza", "Confiança")}
-            title={t("Partners con los que trabajamos", "Partners amb què treballem")}
+            eyebrow={t("Confianza", "Confiança", "Trust")}
+            title={t("Partners con los que trabajamos", "Partners amb què treballem", "Partners we work with")}
           />
           <Reveal className="flex flex-wrap justify-center gap-3">
             {site.badges.map((badge) => (

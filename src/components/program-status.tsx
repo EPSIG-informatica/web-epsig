@@ -25,12 +25,13 @@ export default async function ProgramStatus({
       <div>
         <p className="flex items-center gap-2 text-sm font-semibold text-ink">
           <span className="h-2 w-2 shrink-0 rounded-full bg-chip-amber" aria-hidden />
-          {t(`Convocatoria de ${program} cerrada`, `Convocatòria de ${program} tancada`)}
+          {t(`Convocatoria de ${program} cerrada`, `Convocatòria de ${program} tancada`, `${program}: call for applications closed`)}
         </p>
         <p className="mt-1 text-[13.5px] leading-relaxed text-ink-soft">
           {t(
             "Ahora mismo no se admiten nuevas solicitudes. Puedes contratar estos servicios directamente con nosotros y te avisamos en cuanto se abra una nueva convocatoria.",
             "Ara mateix no s'admeten noves sol·licituds. Pots contractar estos serveis directament amb nosaltres i t'avisem tan prompte com s'obriga una nova convocatòria.",
+            "New applications are not being accepted right now. You can hire these services directly from us, and we'll let you know as soon as a new call opens.",
           )}
         </p>
       </div>
@@ -38,7 +39,7 @@ export default async function ProgramStatus({
         href="/contacto#diagnostico"
         className="shrink-0 self-start rounded-full bg-ink px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-primary sm:self-center"
       >
-        {t("Avisadme", "Aviseu-me")}
+        {t("Avisadme", "Aviseu-me", "Notify me")}
       </Link>
     </div>
   );

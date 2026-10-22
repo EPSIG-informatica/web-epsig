@@ -21,17 +21,18 @@ export default async function AsesoriaArea({ slug }: { slug: AreaSlug }) {
   const area = getArea(slug);
   return (
     <CatalogDetail
-      eyebrow={t("Consultoría Empresarial", "Consultoria Empresarial")}
+      eyebrow={t("Consultoría Empresarial", "Consultoria Empresarial", "Business Consulting")}
       title={t(area.pageTitle)}
       body={t(area.body)}
       backHref="/servicios/consultoria-empresarial"
-      backLabel={t("Ver toda la Consultoría Empresarial", "Veure tota la Consultoria Empresarial")}
-      ctaTitle={t("¿Hablamos de tu caso?", "Parlem del teu cas?")}
+      backLabel={t("Ver toda la Consultoría Empresarial", "Veure tota la Consultoria Empresarial", "See all Business Consulting")}
+      ctaTitle={t("¿Hablamos de tu caso?", "Parlem del teu cas?", "Shall we talk about your case?")}
       ctaBody={t(
         "Una primera conversación gratuita para entender dónde estás y qué necesitas.",
         "Una primera conversa gratuïta per a entendre on estàs i què necessites.",
+        "A free initial conversation to understand where you are and what you need.",
       )}
-      ctaLabel={t("Solicitar diagnóstico", "Sol·licitar diagnòstic")}
+      ctaLabel={t("Solicitar diagnóstico", "Sol·licitar diagnòstic", "Request an assessment")}
     />
   );
 }

@@ -18,12 +18,13 @@ export default async function CtaBand({
 }) {
   const t = await getT();
   // Textos por defecto en el idioma de la página (si llega el prop, se usa tal cual).
-  title ??= t("¿Empezamos con un diagnóstico gratuito?", "Comencem amb un diagnòstic gratuït?");
+  title ??= t("¿Empezamos con un diagnóstico gratuito?", "Comencem amb un diagnòstic gratuït?", "Shall we start with a free assessment?");
   body ??= t(
     "Una conversación de 30 minutos para ver qué necesita tu empresa primero.",
     "Una conversa de 30 minuts per a veure què necessita primer la teua empresa.",
+    "A 30-minute conversation to see what your business needs first.",
   );
-  ctaLabel ??= t("Solicitar diagnóstico", "Sol·licitar diagnòstic");
+  ctaLabel ??= t("Solicitar diagnóstico", "Sol·licitar diagnòstic", "Request an assessment");
 
   return (
     <div className={`px-6 pb-20 sm:pb-24 ${spaced ? "pt-20 sm:pt-24" : ""}`}>

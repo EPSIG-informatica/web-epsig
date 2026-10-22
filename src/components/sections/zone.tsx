@@ -9,9 +9,9 @@ export default async function Zone() {
       <Reveal className="mx-auto max-w-3xl px-6">
         <div className="inline-flex items-center justify-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-primary">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-          {t("Zona de actuación", "Zona d'actuació")}
+          {t("Zona de actuación", "Zona d'actuació", "Where we work")}
         </div>
-        <h2 className="mt-3 text-[32px]">{t("Trabajamos cerca de ti", "Treballem a prop teu")}</h2>
+        <h2 className="mt-3 text-[32px]">{t("Trabajamos cerca de ti", "Treballem a prop teu", "We work close to you")}</h2>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           {site.zones.map((zone) => (
             <span

@@ -50,12 +50,12 @@ export default function Nav() {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-line bg-surface/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
-        <Link href="/" className="flex shrink-0 items-center" aria-label={`${site.name} — ${t("Inicio", "Inici")}`}>
+      <div className="mx-auto flex max-w-7xl items-center 2xl:max-w-[90rem] justify-between gap-4 px-6 py-4">
+        <Link href="/" className="flex shrink-0 items-center" aria-label={`${site.name} — ${t("Inicio", "Inici", "Home")}`}>
           <Image src={logo} alt={site.name} preload sizes="144px" className="h-9 w-auto shrink-0 sm:h-10" />
         </Link>
 
-        <ul className="hidden items-center text-[13.5px] lg:flex xl:gap-0.5 xl:text-sm">
+        <ul className="hidden items-center text-sm xl:flex xl:gap-0.5">
           {primaryNav.map((item, index) => (
             <li key={item.href} className="group relative">
               {item.external ? (
@@ -66,7 +66,7 @@ export default function Nav() {
                   className="whitespace-nowrap rounded-full px-2.5 py-2 font-medium text-ink-soft transition-colors hover:bg-surface-alt hover:text-ink xl:px-3.5"
                 >
                   {t(item.label)} <span aria-hidden>↗</span>
-                  <span className="sr-only">{t(" (se abre en una pestaña nueva)", " (s'obri en una pestanya nova)")}</span>
+                  <span className="sr-only">{t(" (se abre en una pestaña nueva)", " (s'obri en una pestanya nova)", " (opens in a new tab)")}</span>
                 </a>
               ) : (
                 <Link
@@ -110,30 +110,30 @@ export default function Nav() {
           ))}
         </ul>
 
-        <div className="hidden shrink-0 items-center gap-3 lg:flex">
+        <div className="hidden shrink-0 items-center gap-3 xl:flex">
           <LanguageSwitcher />
           <Link
             href="/contacto"
-            className="hidden whitespace-nowrap rounded-full border-[1.5px] border-line px-5 py-2.5 text-[13.5px] font-semibold transition-colors hover:border-ink xl:inline-block"
+            className="hidden whitespace-nowrap rounded-full border-[1.5px] border-line px-5 py-2.5 text-[13.5px] font-semibold transition-colors hover:border-ink 2xl:inline-block"
           >
-            {t("Contacto", "Contacte")}
+            {t("Contacto", "Contacte", "Contact")}
           </Link>
           <Link
             href="/contacto#diagnostico"
             className="inline-block whitespace-nowrap rounded-full bg-ink px-5 py-3 text-[13.5px] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(42,107,165,.6)] transition hover:scale-[1.04] hover:bg-primary active:scale-[0.97]"
           >
-            {t("Diagnóstico gratuito", "Diagnòstic gratuït")}
+            {t("Diagnóstico gratuito", "Diagnòstic gratuït", "Free assessment")}
           </Link>
         </div>
 
-        <div className="flex items-center gap-2.5 lg:hidden">
+        <div className="flex items-center gap-2.5 xl:hidden">
           <LanguageSwitcher />
           <button
             ref={toggleRef}
             type="button"
             aria-controls="menu-movil"
             className="flex h-10 w-10 items-center justify-center rounded-full border border-line"
-            aria-label={open ? t("Cerrar menú", "Tanca el menú") : t("Abrir menú", "Obri el menú")}
+            aria-label={open ? t("Cerrar menú", "Tanca el menú", "Close menu") : t("Abrir menú", "Obri el menú", "Open menu")}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
@@ -155,7 +155,7 @@ export default function Nav() {
       {open && (
           <div
             id="menu-movil"
-            className="pop-in overflow-hidden border-t border-line bg-surface lg:hidden"
+            className="pop-in overflow-hidden border-t border-line bg-surface xl:hidden"
           >
             <div className="max-h-[calc(100vh-64px)] overflow-y-auto px-6 py-4">
               <ul className="flex flex-col gap-1 text-[15px]">
@@ -170,7 +170,7 @@ export default function Nav() {
                         className="block rounded-lg px-3 py-2.5 font-medium text-ink-soft"
                       >
                         {t(item.label)} <span aria-hidden>↗</span>
-                        <span className="sr-only">{t(" (se abre en una pestaña nueva)", " (s'obri en una pestanya nova)")}</span>
+                        <span className="sr-only">{t(" (se abre en una pestaña nueva)", " (s'obri en una pestanya nova)", " (opens in a new tab)")}</span>
                       </a>
                     ) : (
                       <Link
@@ -208,14 +208,14 @@ export default function Nav() {
                   onClick={() => setOpen(false)}
                   className="rounded-full border-[1.5px] border-line px-5 py-2.5 text-center text-[13.5px] font-semibold"
                 >
-                  {t("Contacto", "Contacte")}
+                  {t("Contacto", "Contacte", "Contact")}
                 </Link>
                 <Link
                   href="/contacto#diagnostico"
                   onClick={() => setOpen(false)}
                   className="rounded-full bg-ink px-5 py-3 text-center text-[13.5px] font-semibold text-white"
                 >
-                  {t("Diagnóstico gratuito", "Diagnòstic gratuït")}
+                  {t("Diagnóstico gratuito", "Diagnòstic gratuït", "Free assessment")}
                 </Link>
               </div>
             </div>

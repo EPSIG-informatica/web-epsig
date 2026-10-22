@@ -2,16 +2,16 @@ import { getT } from "@/lib/i18n-server";
 
 // Diagrama del recorrido de los datos entre programas. Solo CSS (línea animada con .flow-line-live).
 const nodes = [
-  { name: "Forvenues", role: { es: "Venta de entradas", ca: "Venda d'entrades" } },
-  { name: "Ágora", role: { es: "TPV y ventas", ca: "TPV i vendes" } },
-  { name: "Sage", role: { es: "Contabilidad", ca: "Comptabilitat" } },
-  { name: "FACe", role: { es: "Factura electrónica", ca: "Factura electrònica" } },
+  { name: "Forvenues", role: { es: "Venta de entradas", ca: "Venda d'entrades", en: "Ticket sales" } },
+  { name: "Ágora", role: { es: "TPV y ventas", ca: "TPV i vendes", en: "POS and sales" } },
+  { name: "Sage", role: { es: "Contabilidad", ca: "Comptabilitat", en: "Accounting" } },
+  { name: "FACe", role: { es: "Factura electrónica", ca: "Factura electrònica", en: "E-invoicing" } },
 ] as const;
 
 const links = [
-  { es: "Automático", ca: "Automàtic" },
-  { es: "Cada día", ca: "Cada dia" },
-  { es: "Automático", ca: "Automàtic" },
+  { es: "Automático", ca: "Automàtic", en: "Automatic" },
+  { es: "Cada día", ca: "Cada dia", en: "Every day" },
+  { es: "Automático", ca: "Automàtic", en: "Automatic" },
 ] as const;
 
 export default async function ConnectorFlow() {
@@ -22,6 +22,7 @@ export default async function ConnectorFlow() {
       aria-label={t(
         "Recorrido de los datos: Forvenues envía las ventas de entradas a Ágora, Ágora envía las ventas a Sage cada día y Sage envía las facturas a FACe.",
         "Recorregut de les dades: Forvenues envia les vendes d'entrades a Ágora, Ágora envia les vendes a Sage cada dia i Sage envia les factures a FACe.",
+        "Data journey: Forvenues sends ticket sales to Ágora, Ágora sends sales to Sage every day, and Sage sends invoices to FACe.",
       )}
       className="relative"
     >

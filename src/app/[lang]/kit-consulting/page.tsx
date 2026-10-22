@@ -15,6 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: t(
       "Servicios de asesoramiento del programa Kit Consulting: inteligencia artificial, análisis de datos, procesos, estrategia, ciberseguridad y transformación digital, con EPSIG como Asesor Digital.",
       "Serveis d'assessorament del programa Kit Consulting: intel·ligència artificial, anàlisi de dades, processos, estratègia, ciberseguretat i transformació digital, amb EPSIG com a Assessor Digital.",
+      "Kit Consulting advisory in AI, data analytics, processes, strategy, cybersecurity and digital transformation, from an accredited advisor.",
     ),
   });
 }
@@ -24,14 +25,16 @@ export default async function KitConsultingPage() {
   return (
     <>
       <PageHero
-        eyebrow={t("Asesor Digital", "Assessor Digital")}
+        eyebrow={t("Asesor Digital", "Assessor Digital", "Accredited Digital Advisor")}
         title={t(
           "Kit Consulting: asesoramiento experto para digitalizar tu empresa",
           "Kit Consulting: assessorament expert per a digitalitzar la teua empresa",
+          "Kit Consulting: expert advice to digitalise your business",
         )}
         lead={t(
           "Un programa del Gobierno de España, financiado por la Unión Europea – NextGenerationEU, que subvenciona servicios de asesoramiento digital para empresas de entre 10 y 249 empleados.",
           "Un programa del Govern d'Espanya, finançat per la Unió Europea – NextGenerationEU, que subvenciona serveis d'assessorament digital per a empreses d'entre 10 i 249 empleats.",
+          "A Spanish Government programme, funded by the European Union – NextGenerationEU, that subsidises digital advisory services for businesses with between 10 and 249 employees.",
         )}
       />
 
@@ -46,19 +49,20 @@ export default async function KitConsultingPage() {
               {t(
                 "El programa Kit Consulting, dentro del Plan de Recuperación, Transformación y Resiliencia, subvenciona servicios de asesoramiento en inteligencia artificial, análisis de datos, procesos de negocio, estrategia, ciberseguridad y transformación digital. Como Asesor Digital, prestamos todos estos servicios.",
                 "El programa Kit Consulting, dins del Pla de Recuperació, Transformació i Resiliència, subvenciona serveis d'assessorament en intel·ligència artificial, anàlisi de dades, processos de negoci, estratègia, ciberseguretat i transformació digital. Com a Assessor Digital, prestem tots estos serveis.",
+                "The Kit Consulting programme, part of the Recovery, Transformation and Resilience Plan, subsidises advisory services in artificial intelligence, data analytics, business processes, strategy, cybersecurity and digital transformation. As an Accredited Digital Advisor, we provide all of these services.",
               )}
             </p>
           </Reveal>
 
           <p className="mb-5 text-center text-sm font-semibold text-ink">
-            {t("Importe del bono según el tamaño de la empresa", "Import del bo segons la grandària de l'empresa")}
+            {t("Importe del bono según el tamaño de la empresa", "Import del bo segons la grandària de l'empresa", "Voucher amount by company size")}
           </p>
           <div className="mx-auto mb-20 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
             {kitConsultingTiers.map((tier, index) => (
               <Reveal key={tier.range.es} delay={index * 0.08}>
                 <TiltCard className="rounded-brand border border-line bg-surface-alt p-6 text-center">
                   <span className="block font-mono text-2xl font-semibold text-primary">
-                    {tier.amount}
+                    {t(tier.amount)}
                   </span>
                   <span className="mt-2 block text-[13.5px] text-ink-soft">{t(tier.range)}</span>
                 </TiltCard>
@@ -67,11 +71,12 @@ export default async function KitConsultingPage() {
           </div>
 
           <SectionHeading
-            eyebrow={t("Servicios de asesoramiento", "Serveis d'assessorament")}
-            title={t("Servicios del catálogo Kit Consulting", "Serveis del catàleg Kit Consulting")}
+            eyebrow={t("Servicios de asesoramiento", "Serveis d'assessorament", "Advisory services")}
+            title={t("Servicios del catálogo Kit Consulting", "Serveis del catàleg Kit Consulting", "Kit Consulting catalogue services")}
             body={t(
               "Puedes contratarlos directamente con nosotros, con o sin ayuda pública.",
               "Pots contractar-los directament amb nosaltres, amb ajuda pública o sense.",
+              "You can hire them directly from us, with or without public funding.",
             )}
             align="left"
           />
@@ -87,7 +92,7 @@ export default async function KitConsultingPage() {
                     {t(service.summary)}
                   </p>
                   <span className="mt-3 inline-block text-sm font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 pointer-coarse:opacity-100">
-                    {t("Ver más →", "Veure'n més →")}
+                    {t("Ver más →", "Veure'n més →", "Learn more →")}
                   </span>
                 </TiltCard>
               </Reveal>
@@ -97,12 +102,13 @@ export default async function KitConsultingPage() {
       </section>
 
       <CtaBand
-        title={t("¿Quieres digitalizar tu empresa con un plan claro?", "Vols digitalitzar la teua empresa amb un pla clar?")}
+        title={t("¿Quieres digitalizar tu empresa con un plan claro?", "Vols digitalitzar la teua empresa amb un pla clar?", "Want to digitalise your business with a clear plan?")}
         body={t(
           "Te asesoramos sin compromiso y te avisamos en cuanto haya una nueva convocatoria de ayudas.",
           "T'assessorem sense compromís i t'avisem tan prompte com hi haja una nova convocatòria d'ajudes.",
+          "We offer no-obligation advice and will let you know as soon as a new funding call opens.",
         )}
-        ctaLabel={t("Solicitar información", "Sol·licitar informació")}
+        ctaLabel={t("Solicitar información", "Sol·licitar informació", "Request information")}
       />
     </>
   );

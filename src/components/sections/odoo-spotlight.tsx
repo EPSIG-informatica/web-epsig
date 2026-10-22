@@ -12,14 +12,16 @@ export default async function OdooSpotlight() {
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <SectionHeading
-            eyebrow={t("Servicio estrella", "Servei estrela")}
+            eyebrow={t("Servicio estrella", "Servei estrela", "Flagship service")}
             title={t(
               "Odoo ERP, implantado por quien entiende de empresa",
               "Odoo ERP, implantat per qui entén d'empresa",
+              "Odoo ERP, implemented by people who understand business",
             )}
             body={t(
               "Diagnóstico, configuración, migración de datos, formación del equipo y soporte continuo. No nos limitamos a venderte licencias: acompañamos la implantación de principio a fin.",
               "Diagnòstic, configuració, migració de dades, formació de l'equip i suport continu. No ens limitem a vendre't llicències: acompanyem la implantació de principi a fi.",
+              "Assessment, configuration, data migration, team training and ongoing support. We don't just sell you licences: we see the implementation through from start to finish.",
             )}
             dark
           />
@@ -43,7 +45,7 @@ export default async function OdooSpotlight() {
             href="/contacto#diagnostico"
             className="inline-block rounded-full bg-accent-strong px-6.5 py-3.5 text-[14.5px] font-semibold text-white transition-transform hover:scale-[1.04] active:scale-[0.96]"
           >
-            {t("Habla con un consultor Odoo", "Parla amb un consultor d'Odoo")}
+            {t("Habla con un consultor Odoo", "Parla amb un consultor d'Odoo", "Talk to an Odoo consultant")}
           </Link>
         </div>
       </div>

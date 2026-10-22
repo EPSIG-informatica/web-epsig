@@ -49,6 +49,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
       default: t(
         `${site.name} — Partner Odoo y consultoría para pymes en Gata de Gorgos y Valencia`,
         `${site.name} — Partner Odoo i consultoria per a pimes a Gata de Gorgos i València`,
+        `${site.name} — Odoo Partner and business consulting for SMEs in Gata de Gorgos and Valencia`,
       ),
       template: `%s — ${site.name}`,
     },
@@ -78,7 +79,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
             href="#contenido"
             className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-ink focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white"
           >
-            {t("Saltar al contenido", "Salta al contingut")}
+            {t("Saltar al contenido", "Salta al contingut", "Skip to content")}
           </a>
           <ScrollProgress />
           <Nav />

@@ -11,14 +11,16 @@ export default async function SoftwareSpotlight() {
     <section className="py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
-          eyebrow={t("Software propio", "Software propi")}
+          eyebrow={t("Software propio", "Software propi", "Our own software")}
           title={t(
             "Herramientas que hemos creado para problemas reales",
             "Eines que hem creat per a problemes reals",
+            "Tools we have built to solve real problems",
           )}
           body={t(
             "Además de implantar software, desarrollamos el nuestro cuando ningún programa resuelve bien el problema.",
             "A més d'implantar programari, desenvolupem el nostre quan cap programa no resol bé el problema.",
+            "As well as implementing software, we build our own when no existing program solves the problem properly.",
           )}
         />
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -35,7 +37,7 @@ export default async function SoftwareSpotlight() {
               <span>
                 <span className="block text-[19px] font-semibold text-ink">{t(software.camping.title)}</span>
                 <span className="mt-1.5 block text-[14.5px] leading-relaxed text-ink-soft">{t(software.camping.summary)}</span>
-                <span className="mt-4 block text-sm font-semibold text-primary">{t("Descubrir →", "Descobrir →")}</span>
+                <span className="mt-4 block text-sm font-semibold text-primary">{t("Descubrir →", "Descobrir →", "Discover →")}</span>
               </span>
             </Link>
           </Reveal>
@@ -55,7 +57,7 @@ export default async function SoftwareSpotlight() {
               <span>
                 <span className="block text-[19px] font-semibold text-ink">{t(software.viviendas.title)}</span>
                 <span className="mt-1.5 block text-[14.5px] leading-relaxed text-ink-soft">{t(software.viviendas.summary)}</span>
-                <span className="mt-4 block text-sm font-semibold text-primary">{t("Ver el software →", "Veure el software →")}</span>
+                <span className="mt-4 block text-sm font-semibold text-primary">{t("Ver el software →", "Veure el software →", "See the software →")}</span>
               </span>
             </Link>
           </Reveal>
@@ -75,7 +77,7 @@ export default async function SoftwareSpotlight() {
               <span>
                 <span className="block text-[19px] font-semibold text-ink">{t(software.conectores.title)}</span>
                 <span className="mt-1.5 block text-[14.5px] leading-relaxed text-ink-soft">{t(software.conectores.summary)}</span>
-                <span className="mt-4 block text-sm font-semibold text-primary">{t("Ver conectores →", "Veure connectors →")}</span>
+                <span className="mt-4 block text-sm font-semibold text-primary">{t("Ver conectores →", "Veure connectors →", "See connectors →")}</span>
               </span>
             </Link>
           </Reveal>
