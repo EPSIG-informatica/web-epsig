@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/page-hero";
+import Link from "@/components/link";
 import CookieSettingsButton from "@/components/cookie-settings-button";
 import { site } from "@/lib/site";
 import type { Localized, Translate } from "@/lib/i18n";
@@ -142,6 +143,21 @@ export default async function PoliticaDeCookiesPage() {
               "La cookie «idioma» és una cookie tècnica de personalització de la interfície i està exempta de consentiment. Si no has triat idioma i el teu navegador està configurat en català/valencià o en anglés, et mostrem directament la versió en eixe idioma, sense guardar res en el teu dispositiu.",
               "The “idioma” cookie is a technical interface customisation cookie and is exempt from consent. If you have not chosen a language and your browser is set to Catalan/Valencian or English, we show you the corresponding language version directly, without storing anything on your device.",
             )}
+          </p>
+
+          <h3 className="mt-6 mb-2 text-base font-semibold text-ink">
+            {t("Estadísticas sin cookies", "Estadístiques sense cookies", "Cookie-free statistics")}
+          </h3>
+          <p>
+            {t(
+              "Para conocer las visitas de forma agregada usamos Plausible Analytics, instalado en un servidor propio (analitica.epsigconsultores.com). No instala cookies ni guarda ni lee información en tu dispositivo, y no almacena tu dirección IP ni ningún identificador, por lo que no requiere consentimiento y funciona aunque rechaces las cookies. Más información en la ",
+              "Per a conéixer les visites de manera agregada usem Plausible Analytics, instal·lat en un servidor propi (analitica.epsigconsultores.com). No instal·la cookies ni guarda ni llig informació en el teu dispositiu, i no emmagatzema la teua adreça IP ni cap identificador, per la qual cosa no requerix consentiment i funciona encara que rebutges les cookies. Més informació en la ",
+              "To measure visits in aggregate form we use Plausible Analytics, installed on our own server (analitica.epsigconsultores.com). It does not install cookies or store or read any information on your device, and it does not store your IP address or any identifier, so it does not require consent and works even if you reject cookies. More information is available in our ",
+            )}
+            <Link href="/politica-de-privacidad" className="text-primary underline underline-offset-2 hover:no-underline">
+              {t("política de privacidad", "política de privacitat", "privacy policy")}
+            </Link>
+            .
           </p>
 
           {analyticsEnabled && (

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "../globals.css";
 import Nav from "@/components/nav";
@@ -90,6 +91,12 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
           <CookieBanner />
           <CardEffects />
           <GoogleAnalytics />
+          {/* Plausible (servidor propio): sin cookies ni datos personales, no necesita consentimiento. */}
+          <Script
+            defer
+            data-domain="epsigconsultores.com"
+            src="https://analitica.epsigconsultores.com/js/script.js"
+          />
           <AttributionTracker />
           <StructuredData />
         </LangProvider>

@@ -66,6 +66,13 @@ export default async function PoliticaDePrivacidadPage() {
               "Fields marked with an asterisk are mandatory; without them we cannot deal with your request. We will not use your data to send you advertising, nor will we use it for automated decision-making.",
             )}
           </p>
+          <p className="mt-3">
+            {t(
+              "Además, medimos las visitas a la web de forma agregada con Plausible Analytics, instalado en un servidor propio (analitica.epsigconsultores.com). No usa cookies, no almacena tu dirección IP ni ningún identificador y no permite reconocerte: solo obtenemos estadísticas de conjunto, como las páginas más vistas, la web de procedencia, el país o el tipo de dispositivo. Estos datos no se ceden a nadie.",
+              "A més, mesurem les visites a la web de manera agregada amb Plausible Analytics, instal·lat en un servidor propi (analitica.epsigconsultores.com). No usa cookies, no emmagatzema la teua adreça IP ni cap identificador i no permet reconéixer-te: només obtenim estadístiques de conjunt, com les pàgines més vistes, la web de procedència, el país o el tipus de dispositiu. Estes dades no es cedixen a ningú.",
+              "We also measure visits to the website in aggregate form using Plausible Analytics, installed on our own server (analitica.epsigconsultores.com). It does not use cookies, does not store your IP address or any identifier and cannot be used to recognise you: we only obtain overall statistics, such as the most visited pages, the referring website, the country or the type of device. This data is not disclosed to anyone.",
+            )}
+          </p>
 
           <h2 className="mt-8 mb-3 text-xl text-ink">{t("3. Legitimación", "3. Legitimació", "3. Legal basis")}</h2>
           <p>
@@ -73,6 +80,13 @@ export default async function PoliticaDePrivacidadPage() {
               `La base legal para el tratamiento es el consentimiento que otorgas al marcar la casilla de aceptación y enviar el formulario de contacto. Puedes retirarlo en cualquier momento escribiendo a ${site.email}, sin que ello afecte a la licitud del tratamiento realizado antes de retirarlo.`,
               `La base legal per al tractament és el consentiment que atorgues en marcar la casella d'acceptació i enviar el formulari de contacte. Pots retirar-lo en qualsevol moment escrivint a ${site.email}, sense que això afecte la licitud del tractament fet abans de retirar-lo.`,
               `The legal basis for the processing is the consent you give by ticking the acceptance box and submitting the contact form. You may withdraw your consent at any time by writing to ${site.email}, without affecting the lawfulness of processing carried out before its withdrawal.`,
+            )}
+          </p>
+          <p className="mt-3">
+            {t(
+              "Las estadísticas de visitas se basan en nuestro interés legítimo en conocer cómo se usa la web para mejorarla (artículo 6.1.f del RGPD). Al no utilizar cookies ni datos que te identifiquen, no requieren tu consentimiento.",
+              "Les estadístiques de visites es basen en el nostre interés legítim a conéixer com s'usa la web per a millorar-la (article 6.1.f del RGPD). Com que no utilitzen cookies ni dades que t'identifiquen, no requerixen el teu consentiment.",
+              "Visit statistics are based on our legitimate interest in understanding how the website is used in order to improve it (Article 6(1)(f) GDPR). As they do not use cookies or any data that identifies you, they do not require your consent.",
             )}
           </p>
 

@@ -62,15 +62,18 @@ const googleAnalytics = {
   img: "https://*.google-analytics.com https://*.googletagmanager.com",
 };
 
+// Plausible, alojado en un subdominio propio: script y envío de visitas a la misma dirección.
+const plausible = "https://analitica.epsigconsultores.com";
+
 // CSP sin nonces para mantener las páginas estáticas: Next.js necesita 'unsafe-inline'
 // para sus scripts inline. En desarrollo React requiere además 'unsafe-eval'.
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ${googleAnalytics.script}`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ${googleAnalytics.script} ${plausible}`,
   "style-src 'self' 'unsafe-inline'",
   `img-src 'self' data: blob: ${googleAnalytics.img}`,
   "font-src 'self'",
-  `connect-src 'self' ${googleAnalytics.connect}`,
+  `connect-src 'self' ${googleAnalytics.connect} ${plausible}`,
   // Solo iframes propios: las animaciones de producto de /animaciones/.
   "frame-src 'self'",
   "object-src 'none'",
