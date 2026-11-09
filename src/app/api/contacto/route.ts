@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { sendContactConfirmation, sendContactEmail, type ContactRequest } from "@/lib/mailer";
 import { createLead, odooConfigured, type LeadOrigin } from "@/lib/odoo";
 import { clientIp, hit } from "@/lib/rate-limit";
+import { verifyRecaptcha } from "@/lib/recaptcha";
 import { contactInterests, site } from "@/lib/site";
 import { defaultLocale, isLocale, localizePath, splitLocale, translator, type Locale, type Translate } from "@/lib/i18n";
 
@@ -25,6 +26,12 @@ const tooMany = (t: Translate) =>
     "Has enviado demasiadas solicitudes. Inténtalo de nuevo en unos minutos o llámanos.",
     "Has enviat massa sol·licituds. Torna-ho a provar d'ací a uns minuts o telefona'ns.",
     "You've sent too many requests. Please try again in a few minutes or give us a call.",
+  );
+const captchaFailed = (t: Translate) =>
+  t(
+    `No hemos podido comprobar que el envío lo hace una persona. Recarga la página e inténtalo de nuevo, o escríbenos a ${site.email}.`,
+    `No hem pogut comprovar que l'enviament el fa una persona. Recarrega la pàgina i torna-ho a provar, o escriu-nos a ${site.email}.`,
+    `We couldn't confirm that the form was sent by a person. Please reload the page and try again, or email us at ${site.email}.`,
   );
 const sendFailed = (t: Translate) =>
   t(
@@ -197,6 +204,10 @@ export async function POST(request: Request) {
 
   const parsed = parseRequest(body, t);
   if (typeof parsed === "string") return reply(400, parsed);
+
+  // Google reCAPTCHA v3: el formulario envía el token en `captcha` (solo si está configurado).
+  const captcha = await verifyRecaptcha((body as Record<string, unknown>).captcha, clientIp(request));
+  if (!captcha.ok) return reply(403, captchaFailed(t));
 
   if (!hit("notifications", NOTIFICATIONS_GLOBAL.limit, NOTIFICATIONS_GLOBAL.windowMs)) {
     return reply(429, tooMany(t));

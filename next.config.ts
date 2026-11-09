@@ -65,17 +65,23 @@ const googleAnalytics = {
 // Plausible, alojado en un subdominio propio: script y envío de visitas a la misma dirección.
 const plausible = "https://analitica.epsigconsultores.com";
 
+// Google reCAPTCHA v3 (formulario de contacto): script, iframe invisible y verificación.
+const recaptcha = {
+  script: "https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/",
+  frame: "https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/",
+};
+
 // CSP sin nonces para mantener las páginas estáticas: Next.js necesita 'unsafe-inline'
 // para sus scripts inline. En desarrollo React requiere además 'unsafe-eval'.
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ${googleAnalytics.script} ${plausible}`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ${googleAnalytics.script} ${plausible} ${recaptcha.script}`,
   "style-src 'self' 'unsafe-inline'",
   `img-src 'self' data: blob: ${googleAnalytics.img}`,
   "font-src 'self'",
-  `connect-src 'self' ${googleAnalytics.connect} ${plausible}`,
-  // Solo iframes propios: las animaciones de producto de /animaciones/.
-  "frame-src 'self'",
+  `connect-src 'self' ${googleAnalytics.connect} ${plausible} https://www.google.com/recaptcha/`,
+  // Iframes propios (animaciones de /animaciones/) y el invisible de reCAPTCHA.
+  `frame-src 'self' ${recaptcha.frame}`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

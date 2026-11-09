@@ -47,6 +47,16 @@ const technicalCookies: CookieRow[] = [
     },
     duration: { es: "30 minutos", ca: "30 minuts", en: "30 minutes" },
   },
+  {
+    name: "_GRECAPTCHA",
+    provider: "Google (reCAPTCHA)",
+    purpose: {
+      es: "Seguridad: comprueba que el formulario de contacto lo envía una persona y no un bot. Solo se crea si empiezas a rellenar el formulario.",
+      ca: "Seguretat: comprova que el formulari de contacte l'envia una persona i no un bot. Només es crea si comences a omplir el formulari.",
+      en: "Security: checks that the contact form is sent by a person rather than a bot. It is only created if you start filling in the form.",
+    },
+    duration: { es: "6 meses", ca: "6 mesos", en: "6 months" },
+  },
 ];
 
 const analyticsCookies: CookieRow[] = [

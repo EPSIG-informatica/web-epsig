@@ -310,3 +310,8 @@ h3,
     padding-top: 6rem;
   }
 }
+
+/* Insignia flotante de reCAPTCHA: oculta, porque el formulario muestra el aviso que Google exige. */
+.grecaptcha-badge {
+  visibility: hidden;
+}

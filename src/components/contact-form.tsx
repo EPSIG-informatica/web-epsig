@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { contactInterests, site } from "@/lib/site";
 import { originForSubmit } from "@/lib/attribution";
 import { trackEvent } from "@/lib/analytics";
+import { loadRecaptcha, recaptchaEnabled, recaptchaToken } from "@/lib/recaptcha-client";
 import { useLang, useT } from "@/components/lang-provider";
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -37,6 +38,8 @@ export default function ContactForm() {
       elapsed: startedAt.current ? Date.now() - startedAt.current : 0,
       origin: originForSubmit(),
       lang,
+      // Token de Google reCAPTCHA v3 (invisible); el servidor lo verifica.
+      captcha: await recaptchaToken(lang),
     };
 
     try {
@@ -92,6 +95,8 @@ export default function ContactForm() {
       method="post"
       action="/api/contacto/"
       onSubmit={handleSubmit}
+      // reCAPTCHA se carga al empezar a rellenar el formulario, no al abrir la página.
+      onFocus={() => void loadRecaptcha(lang)?.catch(() => {})}
       className="flex flex-col gap-4"
     >
       <input type="hidden" name="lang" value={lang} />
@@ -183,6 +188,25 @@ export default function ContactForm() {
         </Link>
         .
       </p>
+
+      {/* Google permite ocultar la insignia flotante de reCAPTCHA si se muestra este aviso. */}
+      {recaptchaEnabled() && (
+        <p className="text-[12px] leading-relaxed text-ink-soft">
+          {t(
+            "Este formulario está protegido por reCAPTCHA y se aplican la ",
+            "Este formulari està protegit per reCAPTCHA i s'hi apliquen la ",
+            "This form is protected by reCAPTCHA and the Google ",
+          )}
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">
+            {t("política de privacidad", "política de privacitat", "Privacy Policy")}
+          </a>
+          {t(" y las ", " i les ", " and ")}
+          <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">
+            {t("condiciones del servicio", "condicions del servei", "Terms of Service")}
+          </a>
+          {t(" de Google.", " de Google.", " apply.")}
+        </p>
+      )}
     </form>
   );
 }
