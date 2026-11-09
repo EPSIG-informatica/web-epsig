@@ -75,9 +75,9 @@ export default async function PoliticaDePrivacidadPage() {
           </p>
           <p className="mt-3">
             {t(
-              "Para proteger el formulario de contacto frente al spam y los envíos automáticos usamos Google reCAPTCHA. Cuando empiezas a rellenarlo, reCAPTCHA recoge datos técnicos de tu visita (dirección IP, navegador, dispositivo e interacción con la página) para estimar si lo envía una persona. Ese análisis solo se usa para aceptar o rechazar el envío.",
-              "Per a protegir el formulari de contacte davant del correu brossa i els enviaments automàtics usem Google reCAPTCHA. Quan comences a omplir-lo, reCAPTCHA recull dades tècniques de la teua visita (adreça IP, navegador, dispositiu i interacció amb la pàgina) per a estimar si l'envia una persona. Eixa anàlisi només s'usa per a acceptar o rebutjar l'enviament.",
-              "To protect the contact form against spam and automated submissions we use Google reCAPTCHA. When you start filling it in, reCAPTCHA collects technical data about your visit (IP address, browser, device and interaction with the page) to estimate whether it is being sent by a person. This analysis is only used to accept or reject the submission.",
+              "Para proteger el formulario de contacto frente al spam y los envíos automáticos usamos Google reCAPTCHA. En la página de contacto, la casilla «No soy un robot» de reCAPTCHA recoge datos técnicos de tu visita (dirección IP, navegador, dispositivo e interacción con la página) para comprobar que lo envía una persona y, si hace falta, te pide resolver una prueba. Ese análisis solo se usa para aceptar o rechazar el envío.",
+              "Per a protegir el formulari de contacte davant del correu brossa i els enviaments automàtics usem Google reCAPTCHA. En la pàgina de contacte, la casella «No sóc un robot» de reCAPTCHA recull dades tècniques de la teua visita (adreça IP, navegador, dispositiu i interacció amb la pàgina) per a comprovar que l'envia una persona i, si cal, et demana resoldre una prova. Eixa anàlisi només s'usa per a acceptar o rebutjar l'enviament.",
+              "To protect the contact form against spam and automated submissions we use Google reCAPTCHA. On the contact page, the reCAPTCHA “I'm not a robot” box collects technical data about your visit (IP address, browser, device and interaction with the page) to check that the form is being sent by a person and, if necessary, asks you to complete a challenge. This analysis is only used to accept or reject the submission.",
             )}
           </p>
 

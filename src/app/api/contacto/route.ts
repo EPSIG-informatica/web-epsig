@@ -27,6 +27,12 @@ const tooMany = (t: Translate) =>
     "Has enviat massa sol·licituds. Torna-ho a provar d'ací a uns minuts o telefona'ns.",
     "You've sent too many requests. Please try again in a few minutes or give us a call.",
   );
+const captchaMissing = (t: Translate) =>
+  t(
+    "Marca la casilla «No soy un robot» antes de enviar el formulario.",
+    "Marca la casella «No sóc un robot» abans d'enviar el formulari.",
+    "Please tick the “I'm not a robot” box before sending the form.",
+  );
 const captchaFailed = (t: Translate) =>
   t(
     `No hemos podido comprobar que el envío lo hace una persona. Recarga la página e inténtalo de nuevo, o escríbenos a ${site.email}.`,
@@ -205,9 +211,11 @@ export async function POST(request: Request) {
   const parsed = parseRequest(body, t);
   if (typeof parsed === "string") return reply(400, parsed);
 
-  // Google reCAPTCHA v3: el formulario envía el token en `captcha` (solo si está configurado).
-  const captcha = await verifyRecaptcha((body as Record<string, unknown>).captcha, clientIp(request));
-  if (!captcha.ok) return reply(403, captchaFailed(t));
+  // Google reCAPTCHA v2 (casilla): el formulario envía la respuesta en `captcha`, o en
+  // `g-recaptcha-response` si se envía sin JavaScript propio. Solo si está configurado.
+  const fields = body as Record<string, unknown>;
+  const captcha = await verifyRecaptcha(fields.captcha ?? fields["g-recaptcha-response"], clientIp(request));
+  if (!captcha.ok) return reply(400, captcha.reason === "missing" ? captchaMissing(t) : captchaFailed(t));
 
   if (!hit("notifications", NOTIFICATIONS_GLOBAL.limit, NOTIFICATIONS_GLOBAL.windowMs)) {
     return reply(429, tooMany(t));

@@ -65,7 +65,7 @@ const googleAnalytics = {
 // Plausible, alojado en un subdominio propio: script y envío de visitas a la misma dirección.
 const plausible = "https://analitica.epsigconsultores.com";
 
-// Google reCAPTCHA v3 (formulario de contacto): script, iframe invisible y verificación.
+// Google reCAPTCHA v2 (casilla del formulario de contacto): script e iframes de la casilla y la prueba.
 const recaptcha = {
   script: "https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/",
   frame: "https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/",
@@ -80,7 +80,7 @@ const contentSecurityPolicy = [
   `img-src 'self' data: blob: ${googleAnalytics.img}`,
   "font-src 'self'",
   `connect-src 'self' ${googleAnalytics.connect} ${plausible} https://www.google.com/recaptcha/`,
-  // Iframes propios (animaciones de /animaciones/) y el invisible de reCAPTCHA.
+  // Iframes propios (animaciones de /animaciones/) y los de reCAPTCHA.
   `frame-src 'self' ${recaptcha.frame}`,
   "object-src 'none'",
   "base-uri 'self'",
