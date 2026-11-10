@@ -70,7 +70,7 @@ export default function ContactForm() {
     return (
       <div
         role="status"
-        className="pop-in rounded-brand border border-accent/30 bg-accent-pale p-8 text-center"
+        className="pop-in rounded-brand border border-accent/30 bg-gradient-to-b from-accent-pale to-white p-8 text-center shadow-[0_24px_50px_-34px_rgba(42,107,165,.6)]"
       >
         <h3 ref={successRef} tabIndex={-1} className="mb-2 text-lg font-semibold text-ink outline-none">
           {t("¡Gracias! Hemos recibido tu mensaje.", "Gràcies! Hem rebut el teu missatge.", "Thank you! We have received your message.")}
@@ -115,7 +115,7 @@ export default function ContactForm() {
         <select
           name="interest"
           defaultValue=""
-          className="rounded-xl border border-line bg-surface px-4 py-3 text-[15px] text-ink outline-none transition-colors focus:border-primary"
+          className="rounded-2xl border border-line bg-surface-alt/60 px-4 py-3.5 text-[15px] text-ink outline-none transition-all duration-300 placeholder:text-ink-faint hover:border-primary-light focus:border-primary focus:bg-white focus:shadow-[0_0_0_4px_rgba(90,169,230,.18)]"
         >
           <option value="">{t("Selecciona una opción", "Tria una opció", "Choose an option")}</option>
           {contactInterests.map((interest) => (
@@ -135,7 +135,7 @@ export default function ContactForm() {
           required
           rows={5}
           maxLength={5000}
-          className="rounded-xl border border-line bg-surface px-4 py-3 text-[15px] text-ink outline-none transition-colors focus:border-primary"
+          className="rounded-2xl border border-line bg-surface-alt/60 px-4 py-3.5 text-[15px] text-ink outline-none transition-all duration-300 placeholder:text-ink-faint hover:border-primary-light focus:border-primary focus:bg-white focus:shadow-[0_0_0_4px_rgba(90,169,230,.18)]"
         />
       </label>
 
@@ -164,7 +164,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="mt-2 self-start rounded-full bg-ink px-7 py-3 text-[14px] font-semibold text-white transition hover:scale-[1.03] hover:bg-primary active:scale-[0.97] disabled:opacity-60"
+        className="btn btn-primary mt-2 w-full self-start disabled:opacity-60 sm:w-auto"
       >
         {status === "loading" ? t("Enviando…", "Enviant…", "Sending…") : t("Enviar mensaje", "Enviar el missatge", "Send message")}
       </button>
@@ -220,7 +220,7 @@ function Field({
         name={name}
         required={required}
         autoComplete={autoComplete}
-        className="rounded-xl border border-line bg-surface px-4 py-3 text-[15px] text-ink outline-none transition-colors focus:border-primary"
+        className="rounded-2xl border border-line bg-surface-alt/60 px-4 py-3.5 text-[15px] text-ink outline-none transition-all duration-300 placeholder:text-ink-faint hover:border-primary-light focus:border-primary focus:bg-white focus:shadow-[0_0_0_4px_rgba(90,169,230,.18)]"
       />
     </label>
   );

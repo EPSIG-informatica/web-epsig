@@ -4,6 +4,7 @@ import Reveal from "@/components/reveal";
 import IndexMark from "@/components/index-mark";
 import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
+import Icon, { moduleIcons } from "@/components/icons";
 import CtaBand from "@/components/sections/cta-band";
 import { odooModules } from "@/lib/site";
 import type { Localized } from "@/lib/i18n";
@@ -69,6 +70,9 @@ const steps: { n: string; title: Localized; body: Localized }[] = [
   },
 ];
 
+// Icono de cada paso del proceso, en el mismo orden que `steps`.
+const stepIcons = ["chart", "link", "purchase", "crm", "shield"] as const;
+
 export default async function OdooPage() {
   const t = await getT();
   return (
@@ -89,30 +93,65 @@ export default async function OdooPage() {
         )}
       />
 
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <section className="section-tint relative overflow-hidden py-28 sm:py-36">
+        <div
+          className="pointer-events-none absolute top-0 -right-40 h-[480px] w-[480px] rounded-full blob-drift-slow"
+          style={{ background: "radial-gradient(circle, rgba(90,169,230,.18), transparent 65%)" }}
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-6xl px-6">
           <SectionHeading
             eyebrow={t("Cómo lo hacemos", "Com ho fem", "How we do it")}
             title={t("Un proceso pensado para pymes", "Un procés pensat per a pimes", "A process designed for SMEs")}
             body=""
             align="left"
           />
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
-            {steps.map((step, index) => (
-              <Reveal key={step.n} delay={index * 0.07}>
-                <TiltCard className="rounded-brand border border-line bg-surface p-6">
-                  <span className="font-mono text-sm font-medium text-accent-strong">{step.n}</span>
-                  <h3 className="mt-3 mb-2 text-[17px]">{t(step.title)}</h3>
-                  <p className="text-[13.5px] leading-relaxed text-ink-soft">{t(step.body)}</p>
-                </TiltCard>
-              </Reveal>
-            ))}
+
+          {/* Línea de tiempo: la traza se dibuja al entrar en pantalla y une los cinco pasos */}
+          <div data-observe className="relative">
+            <div className="absolute top-7 right-[10%] left-[10%] hidden h-px bg-line lg:block" aria-hidden>
+              <div className="draw-line h-full w-full bg-gradient-to-r from-primary via-accent to-ice shadow-[0_0_12px_#5aa9e6]" />
+            </div>
+            <div
+              className="absolute top-7 bottom-7 left-7 w-px bg-gradient-to-b from-primary via-accent to-ice/40 sm:hidden"
+              aria-hidden
+            />
+            <ol className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5 lg:gap-4">
+              {steps.map((step, index) => (
+                <li key={step.n} className={index === 4 ? "sm:col-span-2 lg:col-span-1" : undefined}>
+                  <Reveal delay={index * 0.1} className="flex h-full gap-4 sm:flex-col lg:items-center">
+                    <span className="relative z-10 grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-primary/20 bg-white font-mono text-[14px] font-semibold text-primary shadow-[0_14px_30px_-16px_rgba(42,107,165,.7)]">
+                      <span
+                        className="absolute inset-0 rounded-2xl border border-accent/50 animate-ping [animation-duration:2.6s]"
+                        style={{ animationDelay: `${index * 0.5}s` }}
+                        aria-hidden
+                      />
+                      {step.n}
+                    </span>
+                    <TiltCard className="card-light flex-1 p-6 lg:w-full">
+                      <span className="icon-tile mb-5 h-10 w-10 rounded-xl" aria-hidden>
+                        <Icon name={stepIcons[index]} className="h-[18px] w-[18px]" />
+                      </span>
+                      <h3 className="mb-2 text-[18px] text-ink">{t(step.title)}</h3>
+                      <p className="text-[13.5px] leading-relaxed text-ink-soft">{t(step.body)}</p>
+                    </TiltCard>
+                  </Reveal>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>
 
-      <section className="bg-surface-dark py-20 text-white sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <section className="relative overflow-hidden bg-surface-dark py-28 text-white sm:py-36">
+        <div className="stars pointer-events-none absolute inset-0" aria-hidden />
+        <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden />
+        <div
+          className="pointer-events-none absolute top-0 left-1/2 h-[520px] w-[900px] max-w-[160%] -translate-x-1/2 rounded-full"
+          style={{ background: "radial-gradient(ellipse, rgba(42,107,165,.3), transparent 65%)" }}
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-6xl px-6">
           <SectionHeading
             eyebrow={t("Módulos", "Mòduls", "Modules")}
             title={t("Un núcleo, todos tus procesos conectados", "Un nucli, tots els teus processos connectats", "One core, all your processes connected")}
@@ -122,19 +161,53 @@ export default async function OdooPage() {
               "We start with the essentials and add modules as your business needs them.",
             )}
             dark
+            className="mb-10 lg:mb-4"
           />
-          <Reveal className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
+
+          {/* Núcleo: una traza por columna lleva los datos del núcleo a cada módulo */}
+          <div className="relative hidden h-36 lg:block" aria-hidden>
+            <svg viewBox="0 0 1000 144" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" fill="none">
+              {["M500 40 V80 H125 V144", "M500 40 V80 H375 V144", "M500 40 V80 H625 V144", "M500 40 V80 H875 V144"].map((d, i) => (
+                <g key={d}>
+                  <path d={d} stroke="rgba(140,195,239,.18)" strokeWidth="1.2" vectorEffect="non-scaling-stroke" />
+                  <path
+                    d={d}
+                    pathLength={100}
+                    stroke="#8cc3ef"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    vectorEffect="non-scaling-stroke"
+                    className="trace-pulse"
+                    style={{ "--td": `${i * 0.5}s`, filter: "drop-shadow(0 0 4px #5aa9e6)" } as React.CSSProperties}
+                  />
+                </g>
+              ))}
+            </svg>
+            <span className="absolute top-0 left-1/2 grid h-14 w-14 -translate-x-1/2 place-items-center rounded-2xl border border-accent/40 bg-gradient-to-b from-[#123058] to-[#0a1830] text-ice shadow-[0_0_40px_-4px_rgba(61,143,224,.7)]">
+              <Icon name="spark" className="h-6 w-6 animate-[spin_12s_linear_infinite]" />
+            </span>
+          </div>
+
+          <ul className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
             {odooModules.map((mod, index) => (
-              <div
-                key={mod.label.es}
-                className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition-colors hover:border-accent/60 hover:bg-white/[0.07]"
-              >
-                <IndexMark n={index + 1} dark className="mb-4" />
-                <span className="block text-[15px] font-semibold text-white">{t(mod.label)}</span>
-                <span className="mt-1 block text-[12.5px] text-mist-soft">{t(mod.body)}</span>
-              </div>
+              <li key={mod.label.es}>
+                <Reveal delay={(index % 4) * 0.07 + Math.floor(index / 4) * 0.12} className="h-full">
+                  <div className="glass card-spotlight group flex h-full items-center gap-4 rounded-panel p-5 sm:flex-col sm:items-stretch sm:p-6">
+                    <div className="flex shrink-0 items-center gap-4 sm:w-full">
+                      <span className="icon-tile-dark transition-colors duration-300 group-hover:border-accent/60 group-hover:text-white" aria-hidden>
+                        <Icon name={moduleIcons[index]} className="h-5 w-5" />
+                      </span>
+                      <IndexMark n={index + 1} dark className="hidden flex-1 sm:flex" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="block text-[16px] font-semibold text-white">{t(mod.label)}</span>
+                      <span className="mt-1 block text-[13px] text-mist-soft">{t(mod.body)}</span>
+                    </div>
+                  </div>
+                </Reveal>
+              </li>
             ))}
-          </Reveal>
+          </ul>
         </div>
       </section>
 

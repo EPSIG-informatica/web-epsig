@@ -5,9 +5,11 @@ import Reveal from "@/components/reveal";
 import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
 import CtaBand from "@/components/sections/cta-band";
-import IndexMark from "@/components/index-mark";
+import SplitText, { type Segment } from "@/components/split-text";
+import Icon from "@/components/icons";
 import ViviendasAppDemo from "@/components/software/viviendas-app-demo";
 import { getT, pageMetadata } from "@/lib/i18n-server";
+import HeroBackdrop from "@/components/hero-backdrop";
 import type { Localized } from "@/lib/i18n";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -149,78 +151,95 @@ const wins: Item[] = [
   },
 ];
 
+// Icono de cada función, en el mismo orden que `features` ("calendar", "folder" y "doc" se dibujan aquí).
+const featureIcons = ["briefcase", "home", "calendar", "folder", "doc", "chart"] as const;
+const winIcons = ["folder", "doc", "calendar", "shield"] as const;
+
 export default async function ViviendasTuteladasPage() {
   const t = await getT();
   return (
     <>
       <header className="relative overflow-hidden bg-surface-dark pt-20 text-white sm:pt-24">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-            maskImage: "radial-gradient(ellipse 80% 60% at 50% 20%, black 40%, transparent 80%)",
-          }}
-          aria-hidden
-        />
-        <div
-          className="blob-drift pointer-events-none absolute -right-32 -top-40 h-[520px] w-[520px] rounded-full blur-[10px]"
-          style={{ background: "radial-gradient(circle, rgba(42,107,165,.45), transparent 70%)" }}
-          aria-hidden
-        />
-        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 pb-20 sm:pb-24 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="hero-in">
-            <Breadcrumbs path="/software/viviendas-tuteladas" align="left" className="mb-6" />
-            <div className="inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-mist-accent">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-              {t("Software propio · Viviendas tuteladas", "Programari propi · Habitatges tutelats", "Our own software · Supported housing")}
+        <HeroBackdrop />
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-5 pb-20 sm:px-6 sm:pb-28 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
+          <div>
+            <div className="hero-in" style={{ "--d": "0ms" } as React.CSSProperties}>
+              <Breadcrumbs path="/software/viviendas-tuteladas" align="left" className="mb-6" />
             </div>
-            <h1 className="mt-5 mb-5.5 text-[36px] leading-[1.12] text-white sm:text-[46px]">
-              {t(
-                <>
-                  Cada vivienda, cada residente, <em className="text-accent not-italic">en orden.</em>
-                </>,
-                <>
-                  Cada habitatge, cada resident, <em className="text-accent not-italic">en ordre.</em>
-                </>,
-                <>
-                  Every home, every resident, <em className="text-accent not-italic">in order.</em>
-                </>,
+            <div className="hero-in" style={{ "--d": "80ms" } as React.CSSProperties}>
+              <div className="eyebrow eyebrow-dark">
+                <span className="dot" aria-hidden />
+                {t("Software propio · Viviendas tuteladas", "Programari propi · Habitatges tutelats", "Our own software · Supported housing")}
+              </div>
+            </div>
+            <SplitText
+              as="h1"
+              trigger="load"
+              delay={160}
+              text={t<Segment[]>(
+                ["Cada vivienda, cada residente,", { text: "en orden.", className: "text-shine" }],
+                ["Cada habitatge, cada resident,", { text: "en ordre.", className: "text-shine" }],
+                ["Every home, every resident,", { text: "in order.", className: "text-shine" }],
               )}
-            </h1>
-            <p className="mb-8 max-w-[48ch] text-base leading-relaxed text-mist-soft sm:text-[17px]">
+              className="mt-6 mb-6 text-[36px] leading-[1.05] text-white sm:text-[50px] lg:text-[54px]"
+            />
+            <p
+              className="hero-in mb-9 max-w-[48ch] text-[16px] leading-relaxed text-mist-soft sm:text-[17.5px]"
+              style={{ "--d": "480ms" } as React.CSSProperties}
+            >
               {t(
                 "El software para entidades que gestionan viviendas tuteladas: empresas, viviendas, residentes, tareas y documentación en un solo panel, con los certificados listos en PDF.",
                 "El programari per a entitats que gestionen habitatges tutelats: empreses, habitatges, residents, tasques i documentació en un sol panell, amb els certificats preparats en PDF.",
                 "The software for organisations that run supported housing: companies, homes, residents, tasks and documentation in a single dashboard, with certificates ready as PDFs.",
               )}
             </p>
-            <div className="flex flex-wrap gap-3.5">
-              <Link
-                href="/contacto#diagnostico"
-                className="inline-block rounded-full bg-accent-strong px-6.5 py-3.5 text-[14.5px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(90,169,230,.6)] transition-transform hover:scale-[1.04] active:scale-[0.96]"
-              >
+            <div className="hero-in flex flex-wrap gap-3" style={{ "--d": "600ms" } as React.CSSProperties}>
+              <Link href="/contacto#diagnostico" data-magnetic className="btn btn-primary">
                 {t("Solicita una demo", "Sol·licita una demo", "Request a demo")}
               </Link>
-              <a
-                href="#funciones"
-                className="inline-block rounded-full border-[1.5px] border-white/25 px-5 py-2.5 text-[13.5px] font-semibold text-white transition hover:border-white/50"
-              >
+              <a href="#funciones" data-magnetic className="btn btn-ghost">
                 {t("Ver funciones ↓", "Veure funcions ↓", "See features ↓")}
               </a>
             </div>
           </div>
 
-          {/* Animación completa del programa (16:9, se escala sola al ancho disponible). */}
-          <div className="hero-in" style={{ animationDelay: "120ms" }}>
-            <ViviendasAppDemo />
+          {/* Animación completa del programa (16:9, se escala sola al ancho disponible), con halo de luz. */}
+          <div className="hero-in relative min-w-0" style={{ "--d": "320ms" } as React.CSSProperties}>
+            <div
+              className="pointer-events-none absolute -inset-6 rounded-[40px] opacity-80 blur-3xl sm:-inset-10"
+              style={{ background: "radial-gradient(ellipse at 60% 40%, rgba(61,143,224,.45), rgba(42,107,165,.12) 55%, transparent 75%)" }}
+              aria-hidden
+            />
+            <div className="relative">
+              <ViviendasAppDemo />
+            </div>
+            <span
+              className="glass float pointer-events-none absolute -top-4 right-4 hidden items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-[11px] text-white backdrop-blur-md sm:flex"
+              style={{ "--fd": "0.4s" } as React.CSSProperties}
+              aria-hidden
+            >
+              <span className="grid h-4 w-4 place-items-center rounded-full bg-accent text-white">
+                <svg viewBox="0 0 12 12" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2.5 6.2l2.2 2.2 4.8-4.8" />
+                </svg>
+              </span>
+              PDF
+            </span>
           </div>
         </div>
       </header>
 
-      <section id="funciones" className="scroll-mt-20 py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <section id="funciones" className="relative scroll-mt-20 overflow-hidden bg-surface py-28 sm:py-36">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60"
+          style={{
+            backgroundImage: "radial-gradient(rgba(42,107,165,.12) 1px, transparent 1px)",
+            backgroundSize: "22px 22px",
+            maskImage: "radial-gradient(ellipse 70% 50% at 50% 0%, black, transparent 75%)",
+          }}
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-6xl px-5 sm:px-6">
           <SectionHeading
             eyebrow={t("Funciones", "Funcions", "Features")}
             title={t("Todo lo que pasa en tus viviendas, en un solo panel", "Tot el que passa en els teus habitatges, en un sol panell", "Everything happening in your homes, in a single dashboard")}
@@ -230,12 +249,19 @@ export default async function ViviendasTuteladasPage() {
               "Designed for the day-to-day of an organisation running supported housing, not generic software forced to fit.",
             )}
           />
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
             {features.map((feature, index) => (
-              <Reveal key={feature.title.es} className="h-full">
-                <TiltCard className="h-full rounded-brand border border-line bg-surface p-6">
-                  <IndexMark n={index + 1} className="mb-4" />
-                  <h3 className="mb-2 text-[17px]">{t(feature.title)}</h3>
+              <Reveal key={feature.title.es} className="h-full" delay={(index % 3) * 0.1}>
+                <TiltCard className="card-light group h-full p-6 sm:p-7">
+                  <div className="mb-6 flex items-center justify-between">
+                    <span className="icon-tile transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6" aria-hidden>
+                      <Glyph name={featureIcons[index % featureIcons.length]} />
+                    </span>
+                    <span className="font-mono text-[12px] text-ink-faint" aria-hidden>
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <h3 className="mb-2 text-[17.5px] text-ink">{t(feature.title)}</h3>
                   <p className="text-[14px] leading-relaxed text-ink-soft">{t(feature.body)}</p>
                 </TiltCard>
               </Reveal>
@@ -244,48 +270,71 @@ export default async function ViviendasTuteladasPage() {
         </div>
       </section>
 
-      <section className="bg-surface-dark py-20 text-white sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <section className="relative overflow-hidden bg-night py-28 text-white sm:py-36">
+        <div
+          className="pointer-events-none absolute left-1/2 top-0 h-[520px] w-[900px] max-w-[160%] -translate-x-1/2 rounded-full"
+          style={{ background: "radial-gradient(ellipse, rgba(42,107,165,.28), transparent 65%)" }}
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-6xl px-5 sm:px-6">
           <SectionHeading
             eyebrow={t("Cómo funciona", "Com funciona", "How it works")}
             title={t("De la entidad al certificado, sin salir del programa", "De l'entitat al certificat, sense eixir del programa", "From organisation to certificate, without leaving the software")}
             dark
           />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((step) => (
-              <Reveal key={step.n} className="h-full">
-                <div className="relative h-full rounded-brand border border-white/10 bg-white/[0.04] p-6">
-                  <span className="font-mono text-sm font-medium text-accent">{step.n}</span>
-                  <h3 className="mt-3 mb-2 text-[17px] text-white">{t(step.title)}</h3>
-                  <p className="text-[13.5px] leading-relaxed text-mist-soft">{t(step.body)}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <Steps steps={steps.map((step) => ({ n: step.n, title: t(step.title), body: t(step.body) }))} />
         </div>
       </section>
 
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <SectionHeading
-            eyebrow={t("Resultado", "Resultat", "The result")}
-            title={t("Lo que cambia en tu día a día", "El que canvia en el teu dia a dia", "What changes in your day-to-day")}
-          />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {wins.map((win) => (
-              <Reveal key={win.title.es}>
-                <div className="flex h-full items-start gap-4 rounded-brand border border-line bg-surface-alt p-5">
-                  <span
-                    className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-strong text-sm font-bold text-white"
-                    aria-hidden
+      <section className="section-tint relative overflow-hidden py-28 sm:py-36">
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-5 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+          <div>
+            <SectionHeading
+              align="left"
+              className="mb-10"
+              eyebrow={t("Resultado", "Resultat", "The result")}
+              title={t("Lo que cambia en tu día a día", "El que canvia en el teu dia a dia", "What changes in your day-to-day")}
+            />
+            {/* Tareas de cada vivienda que se completan al entrar (decorativo) */}
+            <Reveal direction="scale" delay={0.15}>
+              <div className="card-light relative flex flex-col gap-2.5 overflow-hidden p-4 sm:p-5" aria-hidden>
+                {[0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    data-reveal="left"
+                    style={{ "--d": `${250 + i * 160}ms` } as React.CSSProperties}
+                    className="flex items-center gap-3 rounded-xl border border-line bg-surface-alt/60 px-3 py-2.5"
                   >
-                    ✓
+                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary-pale text-primary">
+                      <Icon name="home" className="h-4.5 w-4.5" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block h-1.5 rounded-full bg-ink/15" style={{ width: `${70 - i * 12}%` }} />
+                      <span className="mt-1.5 block h-1.5 rounded-full bg-ink/10" style={{ width: `${40 + i * 8}%` }} />
+                    </span>
+                    <span
+                      className="check grid h-6 w-6 shrink-0 place-items-center rounded-full bg-accent text-white shadow-[0_0_14px_-3px_rgba(90,169,230,.9)]"
+                      style={{ "--i": i } as React.CSSProperties}
+                    >
+                      <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M2.5 6.2l2.2 2.2 4.8-4.8" />
+                      </svg>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {wins.map((win, index) => (
+              <Reveal key={win.title.es} className="h-full" delay={0.1 + index * 0.1}>
+                <TiltCard className="card-light h-full p-6">
+                  <span className="icon-tile mb-5 h-11 w-11" aria-hidden>
+                    <Glyph name={winIcons[index % winIcons.length]} />
                   </span>
-                  <span>
-                    <span className="block text-[16px] font-semibold text-ink">{t(win.title)}</span>
-                    <span className="mt-0.5 block text-[14px] leading-relaxed text-ink-soft">{t(win.body)}</span>
-                  </span>
-                </div>
+                  <span className="block text-[16.5px] font-semibold text-ink">{t(win.title)}</span>
+                  <span className="mt-1.5 block text-[14px] leading-relaxed text-ink-soft">{t(win.body)}</span>
+                </TiltCard>
               </Reveal>
             ))}
           </div>
@@ -302,5 +351,70 @@ export default async function ViviendasTuteladasPage() {
         ctaLabel={t("Solicitar una demo", "Sol·licitar una demo", "Request a demo")}
       />
     </>
+  );
+}
+
+// Iconos propios de esta página (el resto viene del juego común de `Icon`).
+const localGlyphs: Record<string, React.ReactNode> = {
+  calendar: (
+    <>
+      <rect x="4" y="5" width="16" height="15" rx="2.5" />
+      <path d="M4 9.5h16M8.5 3v4M15.5 3v4M8 13h2M12 13h2M8 16.5h2" />
+    </>
+  ),
+  folder: <path d="M3.5 7.5A2 2 0 0 1 5.5 5.5h4l2 2.2h7a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z" />,
+  doc: (
+    <>
+      <path d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5h-9.5A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5z" />
+      <path d="M14 3.5V8h4M8.5 12.5h7M8.5 16h4.5" />
+    </>
+  ),
+};
+
+function Glyph({ name }: { name: string }) {
+  const local = localGlyphs[name];
+  if (!local) return <Icon name={name} className="h-5 w-5" />;
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden>
+      {local}
+    </svg>
+  );
+}
+
+// Pasos en línea de tiempo: la línea se dibuja al entrar y un pulso de luz la recorre.
+function Steps({ steps }: { steps: { n: string; title: string; body: string }[] }) {
+  return (
+    <div data-observe className="relative">
+      <div className="pointer-events-none absolute top-[22px] right-[12.5%] left-[12.5%] hidden h-px lg:block" aria-hidden>
+        <span className="draw-line absolute inset-0 bg-gradient-to-r from-accent/10 via-accent/60 to-accent/10" />
+        <svg className="absolute inset-x-0 -top-1 h-2 w-full overflow-visible" viewBox="0 0 100 2" preserveAspectRatio="none" fill="none">
+          <path
+            d="M0,1 L100,1"
+            pathLength={100}
+            stroke="#b5dcfb"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            vectorEffect="non-scaling-stroke"
+            className="trace-pulse"
+            style={{ strokeDasharray: "14 86", animationDuration: "4.5s", filter: "drop-shadow(0 0 5px #5aa9e6)" } as React.CSSProperties}
+          />
+        </svg>
+      </div>
+      <ol className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        {steps.map((step, index) => (
+          <li key={step.n} className="h-full">
+            <Reveal className="flex h-full flex-col" delay={0.15 + index * 0.12}>
+              <span className="relative z-10 mb-5 grid h-11 w-11 place-items-center rounded-full border border-accent/50 bg-surface-dark font-mono text-[13px] font-medium text-ice shadow-[0_0_30px_-4px_rgba(61,143,224,.8)] lg:mx-auto">
+                {step.n}
+              </span>
+              <div className="glass card-spotlight flex-1 rounded-panel p-6">
+                <h3 className="mb-2 text-[17px] text-white">{step.title}</h3>
+                <p className="text-[14px] leading-relaxed text-mist-soft">{step.body}</p>
+              </div>
+            </Reveal>
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }

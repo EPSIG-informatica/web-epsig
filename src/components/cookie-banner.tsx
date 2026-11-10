@@ -59,23 +59,23 @@ export default function CookieBanner() {
             // Escape cierra la configuración si ya había una elección guardada.
             if (event.key === "Escape" && settingsOpen && consent) closeSettings();
           }}
-          className="pop-in fixed inset-x-4 bottom-4 z-[60] mx-auto max-w-2xl rounded-panel border border-line bg-surface p-5 shadow-[0_24px_60px_-20px_rgba(11,18,32,.35)] sm:p-6"
+          className="pop-in fixed inset-x-4 bottom-4 z-[60] mx-auto max-w-2xl rounded-panel border border-white/10 bg-surface-dark/95 p-5 text-white shadow-[0_30px_70px_-20px_rgba(0,0,0,.7)] backdrop-blur-xl sm:p-6"
         >
           <h2
             id="cookie-banner-title"
             ref={titleRef}
             tabIndex={-1}
-            className="mb-2 font-display text-base font-semibold text-ink outline-none"
+            className="mb-2 font-display text-base font-semibold text-white outline-none"
           >
             {settingsOpen ? t("Configurar cookies", "Configurar cookies", "Cookie settings") : t("Usamos cookies", "Usem cookies", "We use cookies")}
           </h2>
-          <p className="text-[13.5px] leading-relaxed text-ink-soft">
+          <p className="text-[13.5px] leading-relaxed text-mist-soft">
             {t(
               "Utilizamos cookies técnicas necesarias para que la web funcione y, solo si lo aceptas, cookies opcionales para las finalidades que elijas. Puedes cambiar tu decisión en cualquier momento desde «Configurar cookies», en el pie de página. Más información en nuestra ",
               "Utilitzem cookies tècniques necessàries perquè la web funcione i, només si ho acceptes, cookies opcionals per a les finalitats que tries. Pots canviar la teua decisió en qualsevol moment des de «Configurar cookies», en el peu de pàgina. Més informació en la nostra ",
               "We use technical cookies that are necessary for the website to work and, only if you accept them, optional cookies for the purposes you choose. You can change your decision at any time via “Cookie settings” in the footer. For more information, see our ",
             )}
-            <Link href="/politica-de-cookies" className="font-medium text-primary underline underline-offset-2 hover:no-underline">
+            <Link href="/politica-de-cookies" className="font-medium text-ice underline underline-offset-2 hover:no-underline">
               {t("política de cookies", "política de cookies", "cookie policy")}
             </Link>
             .
@@ -129,7 +129,7 @@ function BannerButton({ children, onClick }: { children: React.ReactNode; onClic
     <button
       type="button"
       onClick={onClick}
-      className="rounded-full bg-ink px-5 py-2.5 text-[13.5px] font-semibold text-white transition-colors hover:bg-primary"
+      className="btn btn-ghost !px-5 !py-2.5 !text-[13.5px]"
     >
       {children}
     </button>
@@ -152,13 +152,13 @@ function CategoryRow({
   return (
     <li>
       <label
-        className={`flex items-start justify-between gap-4 rounded-brand border border-line bg-surface-alt p-3.5 ${
+        className={`flex items-start justify-between gap-4 rounded-brand border border-white/10 bg-white/[0.04] p-3.5 ${
           disabled ? "cursor-default" : "cursor-pointer"
         }`}
       >
         <span>
-          <span className="block text-sm font-semibold text-ink">{title}</span>
-          <span className="block text-[12.5px] leading-snug text-ink-soft">{body}</span>
+          <span className="block text-sm font-semibold text-white">{title}</span>
+          <span className="block text-[12.5px] leading-snug text-mist-soft">{body}</span>
         </span>
         <input
           type="checkbox"

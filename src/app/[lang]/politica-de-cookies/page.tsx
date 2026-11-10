@@ -90,158 +90,193 @@ const analyticsEnabled = Boolean(process.env.NEXT_PUBLIC_GA_ID);
 
 export default async function PoliticaDeCookiesPage() {
   const t = await getT();
+  // Títulos de las secciones: se usan en los encabezados y en el índice lateral.
+  const sections = [
+    { id: "que-son", label: t("¿Qué son las cookies?", "Què són les cookies?", "What are cookies?") },
+    { id: "tipos", label: t("Tipos de cookies y consentimiento", "Tipus de cookies i consentiment", "Types of cookies and consent") },
+    {
+      id: "consentimiento",
+      label: t("Cómo cambiar o retirar tu consentimiento", "Com canviar o retirar el teu consentiment", "How to change or withdraw your consent"),
+    },
+    { id: "mas-informacion", label: t("Más información", "Més informació", "Further information") },
+  ];
   return (
     <>
       <PageHero eyebrow="Legal" title={t("Política de cookies", "Política de cookies", "Cookie policy")} />
-      <section className="py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl px-6 text-[15px] leading-relaxed text-ink-soft">
-          {t.lang === "en" && (
-            <p className="mb-6 text-[13.5px] italic text-ink-soft">
-              This English version is provided for information only. In the event of any discrepancy, the Spanish
-              version shall prevail.
-            </p>
-          )}
-          <h2 className="mb-3 text-xl text-ink">{t("¿Qué son las cookies?", "Què són les cookies?", "What are cookies?")}</h2>
-          <p>
-            {t(
-              "Las cookies son pequeños archivos que se almacenan en tu navegador al visitar un sitio web. Se usan para recordar información sobre tu visita, garantizar la seguridad o, si lo aceptas, obtener estadísticas de uso.",
-              "Les cookies són xicotets fitxers que s'emmagatzemen en el teu navegador quan visites un lloc web. S'usen per a recordar informació sobre la teua visita, garantir la seguretat o, si ho acceptes, obtindre estadístiques d'ús.",
-              "Cookies are small files that are stored in your browser when you visit a website. They are used to remember information about your visit, to ensure security or, if you accept them, to obtain usage statistics.",
-            )}
-          </p>
-
-          <h2 className="mt-8 mb-3 text-xl text-ink">
-            {t("Tipos de cookies y consentimiento", "Tipus de cookies i consentiment", "Types of cookies and consent")}
-          </h2>
-          <p>
-            {t(
-              <>
-                Las cookies <strong className="text-ink">técnicas</strong> son necesarias para que la web funcione
-                y no requieren tu consentimiento. El resto de categorías (funcionales, analíticas y de marketing)
-                solo se activan si las aceptas en el aviso de cookies, y puedes cambiar tu elección en cualquier
-                momento.
-              </>,
-              <>
-                Les cookies <strong className="text-ink">tècniques</strong> són necessàries perquè la web funcione
-                i no requerixen el teu consentiment. La resta de categories (funcionals, analítiques i de
-                màrqueting) només s&apos;activen si les acceptes en l&apos;avís de cookies, i pots canviar la teua
-                elecció en qualsevol moment.
-              </>,
-              <>
-                <strong className="text-ink">Technical</strong> cookies are necessary for the website to work and do
-                not require your consent. The other categories (functional, analytics and marketing) are only
-                activated if you accept them in the cookie notice, and you can change your choice at any time.
-              </>,
-            )}
-          </p>
-
-          <h3 className="mt-6 mb-2 text-base font-semibold text-ink">{t("Cookies técnicas", "Cookies tècniques", "Technical cookies")}</h3>
-          <CookieTable rows={technicalCookies} t={t} />
-          <p className="mt-3">
-            {t(
-              "La cookie «idioma» es una cookie técnica de personalización de la interfaz y está exenta de consentimiento. Si no has elegido idioma y tu navegador está configurado en catalán/valenciano o en inglés, te mostramos directamente la versión en ese idioma, sin guardar nada en tu dispositivo.",
-              "La cookie «idioma» és una cookie tècnica de personalització de la interfície i està exempta de consentiment. Si no has triat idioma i el teu navegador està configurat en català/valencià o en anglés, et mostrem directament la versió en eixe idioma, sense guardar res en el teu dispositiu.",
-              "The “idioma” cookie is a technical interface customisation cookie and is exempt from consent. If you have not chosen a language and your browser is set to Catalan/Valencian or English, we show you the corresponding language version directly, without storing anything on your device.",
-            )}
-          </p>
-
-          <h3 className="mt-6 mb-2 text-base font-semibold text-ink">
-            {t("Estadísticas sin cookies", "Estadístiques sense cookies", "Cookie-free statistics")}
-          </h3>
-          <p>
-            {t(
-              "Para conocer las visitas de forma agregada usamos Plausible Analytics, instalado en un servidor propio (analitica.epsigconsultores.com). No instala cookies ni guarda ni lee información en tu dispositivo, y no almacena tu dirección IP ni ningún identificador, por lo que no requiere consentimiento y funciona aunque rechaces las cookies. Más información en la ",
-              "Per a conéixer les visites de manera agregada usem Plausible Analytics, instal·lat en un servidor propi (analitica.epsigconsultores.com). No instal·la cookies ni guarda ni llig informació en el teu dispositiu, i no emmagatzema la teua adreça IP ni cap identificador, per la qual cosa no requerix consentiment i funciona encara que rebutges les cookies. Més informació en la ",
-              "To measure visits in aggregate form we use Plausible Analytics, installed on our own server (analitica.epsigconsultores.com). It does not install cookies or store or read any information on your device, and it does not store your IP address or any identifier, so it does not require consent and works even if you reject cookies. More information is available in our ",
-            )}
-            <Link href="/politica-de-privacidad" className="text-primary underline underline-offset-2 hover:no-underline">
-              {t("política de privacidad", "política de privacitat", "privacy policy")}
-            </Link>
-            .
-          </p>
-
-          {analyticsEnabled && (
-            <>
-              <h3 className="mt-6 mb-2 text-base font-semibold text-ink">
-                {t(
-                  "Cookies analíticas (solo con tu consentimiento)",
-                  "Cookies analítiques (només amb el teu consentiment)",
-                  "Analytics cookies (only with your consent)",
-                )}
-              </h3>
-              <CookieTable rows={analyticsCookies} t={t} />
-              <p className="mt-3">
-                {t(
-                  "Google Analytics puede implicar transferencias internacionales de datos a Estados Unidos, amparadas en el Marco de Privacidad de Datos UE-EE. UU. Más información en la ",
-                  "Google Analytics pot implicar transferències internacionals de dades als Estats Units, emparades en el Marc de Privacitat de Dades UE-EUA. Més informació en la ",
-                  "Google Analytics may involve international transfers of data to the United States, covered by the EU-US Data Privacy Framework. More information is available in ",
-                )}
-                <a
-                  href="https://policies.google.com/privacy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary underline underline-offset-2 hover:no-underline"
-                >
-                  {t("política de privacidad de Google", "política de privacitat de Google", "Google’s privacy policy")}
-                </a>
-                .
+      <section className="section-tint relative overflow-clip py-16 sm:py-24">
+        <div
+          className="pointer-events-none absolute -top-40 left-1/2 h-[420px] w-[140%] max-w-[900px] -translate-x-1/2 rounded-full"
+          style={{ background: "radial-gradient(ellipse, rgba(90,169,230,.16), transparent 65%)" }}
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start lg:gap-12">
+          {/* Índice lateral fijo, generado con los mismos títulos de la página */}
+          <aside className="hidden lg:sticky lg:top-[calc(var(--nav-h)+2rem)] lg:block">
+            <span className="mb-5 block h-px w-12 bg-gradient-to-r from-accent to-transparent shadow-[0_0_10px_var(--color-accent)]" aria-hidden />
+            <ol className="flex flex-col border-l border-line">
+              {sections.map((section) => (
+                <li key={section.id}>
+                  <a
+                    href={`#${section.id}`}
+                    className="-ml-px block border-l border-transparent py-1.5 pl-4 text-[13.5px] leading-snug text-ink-soft transition-colors hover:border-accent hover:text-primary"
+                  >
+                    {section.label}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </aside>
+          <article className="card-light prose-epsig mx-auto max-w-3xl px-5 py-8 sm:px-10 sm:py-12 lg:mx-0">
+            {t.lang === "en" && (
+              <p className="mb-6 rounded-xl border border-line bg-surface-alt px-4 py-3 text-[13.5px] italic">
+                This English version is provided for information only. In the event of any discrepancy, the Spanish
+                version shall prevail.
               </p>
-            </>
-          )}
-
-          <h3 className="mt-6 mb-2 text-base font-semibold text-ink">
-            {t("Marketing (solo con tu consentimiento)", "Màrqueting (només amb el teu consentiment)", "Marketing (only with your consent)")}
-          </h3>
-          <CookieTable rows={marketingCookies} t={t} />
-          <p className="mt-3">
-            {t(
-              "Este dato no se comparte con terceros ni sirve para mostrarte publicidad: solo se utiliza si nos escribes por el formulario de contacto, para saber por qué canal nos has conocido. Si retiras el consentimiento de marketing, se borra.",
-              "Esta dada no es compartix amb tercers ni servix per a mostrar-te publicitat: només s'utilitza si ens escrius pel formulari de contacte, per a saber per quin canal ens has conegut. Si retires el consentiment de màrqueting, s'esborra.",
-              "This information is not shared with third parties and is not used to show you advertising: it is only used if you write to us through the contact form, so that we know through which channel you found us. If you withdraw your marketing consent, it is deleted.",
             )}
-          </p>
-
-          {!analyticsEnabled && (
-            <p className="mt-4">
+            <h2 id={sections[0].id} style={{ marginTop: 0 }}>
+              {sections[0].label}
+            </h2>
+            <p>
               {t(
-                "Actualmente no utilizamos cookies funcionales ni analíticas.",
-                "Actualment no utilitzem cookies funcionals ni analítiques.",
-                "We do not currently use functional or analytics cookies.",
+                "Las cookies son pequeños archivos que se almacenan en tu navegador al visitar un sitio web. Se usan para recordar información sobre tu visita, garantizar la seguridad o, si lo aceptas, obtener estadísticas de uso.",
+                "Les cookies són xicotets fitxers que s'emmagatzemen en el teu navegador quan visites un lloc web. S'usen per a recordar informació sobre la teua visita, garantir la seguretat o, si ho acceptes, obtindre estadístiques d'ús.",
+                "Cookies are small files that are stored in your browser when you visit a website. They are used to remember information about your visit, to ensure security or, if you accept them, to obtain usage statistics.",
               )}
             </p>
-          )}
 
-          <h2 className="mt-8 mb-3 text-xl text-ink">
-            {t("Cómo cambiar o retirar tu consentimiento", "Com canviar o retirar el teu consentiment", "How to change or withdraw your consent")}
-          </h2>
-          <p>
-            {t(
-              "Puedes modificar tus preferencias en cualquier momento desde el enlace «Configurar cookies» del pie de página o con este botón:",
-              "Pots modificar les teues preferències en qualsevol moment des de l'enllaç «Configurar cookies» del peu de pàgina o amb este botó:",
-              "You can change your preferences at any time via the “Cookie settings” link in the footer or with this button:",
-            )}
-          </p>
-          <CookieSettingsButton className="mt-4 rounded-full bg-ink px-5 py-2.5 text-[13.5px] font-semibold text-white transition-colors hover:bg-primary" />
-          <p className="mt-4">
-            {t(
-              "También puedes bloquear o eliminar las cookies desde la configuración de tu navegador, aunque bloquear las técnicas puede impedir que algunas partes de la web funcionen correctamente.",
-              "També pots bloquejar o eliminar les cookies des de la configuració del teu navegador, encara que bloquejar les tècniques pot impedir que algunes parts de la web funcionen correctament.",
-              "You can also block or delete cookies in your browser settings, although blocking technical cookies may prevent some parts of the website from working properly.",
-            )}
-          </p>
+            <h2 id={sections[1].id}>
+              {sections[1].label}
+            </h2>
+            <p>
+              {t(
+                <>
+                  Las cookies <strong>técnicas</strong> son necesarias para que la web funcione
+                  y no requieren tu consentimiento. El resto de categorías (funcionales, analíticas y de marketing)
+                  solo se activan si las aceptas en el aviso de cookies, y puedes cambiar tu elección en cualquier
+                  momento.
+                </>,
+                <>
+                  Les cookies <strong>tècniques</strong> són necessàries perquè la web funcione
+                  i no requerixen el teu consentiment. La resta de categories (funcionals, analítiques i de
+                  màrqueting) només s&apos;activen si les acceptes en l&apos;avís de cookies, i pots canviar la teua
+                  elecció en qualsevol moment.
+                </>,
+                <>
+                  <strong>Technical</strong> cookies are necessary for the website to work and do
+                  not require your consent. The other categories (functional, analytics and marketing) are only
+                  activated if you accept them in the cookie notice, and you can change your choice at any time.
+                </>,
+              )}
+            </p>
 
-          <h2 className="mt-8 mb-3 text-xl text-ink">{t("Más información", "Més informació", "Further information")}</h2>
-          <p>
-            {t(
-              "Si tienes dudas sobre esta política de cookies, puedes contactarnos en ",
-              "Si tens dubtes sobre esta política de cookies, pots contactar-nos a ",
-              "If you have any questions about this cookie policy, you can contact us at ",
+            <h3>{t("Cookies técnicas", "Cookies tècniques", "Technical cookies")}</h3>
+            <CookieTable rows={technicalCookies} t={t} />
+            <p className="mt-3">
+              {t(
+                "La cookie «idioma» es una cookie técnica de personalización de la interfaz y está exenta de consentimiento. Si no has elegido idioma y tu navegador está configurado en catalán/valenciano o en inglés, te mostramos directamente la versión en ese idioma, sin guardar nada en tu dispositivo.",
+                "La cookie «idioma» és una cookie tècnica de personalització de la interfície i està exempta de consentiment. Si no has triat idioma i el teu navegador està configurat en català/valencià o en anglés, et mostrem directament la versió en eixe idioma, sense guardar res en el teu dispositiu.",
+                "The “idioma” cookie is a technical interface customisation cookie and is exempt from consent. If you have not chosen a language and your browser is set to Catalan/Valencian or English, we show you the corresponding language version directly, without storing anything on your device.",
+              )}
+            </p>
+
+            <h3>
+              {t("Estadísticas sin cookies", "Estadístiques sense cookies", "Cookie-free statistics")}
+            </h3>
+            <p>
+              {t(
+                "Para conocer las visitas de forma agregada usamos Plausible Analytics, instalado en un servidor propio (analitica.epsigconsultores.com). No instala cookies ni guarda ni lee información en tu dispositivo, y no almacena tu dirección IP ni ningún identificador, por lo que no requiere consentimiento y funciona aunque rechaces las cookies. Más información en la ",
+                "Per a conéixer les visites de manera agregada usem Plausible Analytics, instal·lat en un servidor propi (analitica.epsigconsultores.com). No instal·la cookies ni guarda ni llig informació en el teu dispositiu, i no emmagatzema la teua adreça IP ni cap identificador, per la qual cosa no requerix consentiment i funciona encara que rebutges les cookies. Més informació en la ",
+                "To measure visits in aggregate form we use Plausible Analytics, installed on our own server (analitica.epsigconsultores.com). It does not install cookies or store or read any information on your device, and it does not store your IP address or any identifier, so it does not require consent and works even if you reject cookies. More information is available in our ",
+              )}
+              <Link href="/politica-de-privacidad">
+                {t("política de privacidad", "política de privacitat", "privacy policy")}
+              </Link>
+              .
+            </p>
+
+            {analyticsEnabled && (
+              <>
+                <h3>
+                  {t(
+                    "Cookies analíticas (solo con tu consentimiento)",
+                    "Cookies analítiques (només amb el teu consentiment)",
+                    "Analytics cookies (only with your consent)",
+                  )}
+                </h3>
+                <CookieTable rows={analyticsCookies} t={t} />
+                <p className="mt-3">
+                  {t(
+                    "Google Analytics puede implicar transferencias internacionales de datos a Estados Unidos, amparadas en el Marco de Privacidad de Datos UE-EE. UU. Más información en la ",
+                    "Google Analytics pot implicar transferències internacionals de dades als Estats Units, emparades en el Marc de Privacitat de Dades UE-EUA. Més informació en la ",
+                    "Google Analytics may involve international transfers of data to the United States, covered by the EU-US Data Privacy Framework. More information is available in ",
+                  )}
+                  <a
+                    href="https://policies.google.com/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                   
+                  >
+                    {t("política de privacidad de Google", "política de privacitat de Google", "Google’s privacy policy")}
+                  </a>
+                  .
+                </p>
+              </>
             )}
-            <a href={`mailto:${site.email}`} className="text-primary underline underline-offset-2 hover:no-underline">
-              {site.email}
-            </a>
-            .
-          </p>
+
+            <h3>
+              {t("Marketing (solo con tu consentimiento)", "Màrqueting (només amb el teu consentiment)", "Marketing (only with your consent)")}
+            </h3>
+            <CookieTable rows={marketingCookies} t={t} />
+            <p className="mt-3">
+              {t(
+                "Este dato no se comparte con terceros ni sirve para mostrarte publicidad: solo se utiliza si nos escribes por el formulario de contacto, para saber por qué canal nos has conocido. Si retiras el consentimiento de marketing, se borra.",
+                "Esta dada no es compartix amb tercers ni servix per a mostrar-te publicitat: només s'utilitza si ens escrius pel formulari de contacte, per a saber per quin canal ens has conegut. Si retires el consentiment de màrqueting, s'esborra.",
+                "This information is not shared with third parties and is not used to show you advertising: it is only used if you write to us through the contact form, so that we know through which channel you found us. If you withdraw your marketing consent, it is deleted.",
+              )}
+            </p>
+
+            {!analyticsEnabled && (
+              <p className="mt-4">
+                {t(
+                  "Actualmente no utilizamos cookies funcionales ni analíticas.",
+                  "Actualment no utilitzem cookies funcionals ni analítiques.",
+                  "We do not currently use functional or analytics cookies.",
+                )}
+              </p>
+            )}
+
+            <h2 id={sections[2].id}>
+              {sections[2].label}
+            </h2>
+            <p>
+              {t(
+                "Puedes modificar tus preferencias en cualquier momento desde el enlace «Configurar cookies» del pie de página o con este botón:",
+                "Pots modificar les teues preferències en qualsevol moment des de l'enllaç «Configurar cookies» del peu de pàgina o amb este botó:",
+                "You can change your preferences at any time via the “Cookie settings” link in the footer or with this button:",
+              )}
+            </p>
+            <CookieSettingsButton className="btn btn-dark mt-2" />
+            <p className="mt-4">
+              {t(
+                "También puedes bloquear o eliminar las cookies desde la configuración de tu navegador, aunque bloquear las técnicas puede impedir que algunas partes de la web funcionen correctamente.",
+                "També pots bloquejar o eliminar les cookies des de la configuració del teu navegador, encara que bloquejar les tècniques pot impedir que algunes parts de la web funcionen correctament.",
+                "You can also block or delete cookies in your browser settings, although blocking technical cookies may prevent some parts of the website from working properly.",
+              )}
+            </p>
+
+            <h2 id={sections[3].id}>{sections[3].label}</h2>
+            <p>
+              {t(
+                "Si tienes dudas sobre esta política de cookies, puedes contactarnos en ",
+                "Si tens dubtes sobre esta política de cookies, pots contactar-nos a ",
+                "If you have any questions about this cookie policy, you can contact us at ",
+              )}
+              <a href={`mailto:${site.email}`}>
+                {site.email}
+              </a>
+              .
+            </p>
+          </article>
         </div>
       </section>
     </>
@@ -250,23 +285,24 @@ export default async function PoliticaDeCookiesPage() {
 
 function CookieTable({ rows, t }: { rows: CookieRow[]; t: Translate }) {
   return (
-    <div className="overflow-x-auto rounded-brand border border-line">
-      <table className="w-full min-w-[520px] text-left text-[13.5px]">
-        <thead className="bg-surface-alt text-ink">
+    // La tabla se desplaza dentro de su propio contenedor en móvil (nunca la página).
+    <div className="my-4 max-w-full overflow-x-auto rounded-xl border border-line bg-white shadow-[0_14px_30px_-26px_rgba(11,18,32,.4)]">
+      <table className="min-w-[520px]">
+        <thead className="bg-primary-pale text-ink">
           <tr>
-            <th className="px-4 py-2.5 font-semibold">Cookie</th>
-            <th className="px-4 py-2.5 font-semibold">{t("Proveedor", "Proveïdor", "Provider")}</th>
-            <th className="px-4 py-2.5 font-semibold">{t("Finalidad", "Finalitat", "Purpose")}</th>
-            <th className="px-4 py-2.5 font-semibold">{t("Duración", "Durada", "Duration")}</th>
+            <th className="font-semibold">Cookie</th>
+            <th className="font-semibold">{t("Proveedor", "Proveïdor", "Provider")}</th>
+            <th className="font-semibold">{t("Finalidad", "Finalitat", "Purpose")}</th>
+            <th className="font-semibold">{t("Duración", "Durada", "Duration")}</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row) => (
-            <tr key={row.name} className="border-t border-line align-top">
-              <td className="px-4 py-2.5 font-mono text-[12.5px] text-ink">{row.name}</td>
-              <td className="px-4 py-2.5">{row.provider}</td>
-              <td className="px-4 py-2.5">{t(row.purpose)}</td>
-              <td className="px-4 py-2.5 whitespace-nowrap">{t(row.duration)}</td>
+            <tr key={row.name} className="transition-colors hover:bg-surface-alt">
+              <td className="font-mono text-[12.5px] text-ink">{row.name}</td>
+              <td>{row.provider}</td>
+              <td>{t(row.purpose)}</td>
+              <td className="whitespace-nowrap">{t(row.duration)}</td>
             </tr>
           ))}
         </tbody>

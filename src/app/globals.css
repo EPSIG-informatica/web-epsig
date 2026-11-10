@@ -1,14 +1,22 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   EPSIG — sistema de diseño
+   Paleta corporativa azul (logotipo) con variantes nocturnas y "glow" para
+   las secciones oscuras animadas.
+   ========================================================================== */
+
 :root {
   --color-ink: #0b1220;
   --color-ink-soft: #57667e;
   --color-ink-faint: #6a768b;
 
   --color-surface: #ffffff;
-  --color-surface-alt: #f2f5fb;
-  --color-surface-dark: #0a1428;
-  --color-surface-dark-2: #0f1e3d;
+  --color-surface-alt: #f3f6fb;
+  /* Variantes nocturnas del azul corporativo: fondos de las secciones oscuras. */
+  --color-night: #050a15;
+  --color-surface-dark: #07101f;
+  --color-surface-dark-2: #0c1830;
 
   /* Azul corporativo EPSIG (logotipo). */
   --color-primary: #2a6ba5;
@@ -23,10 +31,14 @@
   --color-accent-strong: #215a8f;
   --color-accent-pale: #e4f0fa;
 
-  --color-line: #e1e7f2;
+  /* Variantes de luz: brillo eléctrico y hielo para resplandores y haces. */
+  --color-glow: #3d8fe0;
+  --color-ice: #b5dcfb;
+
+  --color-line: #e3e9f3;
 
   --color-mist: #e8eefc;
-  --color-mist-soft: #b9c7e8;
+  --color-mist-soft: #b3c2e2;
   --color-mist-faint: #7c8aac;
   --color-mist-accent: #8cc3ef;
 
@@ -35,6 +47,16 @@
   --color-chip-blue: #3474b0;
   --color-chip-slate: #334366;
   --color-chip-muted: #55617a;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Retraso de las entradas de la cabecera: crece cuando se muestra la intro. */
+  --intro: 0ms;
+  --nav-h: 76px;
+}
+
+html.intro {
+  --intro: 1500ms;
 }
 
 @theme inline {
@@ -44,6 +66,7 @@
 
   --color-surface: var(--color-surface);
   --color-surface-alt: var(--color-surface-alt);
+  --color-night: var(--color-night);
   --color-surface-dark: var(--color-surface-dark);
   --color-surface-dark-2: var(--color-surface-dark-2);
 
@@ -57,6 +80,9 @@
   --color-accent-strong: var(--color-accent-strong);
   --color-accent-pale: var(--color-accent-pale);
 
+  --color-glow: var(--color-glow);
+  --color-ice: var(--color-ice);
+
   --color-line: var(--color-line);
 
   --color-mist: var(--color-mist);
@@ -69,25 +95,17 @@
   --color-chip-slate: var(--color-chip-slate);
   --color-chip-muted: var(--color-chip-muted);
 
-  --radius-brand: 16px;
-  --radius-panel: 22px;
+  --radius-brand: 20px;
+  --radius-panel: 28px;
 
   --font-display: var(--font-space-grotesk), sans-serif;
   --font-sans: var(--font-inter), sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    transition-duration: 0.001ms !important;
-  }
-}
-
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 16px);
 }
 
 body {
@@ -95,6 +113,7 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
@@ -103,7 +122,7 @@ h3,
 .font-display {
   font-family: var(--font-display);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 ::selection {
@@ -112,8 +131,277 @@ h3,
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* La navegación es flotante: la primera sección de cada página deja hueco debajo. */
+#contenido > :first-child {
+  padding-top: calc(var(--nav-h) + 3.5rem);
+}
+@media (min-width: 40rem) {
+  #contenido > :first-child {
+    padding-top: calc(var(--nav-h) + 4.5rem);
+  }
+}
+
+/* ==========================================================================
+   Intro (preloader): solo la primera visita de la sesión. Puro CSS: se oculta
+   sola aunque falle JavaScript.
+   ========================================================================== */
+.intro-screen {
+  display: none;
+}
+html.intro .intro-screen {
+  display: grid;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  place-items: center;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, #0b1a33, var(--color-night) 70%);
+  animation: intro-out 0.75s var(--ease-in-out) 1.25s forwards;
+  pointer-events: none;
+}
+@keyframes intro-out {
+  to {
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+  }
+}
+.intro-screen .intro-ring {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: intro-draw 0.7s var(--ease-out) 0.1s forwards;
+}
+.intro-screen .intro-e {
+  opacity: 0;
+  transform: scale(0.6) rotate(-40deg);
+  transform-origin: 50% 50%;
+  transform-box: fill-box;
+  animation: intro-e 0.55s var(--ease-out) 0.45s forwards;
+}
+.intro-screen .intro-mark {
+  animation: intro-mark 0.5s var(--ease-in-out) 0.85s forwards;
+}
+.intro-screen .intro-logo {
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  animation: intro-logo 0.55s var(--ease-out) 0.9s forwards;
+}
+.intro-screen .intro-glow {
+  animation: intro-glow 1.4s ease-out forwards;
+}
+@keyframes intro-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes intro-e {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes intro-mark {
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+@keyframes intro-logo {
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes intro-glow {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==========================================================================
+   Entradas al hacer scroll. `MotionObserver` añade `.is-in` al entrar en
+   pantalla. Sin JavaScript (sin la clase .js) todo se ve directamente.
+   ========================================================================== */
+.js [data-reveal] {
+  opacity: 0;
+  transform: var(--reveal-from, translate3d(0, 32px, 0));
+  filter: blur(8px);
+  transition:
+    opacity 0.9s var(--ease-out),
+    transform 1s var(--ease-out),
+    filter 0.9s var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+.js [data-reveal="left"] {
+  --reveal-from: translate3d(40px, 0, 0);
+}
+.js [data-reveal="right"] {
+  --reveal-from: translate3d(-40px, 0, 0);
+}
+.js [data-reveal="down"] {
+  --reveal-from: translate3d(0, -28px, 0);
+}
+.js [data-reveal="scale"] {
+  --reveal-from: scale(0.92) translate3d(0, 20px, 0);
+}
+.js [data-reveal="none"] {
+  --reveal-from: none;
+}
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Titulares palabra a palabra: cada palabra sube desde una altura distinta y se enfoca. */
+.split .w {
+  display: inline-block;
+  white-space: nowrap;
+}
+.js .split .w {
+  opacity: 0;
+  filter: blur(12px);
+  transform: translate3d(0, calc(0.35em + var(--o, 0) * 0.25em), 0);
+  transition:
+    opacity 0.8s var(--ease-out),
+    transform 1s var(--ease-out),
+    filter 0.8s var(--ease-out);
+  transition-delay: calc(var(--d, 0ms) + var(--i, 0) * 55ms);
+}
+.js .split.is-in .w {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+/* Entrada de las cabeceras: por tiempo (no por scroll), tras la intro si la hay. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+.hero-in {
+  animation: rise-in 1s var(--ease-out) both;
+  animation-delay: calc(var(--intro) + var(--d, 0ms));
+}
+.hero-split .w {
+  display: inline-block;
+  white-space: nowrap;
+  animation: rise-in 1s var(--ease-out) both;
+  animation-delay: calc(var(--intro) + var(--d, 0ms) + var(--i, 0) * 60ms);
+}
+
+/* ==========================================================================
+   Fondos de cabecera: haz de luz diagonal, rejilla y estrellas.
+   ========================================================================== */
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(140, 195, 239, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(140, 195, 239, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 75% 60% at 50% 30%, black 30%, transparent 80%);
+}
+.beam {
+  position: absolute;
+  pointer-events: none;
+  width: 140px;
+  height: 160%;
+  top: -40%;
+  right: 12%;
+  transform: rotate(38deg);
+  transform-origin: top center;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(181, 220, 251, 0.85) 18%,
+    rgba(90, 169, 230, 0.55) 40%,
+    rgba(42, 107, 165, 0.15) 70%,
+    transparent 100%
+  );
+  filter: blur(28px);
+  opacity: 0.65;
+  animation:
+    beam-in 1.6s var(--ease-out) both,
+    beam-breathe 7s ease-in-out infinite;
+  animation-delay: calc(var(--intro) + 0.1s), calc(var(--intro) + 1.7s);
+  mix-blend-mode: screen;
+}
+.beam--thin {
+  width: 36px;
+  right: 22%;
+  filter: blur(10px);
+  opacity: 0.55;
+  animation-delay: calc(var(--intro) + 0.3s), calc(var(--intro) + 2.4s);
+}
+@keyframes beam-in {
+  from {
+    opacity: 0;
+    transform: rotate(38deg) translate3d(0, -30%, 0) scaleY(0.4);
+  }
+}
+@keyframes beam-breathe {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+.stars {
+  background-image:
+    radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.55), transparent 60%),
+    radial-gradient(1px 1px at 78% 12%, rgba(255, 255, 255, 0.4), transparent 60%),
+    radial-gradient(1.5px 1.5px at 34% 68%, rgba(181, 220, 251, 0.5), transparent 60%),
+    radial-gradient(1px 1px at 88% 58%, rgba(255, 255, 255, 0.45), transparent 60%),
+    radial-gradient(1px 1px at 56% 34%, rgba(255, 255, 255, 0.3), transparent 60%),
+    radial-gradient(1.5px 1.5px at 22% 88%, rgba(255, 255, 255, 0.35), transparent 60%),
+    radial-gradient(1px 1px at 66% 84%, rgba(181, 220, 251, 0.45), transparent 60%),
+    radial-gradient(1px 1px at 4% 48%, rgba(255, 255, 255, 0.35), transparent 60%);
+  animation: twinkle 6s ease-in-out infinite alternate;
+}
+@keyframes twinkle {
+  to {
+    opacity: 0.45;
+  }
+}
+
+/* Trazas de circuito con pulsos de luz que viajan (pathLength="100"). */
+.trace-pulse {
+  stroke-dasharray: 9 91;
+  stroke-dashoffset: 100;
+  animation: trace 3.4s linear infinite;
+  animation-delay: var(--td, 0s);
+}
+@keyframes trace {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.trace-draw {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: trace-draw 1.6s var(--ease-out) forwards;
+  animation-delay: calc(var(--intro) + var(--td, 0s));
+}
+@keyframes trace-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes dash {
@@ -141,6 +429,20 @@ h3,
   animation: drift 22s ease-in-out infinite reverse;
 }
 
+@keyframes float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
+}
+.float {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: var(--fd, 0s);
+}
+
 @keyframes gradient-pan {
   0% {
     background-position: 0% 50%;
@@ -157,20 +459,204 @@ h3,
   animation: gradient-pan 8s ease infinite;
 }
 
+/* Texto con degradado de luz. */
+.text-glow {
+  background: linear-gradient(100deg, #ffffff 10%, var(--color-ice) 45%, var(--color-accent) 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.text-shine {
+  background: linear-gradient(
+    100deg,
+    var(--color-accent) 0%,
+    var(--color-ice) 30%,
+    #ffffff 45%,
+    var(--color-ice) 60%,
+    var(--color-accent) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 6s linear infinite;
+}
+@keyframes shine {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -150% 0;
+  }
+}
+
+/* ==========================================================================
+   Botones
+   ========================================================================== */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 14.5px;
+  padding: 0.95rem 1.6rem;
+  overflow: hidden;
+  isolation: isolate;
+  white-space: nowrap;
+  transform: translate3d(var(--mx, 0), var(--my, 0), 0);
+  transition:
+    transform 0.35s var(--ease-out),
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    color 0.3s ease;
+}
+.btn:active {
+  transform: translate3d(var(--mx, 0), var(--my, 0), 0) scale(0.97);
+}
+.btn .btn-arrow {
+  transition: transform 0.35s var(--ease-out);
+}
+.btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+.btn-primary {
+  background: linear-gradient(180deg, #3478b6, var(--color-accent-strong));
+  color: white;
+  box-shadow:
+    0 0 0 1px rgba(140, 195, 239, 0.35) inset,
+    0 14px 34px -12px rgba(61, 143, 224, 0.75);
+}
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.8s var(--ease-out);
+}
+.btn-primary:hover {
+  box-shadow:
+    0 0 0 1px rgba(181, 220, 251, 0.6) inset,
+    0 18px 44px -12px rgba(61, 143, 224, 0.95);
+}
+.btn-primary:hover::after {
+  transform: translateX(120%);
+}
+.btn-light {
+  background: white;
+  color: var(--color-ink);
+  box-shadow: 0 14px 34px -14px rgba(181, 220, 251, 0.7);
+}
+.btn-light:hover {
+  background: var(--color-ice);
+}
+.btn-ghost {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: white;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+}
+.btn-ghost:hover {
+  border-color: rgba(181, 220, 251, 0.55);
+  background: rgba(255, 255, 255, 0.08);
+}
+.btn-dark {
+  background: var(--color-ink);
+  color: white;
+}
+.btn-dark:hover {
+  background: var(--color-primary);
+}
+.btn-outline {
+  border: 1px solid var(--color-line);
+  color: var(--color-ink);
+  background: white;
+}
+.btn-outline:hover {
+  border-color: var(--color-ink);
+}
+
+/* Etiqueta "píldora" encima de los titulares. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem 0.4rem 0.6rem;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.eyebrow-dark {
+  border: 1px solid rgba(140, 195, 239, 0.22);
+  background: rgba(90, 169, 230, 0.08);
+  color: var(--color-mist-accent);
+}
+.eyebrow-light {
+  border: 1px solid var(--color-line);
+  background: white;
+  color: var(--color-primary);
+  box-shadow: 0 6px 18px -12px rgba(11, 18, 32, 0.25);
+}
+.eyebrow .dot {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-accent);
+}
+.eyebrow .dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: var(--color-accent);
+  opacity: 0.5;
+  animation: ping 2s var(--ease-out) infinite;
+}
+@keyframes ping {
+  from {
+    transform: scale(0.4);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Tarjetas: cristal oscuro y foco de luz con borde que sigue al ratón.
+   ========================================================================== */
+.glass {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 30px 60px -40px rgba(0, 0, 0, 0.8);
+}
+
 .card-spotlight {
   position: relative;
   isolation: isolate;
-  transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))
     translateY(var(--lift, 0px));
   transition:
-    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.35s ease,
-    border-color 0.2s ease;
+    transform 0.4s var(--ease-out),
+    box-shadow 0.4s ease,
+    border-color 0.3s ease,
+    background-color 0.3s ease;
 }
 @media (hover: hover) {
   .card-spotlight:hover {
     --lift: -6px;
-    box-shadow: 0 24px 48px -28px rgba(11, 18, 32, 0.3);
+    box-shadow: 0 30px 60px -34px rgba(11, 18, 32, 0.35);
   }
 }
 .card-spotlight::before {
@@ -182,15 +668,135 @@ h3,
   opacity: 0;
   transition: opacity 0.4s ease;
   background: radial-gradient(
-    260px circle at var(--spot-x, 50%) var(--spot-y, 50%),
-    color-mix(in srgb, var(--color-primary) 14%, transparent),
+    320px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    color-mix(in srgb, var(--color-accent) 16%, transparent),
     transparent 70%
   );
 }
-.card-spotlight:hover::before {
+/* Borde iluminado bajo el cursor. */
+.card-spotlight::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    220px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    var(--color-accent),
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.card-spotlight:hover::before,
+.card-spotlight:hover::after {
   opacity: 1;
 }
 
+/* Marquesina infinita. */
+.marquee {
+  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Escaneo (protección). */
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(260%);
+  }
+}
+.scan-line {
+  animation: scan 3.2s var(--ease-in-out) infinite;
+}
+
+@keyframes grow-bar {
+  from {
+    transform: scaleY(0.15);
+  }
+}
+.js .grow-bar {
+  transform-origin: bottom;
+  transform: scaleY(0.12);
+  transition: transform 1.2s var(--ease-out);
+  transition-delay: var(--bd, 0s);
+}
+.js .is-in .grow-bar {
+  transform: none;
+}
+
+/* Explorador de Odoo: progreso de la pestaña y elementos de la "pantalla". */
+@keyframes odoo-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.explorer-item {
+  animation: rise-in 0.6s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 60ms + 120ms);
+}
+.explorer-bar {
+  transform-origin: bottom;
+  animation: grow-bar 0.9s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 50ms + 100ms);
+}
+
+/* Software: parcelas que se encienden y tareas completadas. */
+.pitch-on {
+  background: white;
+  animation: pitch 3.6s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.23s);
+}
+@keyframes pitch {
+  0%,
+  100% {
+    background: white;
+    box-shadow: none;
+  }
+  40%,
+  70% {
+    background: var(--color-accent);
+    box-shadow: 0 0 16px -2px var(--color-accent);
+  }
+}
+.js .check {
+  transform: scale(0);
+  transition: transform 0.5s var(--ease-out);
+  transition-delay: calc(700ms + var(--i, 0) * 260ms);
+}
+.js .is-in .check {
+  transform: none;
+}
+.glass-light {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--color-line);
+  backdrop-filter: blur(8px);
+}
+
+/* Barra de progreso de lectura. */
 .scroll-progress {
   display: none;
 }
@@ -200,10 +806,11 @@ h3,
     position: fixed;
     top: 0;
     left: 0;
-    height: 3px;
+    height: 2px;
     width: 100%;
     transform-origin: 0 50%;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-ice));
+    box-shadow: 0 0 12px var(--color-accent);
     z-index: 60;
     animation: scroll-progress linear both;
     animation-timeline: scroll(root);
@@ -215,43 +822,6 @@ h3,
   }
   to {
     transform: scaleX(1);
-  }
-}
-
-/* Aparición al hacer scroll (scroll-driven animations). Sin soporte: contenido visible. */
-@keyframes reveal {
-  from {
-    opacity: 0;
-    transform: var(--reveal-from);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-.reveal {
-  --reveal-from: translate3d(0, 28px, 0);
-}
-.reveal[data-dir="down"] {
-  --reveal-from: translate3d(0, -28px, 0);
-}
-.reveal[data-dir="left"] {
-  --reveal-from: translate3d(28px, 0, 0);
-}
-.reveal[data-dir="right"] {
-  --reveal-from: translate3d(-28px, 0, 0);
-}
-.reveal[data-dir="scale"] {
-  --reveal-from: scale(0.94);
-}
-.reveal[data-dir="none"] {
-  --reveal-from: none;
-}
-@supports (animation-timeline: view()) {
-  .reveal {
-    animation: reveal linear both;
-    animation-timeline: view();
-    animation-range: entry 0% entry 40%;
   }
 }
 
@@ -267,46 +837,191 @@ h3,
   }
 }
 .pop-in {
-  animation: pop-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: pop-in 0.45s var(--ease-out) both;
 }
 
-/* Entrada de las cabeceras con CSS: visible aunque no cargue JavaScript. */
-@keyframes hero-in {
-  from {
-    transform: translate3d(0, 14px, 0);
-  }
-  to {
-    transform: none;
+/* Navegación flotante: barra completa arriba, píldora centrada al hacer scroll. */
+.site-nav {
+  transition: padding 0.5s var(--ease-out);
+}
+.site-nav .nav-shell {
+  transition:
+    max-width 0.6s var(--ease-out),
+    background-color 0.5s ease,
+    border-color 0.5s ease,
+    box-shadow 0.5s ease,
+    padding 0.5s var(--ease-out),
+    border-radius 0.5s var(--ease-out);
+}
+.site-nav[data-scrolled="true"] .nav-shell {
+  background: rgba(7, 16, 31, 0.82);
+  border-color: rgba(140, 195, 239, 0.16);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 20px 50px -20px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+}
+/* La píldora solo se estrecha en pantallas muy anchas, donde el menú cabe de sobra. */
+@media (min-width: 100rem) {
+  .site-nav[data-scrolled="true"] .nav-shell {
+    max-width: 86rem;
   }
 }
-.hero-in {
-  animation: hero-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+/* Entrada de la barra sin `filter` ni opacidad final: si no, el desenfoque del fondo no funciona. */
+@keyframes nav-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -16px, 0);
+  }
+}
+.site-nav {
+  animation: nav-in 0.9s var(--ease-out) backwards;
+  animation-delay: var(--intro);
+}
+
+/* El menú móvil entra con las opciones escalonadas. */
+.menu-item-in {
+  animation: rise-in 0.6s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 45ms + 80ms);
+}
+
+/* El resplandor del CTA final crece al entrar. */
+.cta-glow {
+  transform: translate3d(-50%, 30%, 0) scale(0.7);
+  opacity: 0.4;
+  transition:
+    transform 1.6s var(--ease-out),
+    opacity 1.6s var(--ease-out);
+}
+.is-in .cta-glow,
+html:not(.js) .cta-glow {
+  transform: translate3d(-50%, 0, 0) scale(1);
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
   html {
     scroll-behavior: auto;
   }
-  .card-spotlight {
+  .card-spotlight,
+  .btn {
     transform: none !important;
   }
-  .hero-in,
-  .reveal,
-  .pop-in,
-  .blob-drift,
-  .blob-drift-slow,
-  .gradient-pan {
-    animation: none !important;
+  .js [data-reveal],
+  .js .split .w {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+  html.intro .intro-screen {
+    display: none;
   }
 }
 
-/* La banda final no tiene margen superior propio (la sección blanca anterior ya lo aporta).
-   Si la sección anterior tiene fondo de color, se añade para que no quede pegada. */
-:is(.bg-surface-dark, .bg-surface-dark-2, .bg-surface-alt, .bg-primary-pale) + .cta-band {
-  padding-top: 5rem;
+/* ==========================================================================
+   Utilidades de páginas interiores
+   ========================================================================== */
+/* Tarjeta clara (combinar con .card-spotlight para el foco que sigue al ratón). */
+.card-light {
+  border-radius: var(--radius-brand);
+  border: 1px solid var(--color-line);
+  background: white;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 18px 40px -34px rgba(11, 18, 32, 0.35);
 }
-@media (min-width: 40rem) {
-  :is(.bg-surface-dark, .bg-surface-dark-2, .bg-surface-alt, .bg-primary-pale) + .cta-band {
-    padding-top: 6rem;
-  }
+/* Fondo claro con degradado azul suave (secciones claras destacadas). */
+.section-tint {
+  background: linear-gradient(180deg, #eef5fd 0%, #f6f9fe 50%, #ffffff 100%);
+}
+/* Icono en "baldosa" con degradado corporativo. */
+.icon-tile {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  color: white;
+  background: linear-gradient(180deg, #3478b6, var(--color-accent-strong));
+  box-shadow: 0 14px 30px -14px rgba(42, 107, 165, 0.8);
+}
+.icon-tile-dark {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  color: var(--color-ice);
+  border: 1px solid rgba(90, 169, 230, 0.3);
+  background: rgba(90, 169, 230, 0.1);
+}
+/* Línea de tiempo / pasos numerados con línea que se dibuja al entrar. */
+.js .draw-line {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.4s var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+.js .is-in .draw-line,
+.js .draw-line.is-in {
+  transform: none;
+}
+/* Textos legales. */
+.prose-epsig {
+  color: var(--color-ink-soft);
+  font-size: 15.5px;
+  line-height: 1.75;
+}
+.prose-epsig h2 {
+  margin-top: 2.75rem;
+  margin-bottom: 0.9rem;
+  font-size: 24px;
+  color: var(--color-ink);
+}
+.prose-epsig h3 {
+  margin-top: 1.75rem;
+  margin-bottom: 0.6rem;
+  font-size: 18px;
+  color: var(--color-ink);
+}
+.prose-epsig p + p {
+  margin-top: 0.9rem;
+}
+.prose-epsig ul {
+  margin: 0.9rem 0;
+  padding-left: 1.2rem;
+  list-style: disc;
+}
+.prose-epsig li::marker {
+  color: var(--color-accent);
+}
+.prose-epsig a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-epsig strong {
+  color: var(--color-ink);
+}
+.prose-epsig table {
+  width: 100%;
+  font-size: 14px;
+  border-collapse: collapse;
+}
+.prose-epsig th,
+.prose-epsig td {
+  border-bottom: 1px solid var(--color-line);
+  padding: 0.6rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+.prose-epsig > h2:first-child,
+.prose-epsig > :first-child {
+  margin-top: 0;
 }

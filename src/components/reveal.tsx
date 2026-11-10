@@ -1,15 +1,17 @@
 type Direction = "up" | "down" | "left" | "right" | "scale" | "none";
 
 /**
- * Aparición al hacer scroll, solo con CSS (scroll-driven animations): sin JavaScript
- * y sin retrasar la carga. En navegadores sin soporte el contenido se ve directamente.
- * `delay` y `duration` se mantienen por compatibilidad, pero la animación depende del scroll.
+ * Aparición al entrar en pantalla (desenfoque + desplazamiento). La clase `.is-in` la añade
+ * `Motion`; sin JavaScript el contenido se ve directamente.
+ * `delay` en segundos (como antes). `duration` y `once` se mantienen por compatibilidad.
  */
 export default function Reveal({
   children,
   className = "",
   style,
   direction = "up",
+  delay = 0,
+  id,
 }: {
   children: React.ReactNode;
   className?: string;
@@ -18,9 +20,15 @@ export default function Reveal({
   delay?: number;
   duration?: number;
   once?: boolean;
+  id?: string;
 }) {
   return (
-    <div className={`reveal ${className}`} data-dir={direction} style={style}>
+    <div
+      id={id}
+      className={className}
+      data-reveal={direction}
+      style={{ ...style, "--d": `${Math.round(delay * 1000)}ms` } as React.CSSProperties}
+    >
       {children}
     </div>
   );

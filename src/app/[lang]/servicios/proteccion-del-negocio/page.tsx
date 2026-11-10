@@ -3,8 +3,7 @@ import Link from "@/components/link";
 import PageHero from "@/components/page-hero";
 import Reveal from "@/components/reveal";
 import SectionHeading from "@/components/section-heading";
-import TiltCard from "@/components/tilt-card";
-import IndexMark from "@/components/index-mark";
+import Icon from "@/components/icons";
 import CtaBand from "@/components/sections/cta-band";
 import type { Localized } from "@/lib/i18n";
 import { getT, pageMetadata } from "@/lib/i18n-server";
@@ -396,8 +395,73 @@ const conditions: Localized[] = [
   },
 ];
 
+// Icono de cada entorno (servidor, servidor, web, puesto de trabajo), dibujado aquí para no tocar `icons.tsx`.
+const envIcons = ["server", "server", "web", "endpoint"] as const;
+
+function DeviceIcon({ kind, className = "h-5 w-5" }: { kind: (typeof envIcons)[number]; className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      {kind === "server" && (
+        <>
+          <rect x="4" y="4" width="16" height="6.5" rx="1.6" />
+          <rect x="4" y="13.5" width="16" height="6.5" rx="1.6" />
+          <path d="M7.5 7.25h.01M7.5 16.75h.01M11 7.25h5M11 16.75h5" />
+        </>
+      )}
+      {kind === "web" && (
+        <>
+          <circle cx="12" cy="12" r="8.5" />
+          <path d="M3.5 12h17M12 3.5c2.4 2.4 3.6 5.2 3.6 8.5s-1.2 6.1-3.6 8.5c-2.4-2.4-3.6-5.2-3.6-8.5S9.6 5.9 12 3.5z" />
+        </>
+      )}
+      {kind === "endpoint" && (
+        <>
+          <rect x="3.5" y="4.5" width="17" height="11.5" rx="1.6" />
+          <path d="M9 20h6M12 16v4" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+// Marca de verificación pequeña con brillo.
+function GlowCheck({ dark = false }: { dark?: boolean }) {
+  return (
+    <span
+      className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full ${
+        dark
+          ? "border border-accent/40 bg-accent/15 text-ice shadow-[0_0_12px_-2px_rgba(90,169,230,.8)]"
+          : "border border-primary/25 bg-primary-pale text-primary"
+      }`}
+      aria-hidden
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3">
+        <path d="M5 12.5l4.5 4.5L19 7.5" />
+      </svg>
+    </span>
+  );
+}
+
+// Nodos del diagrama de equipos protegidos (posición en % de la caja 5:4) y su traza hasta el escudo.
+const diagramNodes = [
+  { x: "18%", y: "20%", path: "M168 160 H122 L72 110 V64" },
+  { x: "82%", y: "20%", path: "M232 160 H278 L328 110 V64" },
+  { x: "82%", y: "70%", path: "M232 160 H278 L328 210 V224" },
+  { x: "18%", y: "70%", path: "M168 160 H122 L72 210 V224" },
+];
+
 export default async function ProteccionDelNegocioPage() {
   const t = await getT();
+  const quoteLabel = t("Pedir presupuesto", "Demanar pressupost", "Request a quote");
   return (
     <>
       <PageHero
@@ -412,37 +476,115 @@ export default async function ProteccionDelNegocioPage() {
         )}
       />
 
-      {/* Propuesta + certificaciones */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mx-auto mb-12 max-w-2xl text-center">
-            <p className="text-base leading-relaxed text-ink-soft">
-              {t(
-                "Protegemos servidores Windows, Ubuntu, Plesk/web y equipos de trabajo. Para orientarte tenemos tres paquetes — Básico, Profesional y Avanzado —, pero no son cerrados: puedes contratar cualquier servicio por separado y sumar servicios puntuales (auditorías, pentesting, formación o adecuación normativa) cuando los necesites. Cada empresa es distinta, así que el precio lo fijamos en un presupuesto personalizado.",
-                "Protegim servidors Windows, Ubuntu, Plesk/web i equips de treball. Per a orientar-te tenim tres paquets — Bàsic, Professional i Avançat —, però no són tancats: pots contractar qualsevol servei per separat i afegir-hi serveis puntuals (auditories, pentesting, formació o adequació normativa) quan els necessites. Cada empresa és diferent, així que el preu el fixem en un pressupost personalitzat.",
-                "We protect Windows, Ubuntu and Plesk/web servers and workstations. To guide you, we offer three packages — Basic, Professional and Advanced — but they aren't set in stone: you can contract any service on its own and add one-off services (audits, pentesting, training or regulatory compliance) whenever you need them. Every business is different, so we set the price in a personalised quote.",
-              )}
-            </p>
+      {/* Propuesta + certificaciones + diagrama de equipos protegidos */}
+      <section className="section-tint relative overflow-hidden py-28 sm:py-36">
+        <div
+          className="pointer-events-none absolute -top-40 right-[-10%] h-[420px] w-[70%] rounded-full blur-3xl"
+          style={{ background: "radial-gradient(ellipse, rgba(90,169,230,.18), transparent 70%)" }}
+          aria-hidden
+        />
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <Reveal direction="right">
+              <p className="text-[16.5px] leading-relaxed text-ink-soft sm:text-[17.5px]">
+                {t(
+                  "Protegemos servidores Windows, Ubuntu, Plesk/web y equipos de trabajo. Para orientarte tenemos tres paquetes — Básico, Profesional y Avanzado —, pero no son cerrados: puedes contratar cualquier servicio por separado y sumar servicios puntuales (auditorías, pentesting, formación o adecuación normativa) cuando los necesites. Cada empresa es distinta, así que el precio lo fijamos en un presupuesto personalizado.",
+                  "Protegim servidors Windows, Ubuntu, Plesk/web i equips de treball. Per a orientar-te tenim tres paquets — Bàsic, Professional i Avançat —, però no són tancats: pots contractar qualsevol servei per separat i afegir-hi serveis puntuals (auditories, pentesting, formació o adequació normativa) quan els necessites. Cada empresa és diferent, així que el preu el fixem en un pressupost personalitzat.",
+                  "We protect Windows, Ubuntu and Plesk/web servers and workstations. To guide you, we offer three packages — Basic, Professional and Advanced — but they aren't set in stone: you can contract any service on its own and add one-off services (audits, pentesting, training or regulatory compliance) whenever you need them. Every business is different, so we set the price in a personalised quote.",
+                )}
+              </p>
+            </Reveal>
+
+            <ul className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {certifications.map((cert, index) => (
+                <li
+                  key={cert.es}
+                  data-reveal="up"
+                  style={{ "--d": `${150 + index * 80}ms` } as React.CSSProperties}
+                  className="card-light card-spotlight flex h-full items-center gap-3 p-3.5 text-[13.5px] font-semibold text-ink"
+                >
+                  <span className="icon-tile !h-9 !w-9 shrink-0 !rounded-xl">
+                    <Icon name="shield" className="h-4.5 w-4.5" />
+                  </span>
+                  {t(cert)}
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <Reveal className="flex flex-wrap justify-center gap-3">
-            {certifications.map((cert) => (
-              <span
-                key={cert.es}
-                className="inline-flex items-center gap-2 rounded-full border border-line bg-surface-alt px-4 py-2 text-[13px] font-semibold text-ink"
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-                {t(cert)}
-              </span>
-            ))}
+          {/* Diagrama: escudo central con pulsos hacia cada entorno protegido */}
+          <Reveal direction="scale" delay={0.1}>
+            <div className="relative overflow-hidden rounded-panel border border-white/10 bg-surface-dark p-3 shadow-[0_40px_80px_-40px_rgba(7,16,31,.7)] sm:p-5">
+              <div className="stars pointer-events-none absolute inset-0" aria-hidden />
+              <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden />
+              <div
+                className="pointer-events-none absolute top-1/2 left-1/2 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                style={{ background: "radial-gradient(circle, rgba(61,143,224,.35), transparent 65%)" }}
+                aria-hidden
+              />
+              <div className="relative aspect-[5/4] w-full">
+                <svg viewBox="0 0 400 320" className="absolute inset-0 h-full w-full" fill="none" aria-hidden>
+                  <circle cx="200" cy="160" r="70" stroke="rgba(140,195,239,.14)" strokeDasharray="2 6" />
+                  <circle cx="200" cy="160" r="104" stroke="rgba(140,195,239,.08)" />
+                  {diagramNodes.map((node, i) => (
+                    <g key={node.path}>
+                      <path d={node.path} stroke="rgba(140,195,239,.22)" strokeWidth="1.5" />
+                      <path
+                        d={node.path}
+                        pathLength={100}
+                        stroke="#b5dcfb"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        className="trace-pulse"
+                        style={{ "--td": `${i * 0.85}s`, filter: "drop-shadow(0 0 4px #5aa9e6)" } as React.CSSProperties}
+                      />
+                    </g>
+                  ))}
+                </svg>
+                <span
+                  className="pointer-events-none absolute top-1/2 left-1/2 h-[46%] w-[37%] -translate-x-1/2 -translate-y-1/2 animate-[spin_18s_linear_infinite] rounded-full border border-dashed border-accent/25"
+                  aria-hidden
+                />
+                <div
+                  className="absolute top-1/2 left-1/2 grid h-[26%] w-[21%] -translate-x-1/2 -translate-y-1/2 place-items-center overflow-hidden rounded-[22%] border border-accent/40 bg-gradient-to-b from-[#10284a] to-[#081426] shadow-[0_0_50px_-6px_rgba(61,143,224,.75)]"
+                  aria-hidden
+                >
+                  <Icon name="shield" className="h-1/2 w-1/2 text-ice" />
+                  <span className="scan-line absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-transparent via-accent/40 to-transparent" />
+                </div>
+                {environments.map((env, i) => (
+                  <div
+                    key={env.title.es}
+                    className="absolute flex w-[34%] max-w-[9rem] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1.5 text-center"
+                    style={{ left: diagramNodes[i].x, top: diagramNodes[i].y } as React.CSSProperties}
+                  >
+                    <span
+                      className="glass float grid h-9 w-9 place-items-center rounded-xl text-mist-accent sm:h-12 sm:w-12"
+                      style={{ "--fd": `${i * 0.7}s` } as React.CSSProperties}
+                    >
+                      <DeviceIcon kind={envIcons[i]} className="h-4.5 w-4.5 sm:h-5.5 sm:w-5.5" />
+                    </span>
+                    <span className="text-[10.5px] leading-tight font-semibold text-mist sm:text-[12px]">{t(env.title)}</span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_10px_#5aa9e6]" aria-hidden />
+                  </div>
+                ))}
+              </div>
+            </div>
           </Reveal>
         </div>
       </section>
 
       {/* Paquetes */}
-      <section className="bg-surface-alt py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <section className="relative overflow-hidden bg-night py-28 text-white sm:py-36">
+        <div
+          className="pointer-events-none absolute left-1/2 top-0 h-[520px] w-[min(900px,140%)] -translate-x-1/2 rounded-full"
+          style={{ background: "radial-gradient(ellipse, rgba(42,107,165,.3), transparent 65%)" }}
+          aria-hidden
+        />
+        <div className="stars pointer-events-none absolute inset-0 opacity-60" aria-hidden />
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
           <SectionHeading
+            dark
             eyebrow={t("Paquetes orientativos", "Paquets orientatius", "Indicative packages")}
             title={t(
               "Elige el nivel de protección que necesita tu empresa",
@@ -455,56 +597,104 @@ export default async function ProteccionDelNegocioPage() {
               "They're a guide to point you in the right direction, not a fixed rate: we adapt each package to your systems and needs, and give you the price in a personalised quote.",
             )}
           />
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="mx-auto grid max-w-xl grid-cols-1 gap-6 lg:max-w-none lg:grid-cols-3 lg:items-stretch">
             {plans.map((plan, index) => (
-              <Reveal key={plan.name.es} delay={index * 0.08}>
-                <TiltCard
-                  className={`relative flex h-full flex-col rounded-brand border bg-surface p-7 ${
-                    plan.featured ? "border-primary shadow-[0_20px_45px_-25px_rgba(42,107,165,.55)]" : "border-line"
+              <Reveal key={plan.name.es} delay={index * 0.08} direction="scale" className="h-full">
+                <div
+                  className={`glass card-spotlight relative flex h-full flex-col rounded-panel p-6 sm:p-8 ${
+                    plan.featured
+                      ? "!border-accent/60 !bg-surface-dark-2/60 !shadow-[0_0_60px_-20px_rgba(61,143,224,.8)] lg:-my-3 lg:py-11"
+                      : ""
                   }`}
                 >
                   {plan.featured && (
-                    <span className="absolute -top-3 left-7 rounded-full bg-primary px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-white">
-                      {t("Más elegido", "El més triat", "Most popular")}
-                    </span>
+                    <>
+                      <span
+                        className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-ice to-transparent"
+                        aria-hidden
+                      />
+                      <span className="absolute -top-3.5 left-6 inline-flex items-center gap-1.5 rounded-full border border-accent/50 bg-gradient-to-b from-[#3478b6] to-accent-strong px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-white shadow-[0_0_24px_-4px_rgba(61,143,224,.9)] sm:left-8">
+                        <Icon name="spark" className="h-3 w-3" />
+                        {t("Más elegido", "El més triat", "Most popular")}
+                      </span>
+                    </>
                   )}
-                  <h3 className="text-[22px]">{t(plan.name)}</h3>
-                  <p className="mt-1 mb-6 text-[14px] text-ink-soft">{t(plan.tagline)}</p>
 
-                  <dl className="flex flex-col gap-3.5">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <span className="font-mono text-[12px] text-accent">{String(index + 1).padStart(2, "0")}</span>
+                      <h3 className="mt-1.5 text-[24px] text-white sm:text-[26px]">{t(plan.name)}</h3>
+                    </div>
+                    {/* Nivel de protección: barras que crecen */}
+                    <div data-observe className="flex h-10 items-end gap-1" aria-hidden>
+                      {[0, 1, 2].map((bar) => (
+                        <span
+                          key={bar}
+                          className={`grow-bar w-2 rounded-full ${
+                            bar <= index ? "bg-gradient-to-t from-primary to-ice shadow-[0_0_10px_-1px_#5aa9e6]" : "bg-white/10"
+                          }`}
+                          style={{ height: `${40 + bar * 30}%`, "--bd": `${0.3 + bar * 0.12}s` } as React.CSSProperties}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="mt-2 text-[14.5px] text-mist-soft">{t(plan.tagline)}</p>
+
+                  <div className="my-6 h-px bg-gradient-to-r from-white/15 via-white/5 to-transparent" aria-hidden />
+
+                  <dl className="flex flex-col gap-4">
                     {plan.specs.map((spec) => (
-                      <div key={spec.label.es}>
-                        <dt className="text-[11.5px] font-bold uppercase tracking-[0.08em] text-ink-faint">
-                          {t(spec.label)}
-                        </dt>
-                        <dd className="text-[14.5px] text-ink">{t(spec.value)}</dd>
+                      <div key={spec.label.es} className="flex items-start gap-3">
+                        <GlowCheck dark />
+                        <div className="min-w-0">
+                          <dt className="text-[11px] font-bold uppercase tracking-[0.1em] text-mist-faint">{t(spec.label)}</dt>
+                          <dd className="mt-0.5 text-[14.5px] text-mist">{t(spec.value)}</dd>
+                        </div>
                       </div>
                     ))}
                   </dl>
-                </TiltCard>
+
+                  <div className="mt-auto pt-8">
+                    <Link
+                      href="/contacto#diagnostico"
+                      data-magnetic
+                      className={`btn w-full ${plan.featured ? "btn-primary" : "btn-ghost"}`}
+                    >
+                      {quoteLabel}
+                      <span className="btn-arrow" aria-hidden>
+                        →
+                      </span>
+                    </Link>
+                  </div>
+                </div>
               </Reveal>
             ))}
           </div>
 
-          <Reveal className="mt-8">
-            <div className="flex flex-col items-start gap-5 rounded-brand border border-line bg-surface p-6 sm:flex-row sm:items-center sm:justify-between sm:p-7">
-              <div>
-                <h3 className="text-[18px]">
-                  {t("¿Solo necesitas una parte?", "Només necessites una part?", "Only need part of it?")}
-                </h3>
-                <p className="mt-1.5 max-w-[64ch] text-[14.5px] leading-relaxed text-ink-soft">
-                  {t(
-                    "Cualquier servicio se contrata también por separado: solo las copias de seguridad, solo el antivirus de los equipos o una auditoría puntual. Te hacemos el presupuesto con lo que de verdad necesitas.",
-                    "Qualsevol servei es contracta també per separat: només les còpies de seguretat, només l'antivirus dels equips o una auditoria puntual. Et fem el pressupost amb el que de veritat necessites.",
-                    "Any service can also be contracted on its own: just the backups, just antivirus for your workstations, or a one-off audit. We'll quote you for what you actually need.",
-                  )}
-                </p>
+          <Reveal className="mt-10 sm:mt-12">
+            <div className="glass card-spotlight flex flex-col items-start gap-5 rounded-panel p-6 sm:p-8 md:flex-row md:items-center md:justify-between">
+              <div className="flex items-start gap-4">
+                <span className="icon-tile-dark !hidden shrink-0 sm:!grid">
+                  <Icon name="link" className="h-5 w-5" />
+                </span>
+                <div>
+                  <h3 className="text-[18px] text-white sm:text-[20px]">
+                    {t("¿Solo necesitas una parte?", "Només necessites una part?", "Only need part of it?")}
+                  </h3>
+                  <p className="mt-1.5 max-w-[64ch] text-[14.5px] leading-relaxed text-mist-soft">
+                    {t(
+                      "Cualquier servicio se contrata también por separado: solo las copias de seguridad, solo el antivirus de los equipos o una auditoría puntual. Te hacemos el presupuesto con lo que de verdad necesitas.",
+                      "Qualsevol servei es contracta també per separat: només les còpies de seguretat, només l'antivirus dels equips o una auditoria puntual. Et fem el pressupost amb el que de veritat necessites.",
+                      "Any service can also be contracted on its own: just the backups, just antivirus for your workstations, or a one-off audit. We'll quote you for what you actually need.",
+                    )}
+                  </p>
+                </div>
               </div>
-              <Link
-                href="/contacto#diagnostico"
-                className="inline-block shrink-0 rounded-full bg-accent-strong px-6 py-3 text-[14px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(16,185,129,.6)] transition-transform hover:scale-[1.04] active:scale-[0.96]"
-              >
-                {t("Pedir presupuesto", "Demanar pressupost", "Request a quote")}
+              <Link href="/contacto#diagnostico" data-magnetic className="btn btn-light w-full shrink-0 md:w-auto">
+                {quoteLabel}
+                <span className="btn-arrow" aria-hidden>
+                  →
+                </span>
               </Link>
             </div>
           </Reveal>
@@ -512,37 +702,61 @@ export default async function ProteccionDelNegocioPage() {
       </section>
 
       {/* Qué incluye cada paquete */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <section className="relative overflow-hidden bg-surface py-28 sm:py-36">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <SectionHeading
             eyebrow={t("Qué incluye", "Què inclou", "What's included")}
             title={t("Qué hacemos en cada entorno", "Què fem en cada entorn", "What we do in each environment")}
             body={t("Cada nivel incluye todo lo del nivel anterior.", "Cada nivell inclou tot el del nivell anterior.", "Each level includes everything in the previous one.")}
             align="left"
           />
-          <div className="flex flex-col gap-8">
+          <div className="grid grid-cols-1 gap-6">
             {environments.map((env, envIndex) => (
-              <Reveal key={env.title.es}>
-                <div className="rounded-brand border border-line bg-surface p-6 sm:p-8">
-                  <IndexMark n={envIndex + 1} label={t(env.code)} className="mb-3" />
-                  <h3 className="mb-6 text-[20px]">{t(env.title)}</h3>
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              <Reveal key={env.title.es} delay={(envIndex % 2) * 0.08}>
+                <div data-observe className="card-light card-spotlight overflow-hidden p-5 sm:p-8">
+                  <div className="mb-6 flex items-center gap-4 sm:mb-8">
+                    <span className="icon-tile shrink-0">
+                      <DeviceIcon kind={envIcons[envIndex]} className="h-5.5 w-5.5" />
+                    </span>
+                    <div className="min-w-0">
+                      <span className="font-mono text-[11.5px] uppercase tracking-[0.12em] text-primary">
+                        {String(envIndex + 1).padStart(2, "0")} · {t(env.code)}
+                      </span>
+                      <h3 className="text-[20px] text-ink sm:text-[24px]">{t(env.title)}</h3>
+                    </div>
+                  </div>
+
+                  {/* Progresión de niveles: línea que se dibuja al entrar */}
+                  <div className="relative mb-6 hidden md:block" aria-hidden>
+                    <div className="h-px w-full bg-line" />
+                    <div
+                      className="draw-line absolute inset-x-0 top-0 h-px bg-gradient-to-r from-primary via-accent to-ice shadow-[0_0_8px_#5aa9e6]"
+                      style={{ "--d": "300ms" } as React.CSSProperties}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
                     {env.tiers.map((items, tierIndex) => (
-                      <div key={tierNames[tierIndex].es}>
-                        <div className="mb-3 text-[11.5px] font-bold uppercase tracking-[0.12em] text-primary">
-                          {tierIndex === 0 ? t(tierNames[0]) : `+ ${t(tierNames[tierIndex])}`}
+                      <div
+                        key={tierNames[tierIndex].es}
+                        className={`relative ${tierIndex > 0 ? "border-t border-line pt-6 md:border-t-0 md:pt-0" : ""}`}
+                      >
+                        <div className="mb-3.5 flex items-center gap-2">
+                          <span
+                            className={`h-2 w-2 rounded-full ${
+                              tierIndex === 2 ? "bg-accent shadow-[0_0_10px_#5aa9e6]" : tierIndex === 1 ? "bg-primary" : "bg-primary-light"
+                            }`}
+                            aria-hidden
+                          />
+                          <span className="text-[11.5px] font-bold uppercase tracking-[0.12em] text-primary">
+                            {tierIndex === 0 ? t(tierNames[0]) : `+ ${t(tierNames[tierIndex])}`}
+                          </span>
                         </div>
-                        <ul className="flex flex-col gap-2.5">
+                        <ul className="flex flex-col gap-3">
                           {items.map((item) => (
-                            <li
-                              key={item.es}
-                              className="flex items-start gap-2.5 text-[14px] leading-relaxed text-ink-soft"
-                            >
-                              <span
-                                className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
-                                aria-hidden
-                              />
-                              {t(item)}
+                            <li key={item.es} className="flex items-start gap-2.5 text-[14px] leading-relaxed text-ink-soft">
+                              <GlowCheck />
+                              <span className="min-w-0">{t(item)}</span>
                             </li>
                           ))}
                         </ul>
@@ -557,8 +771,14 @@ export default async function ProteccionDelNegocioPage() {
       </section>
 
       {/* Servicios complementarios */}
-      <section className="bg-surface-dark py-20 text-white sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <section className="relative overflow-hidden bg-surface-dark py-28 text-white sm:py-36">
+        <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden />
+        <div
+          className="pointer-events-none absolute bottom-[-200px] left-1/2 h-[460px] w-[min(1000px,150%)] -translate-x-1/2 rounded-full"
+          style={{ background: "radial-gradient(ellipse, rgba(61,143,224,.22), transparent 65%)" }}
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
           <SectionHeading
             eyebrow={t("Servicios complementarios", "Serveis complementaris", "Additional services")}
             title={t("Servicios puntuales, cuando los necesites", "Serveis puntuals, quan els necessites", "One-off services, whenever you need them")}
@@ -571,12 +791,19 @@ export default async function ProteccionDelNegocioPage() {
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {extras.map((extra, index) => (
-              <Reveal key={extra.title.es} delay={(index % 3) * 0.06}>
-                <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.04] p-5.5 transition-colors hover:border-accent hover:bg-white/[0.07]">
+              <Reveal key={extra.title.es} delay={(index % 3) * 0.08}>
+                <div className="glass card-spotlight group flex h-full flex-col rounded-panel p-5 sm:p-6">
+                  <div className="mb-4 flex items-center justify-between">
+                    <span className="icon-tile-dark !h-10 !w-10 !rounded-xl transition-shadow duration-300 group-hover:shadow-[0_0_24px_-4px_rgba(90,169,230,.8)]">
+                      <Icon name="shield" className="h-4.5 w-4.5" />
+                    </span>
+                    <span className="font-mono text-[11.5px] text-mist-faint">{String(index + 1).padStart(2, "0")}</span>
+                  </div>
                   <h3 className="text-[15.5px] leading-snug text-white">{t(extra.title)}</h3>
                   {extra.included && (
-                    <div className="mt-auto pt-3">
-                      <span className="inline-block rounded-full bg-accent/15 px-2.5 py-1 text-[11px] font-semibold text-accent">
+                    <div className="mt-auto pt-4">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 text-[11px] font-semibold text-ice">
+                        <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_#5aa9e6]" aria-hidden />
                         {t("Incluido en", "Inclòs en", "Included in")} {t(extra.included)}
                       </span>
                     </div>
@@ -589,25 +816,29 @@ export default async function ProteccionDelNegocioPage() {
       </section>
 
       {/* Condiciones */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-3xl px-6">
+      <section className="section-tint relative overflow-hidden py-28 sm:py-36">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <SectionHeading
             eyebrow={t("Precios", "Preus", "Pricing")}
             title={t("Un presupuesto a medida para cada empresa", "Un pressupost a mida per a cada empresa", "A tailored quote for every business")}
           />
-          <Reveal>
-            <ul className="flex flex-col gap-3">
-              {conditions.map((condition) => (
-                <li
-                  key={condition.es}
-                  className="flex items-start gap-3 rounded-brand border border-line bg-surface-alt p-4 text-[14.5px] leading-relaxed text-ink"
-                >
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden />
-                  {t(condition)}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-5 text-center text-xs text-ink-soft">
+          <ul className="flex flex-col gap-3">
+            {conditions.map((condition, index) => (
+              <li
+                key={condition.es}
+                data-reveal="up"
+                style={{ "--d": `${index * 80}ms` } as React.CSSProperties}
+                className="card-light card-spotlight flex items-start gap-4 p-4 text-[14.5px] leading-relaxed text-ink sm:p-5"
+              >
+                <span className="icon-tile !h-8 !w-8 shrink-0 !rounded-lg font-mono text-[12px]" aria-hidden>
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="min-w-0 pt-1">{t(condition)}</span>
+              </li>
+            ))}
+          </ul>
+          <Reveal delay={0.35}>
+            <p className="mt-6 text-center text-xs text-ink-soft">
               {t(
                 "Las licencias de antivirus/EDR, SIEM o Imunify360 pueden ir incluidas en el presupuesto o facturarse aparte, según el caso.",
                 "Les llicències d'antivirus/EDR, SIEM o Imunify360 poden anar incloses en el pressupost o facturar-se a banda, segons el cas.",
@@ -629,7 +860,7 @@ export default async function ProteccionDelNegocioPage() {
           "Veiem els punts febles de la teua empresa i et preparem un pressupost a mida: amb un paquet o només amb els serveis que necessites.",
           "We identify your business's weak points and prepare a tailored quote: with a package or just the services you need.",
         )}
-        ctaLabel={t("Pedir presupuesto", "Demanar pressupost", "Request a quote")}
+        ctaLabel={quoteLabel}
       />
     </>
   );

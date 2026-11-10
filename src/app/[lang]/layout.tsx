@@ -12,6 +12,8 @@ import AttributionTracker from "@/components/attribution-tracker";
 import StructuredData from "@/components/structured-data";
 import CardEffects from "@/components/card-effects";
 import LangProvider from "@/components/lang-provider";
+import Motion from "@/components/motion";
+import Intro, { introScript } from "@/components/intro";
 import { site } from "@/lib/site";
 import { isLocale, locales, translator } from "@/lib/i18n";
 
@@ -72,9 +74,15 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   return (
     <html
       lang={lang}
+      suppressHydrationWarning
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="flex min-h-screen flex-col bg-surface text-ink">
+        {/* Antes de pintar: activa las animaciones y decide si se muestra la intro. */}
+        <Script id="epsig-intro" strategy="beforeInteractive">
+          {introScript}
+        </Script>
+        <Intro />
         <LangProvider lang={lang}>
           <a
             href="#contenido"
@@ -90,6 +98,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
           <Footer />
           <CookieBanner />
           <CardEffects />
+          <Motion />
           <GoogleAnalytics />
           {/* Plausible (servidor propio): sin cookies ni datos personales, no necesita consentimiento. */}
           <Script

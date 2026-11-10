@@ -1,4 +1,6 @@
 import Breadcrumbs from "@/components/breadcrumbs";
+import HeroBackdrop from "@/components/hero-backdrop";
+import SplitText from "@/components/split-text";
 import { ServiceSchema } from "@/components/structured-data";
 
 export default function PageHero({
@@ -17,33 +19,33 @@ export default function PageHero({
   service?: string;
 }) {
   return (
-    <header className="relative overflow-hidden bg-surface-dark pt-20 pb-16 text-white sm:pt-24 sm:pb-20">
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-          maskImage:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 80%)",
-        }}
-        aria-hidden
-      />
-      <div
-        className="blob-drift pointer-events-none absolute -left-24 -top-32 h-[380px] w-[380px] rounded-full blur-[10px]"
-        style={{ background: "radial-gradient(circle, rgba(42,107,165,.45), transparent 70%)" }}
-        aria-hidden
-      />
-      <div className="hero-in relative mx-auto max-w-3xl px-6 text-center">
-        {path && <Breadcrumbs path={path} className="mb-6" />}
+    <header className="relative overflow-hidden bg-surface-dark pb-20 text-white sm:pb-28">
+      <HeroBackdrop />
+      <div className="relative mx-auto max-w-4xl px-6 text-center">
+        {path && (
+          <div className="hero-in" style={{ "--d": "0ms" } as React.CSSProperties}>
+            <Breadcrumbs path={path} className="mb-7" />
+          </div>
+        )}
         {path && service && <ServiceSchema path={path} name={service} description={lead} />}
-        <div className="inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-mist-accent">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-          {eyebrow}
+        <div className="hero-in" style={{ "--d": "80ms" } as React.CSSProperties}>
+          <span className="eyebrow eyebrow-dark">
+            <span className="dot" aria-hidden />
+            {eyebrow}
+          </span>
         </div>
-        <h1 className="mt-4 text-[34px] leading-[1.15] text-white sm:text-[42px]">{title}</h1>
+        <SplitText
+          as="h1"
+          trigger="load"
+          delay={160}
+          text={title}
+          className="mt-6 text-[36px] leading-[1.06] text-white sm:text-[54px]"
+        />
         {lead && (
-          <p className="mx-auto mt-4 max-w-[52ch] text-base leading-relaxed text-mist-soft">
+          <p
+            className="hero-in mx-auto mt-6 max-w-[58ch] text-[16.5px] leading-relaxed text-mist-soft sm:text-[17.5px]"
+            style={{ "--d": "480ms" } as React.CSSProperties}
+          >
             {lead}
           </p>
         )}

@@ -18,13 +18,16 @@ export default async function ProgramStatus({
   const t = await getT();
   return (
     <div
-      className={`flex flex-col gap-3 rounded-brand border border-chip-amber/40 bg-[#fdf6e9] text-left sm:flex-row sm:items-center sm:justify-between ${
+      className={`relative flex flex-col gap-4 overflow-hidden rounded-brand border border-chip-amber/30 bg-gradient-to-br from-[#fdf6e9] to-white text-left shadow-[0_18px_40px_-30px_rgba(148,96,15,.5)] sm:flex-row sm:items-center sm:justify-between ${
         compact ? "p-4" : "p-5 sm:p-6"
       }`}
     >
       <div>
         <p className="flex items-center gap-2 text-sm font-semibold text-ink">
-          <span className="h-2 w-2 shrink-0 rounded-full bg-chip-amber" aria-hidden />
+          <span className="relative flex h-2.5 w-2.5 shrink-0" aria-hidden>
+            <span className="absolute inset-0 animate-ping rounded-full bg-chip-amber/60" />
+            <span className="relative h-2.5 w-2.5 rounded-full bg-chip-amber" />
+          </span>
           {t(`Convocatoria de ${program} cerrada`, `Convocatòria de ${program} tancada`, `${program}: call for applications closed`)}
         </p>
         <p className="mt-1 text-[13.5px] leading-relaxed text-ink-soft">
@@ -37,7 +40,7 @@ export default async function ProgramStatus({
       </div>
       <Link
         href="/contacto#diagnostico"
-        className="shrink-0 self-start rounded-full bg-ink px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-primary sm:self-center"
+        className="btn btn-dark shrink-0 self-start !px-5 !py-2.5 !text-[13px] sm:self-center"
       >
         {t("Avisadme", "Aviseu-me", "Notify me")}
       </Link>

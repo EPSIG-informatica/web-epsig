@@ -4,10 +4,13 @@ import Breadcrumbs from "@/components/breadcrumbs";
 import Reveal from "@/components/reveal";
 import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
+import SplitText, { type Segment } from "@/components/split-text";
+import Icon from "@/components/icons";
 import CtaBand from "@/components/sections/cta-band";
 import ConnectorFlow from "@/components/software/connector-flow";
 import { connectors } from "@/lib/site";
 import { getT, pageMetadata } from "@/lib/i18n-server";
+import HeroBackdrop from "@/components/hero-backdrop";
 import type { Localized } from "@/lib/i18n";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -92,55 +95,40 @@ const faqs: { q: Localized; a: Localized }[] = [
   },
 ];
 
+const winIcons = ["link", "shield", "chart", "spark"] as const;
+
 export default async function ConectoresPage() {
   const t = await getT();
   return (
     <>
-      <header className="relative overflow-hidden bg-surface-dark pt-20 pb-16 text-white sm:pt-24 sm:pb-20">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-            maskImage: "radial-gradient(ellipse 80% 60% at 50% 30%, black 40%, transparent 80%)",
-          }}
-          aria-hidden
-        />
-        <div
-          className="blob-drift pointer-events-none absolute -left-32 -top-40 h-[480px] w-[480px] rounded-full blur-[10px]"
-          style={{ background: "radial-gradient(circle, rgba(42,107,165,.5), transparent 70%)" }}
-          aria-hidden
-        />
-        <div
-          className="blob-drift-slow pointer-events-none absolute -right-40 bottom-[-160px] h-[420px] w-[420px] rounded-full blur-[10px]"
-          style={{ background: "radial-gradient(circle, rgba(90,169,230,.25), transparent 70%)" }}
-          aria-hidden
-        />
-        <div className="relative mx-auto max-w-6xl px-6">
-          <div className="hero-in mx-auto max-w-3xl text-center">
-            <Breadcrumbs path="/software/conectores" className="mb-6" />
-            <div className="inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-mist-accent">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-              {t("Software propio · Conectores", "Programari propi · Connectors", "Our own software · Connectors")}
+      <header className="relative overflow-hidden bg-surface-dark pt-20 pb-20 text-white sm:pt-24 sm:pb-28">
+        <HeroBackdrop glow="center" />
+        <div className="relative mx-auto max-w-6xl px-5 sm:px-6">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="hero-in" style={{ "--d": "0ms" } as React.CSSProperties}>
+              <Breadcrumbs path="/software/conectores" className="mb-6" />
             </div>
-            <h1 className="mt-5 text-[36px] leading-[1.12] text-white sm:text-[46px]">
-              {t(
-                <>
-                  Tus programas, trabajando juntos.{" "}
-                  <em className="text-accent not-italic">Tú, a lo tuyo.</em>
-                </>,
-                <>
-                  Els teus programes, treballant junts.{" "}
-                  <em className="text-accent not-italic">Tu, a la teua.</em>
-                </>,
-                <>
-                  Your software, working together.{" "}
-                  <em className="text-accent not-italic">You, getting on with business.</em>
-                </>,
+            <div className="hero-in" style={{ "--d": "80ms" } as React.CSSProperties}>
+              <div className="eyebrow eyebrow-dark">
+                <span className="dot" aria-hidden />
+                {t("Software propio · Conectores", "Programari propi · Connectors", "Our own software · Connectors")}
+              </div>
+            </div>
+            <SplitText
+              as="h1"
+              trigger="load"
+              delay={160}
+              text={t<Segment[]>(
+                ["Tus programas, trabajando juntos.", { text: "Tú, a lo tuyo.", className: "text-shine" }],
+                ["Els teus programes, treballant junts.", { text: "Tu, a la teua.", className: "text-shine" }],
+                ["Your software, working together.", { text: "You, getting on with business.", className: "text-shine" }],
               )}
-            </h1>
-            <p className="mx-auto mt-5 max-w-[56ch] text-base leading-relaxed text-mist-soft sm:text-[17px]">
+              className="mt-6 text-[34px] leading-[1.06] text-white sm:text-[50px] lg:text-[56px]"
+            />
+            <p
+              className="hero-in mx-auto mt-6 max-w-[56ch] text-[16px] leading-relaxed text-mist-soft sm:text-[17.5px]"
+              style={{ "--d": "480ms" } as React.CSSProperties}
+            >
               {t(
                 "Conectamos Forvenues, Ágora, Sage y FACe para que cada venta viaje sola hasta tu contabilidad y tu factura electrónica. Sin exportar, sin copiar y sin errores.",
                 "Connectem Forvenues, Ágora, Sage i FACe perquè cada venda viatge sola fins a la teua comptabilitat i la teua factura electrònica. Sense exportar, sense copiar i sense errors.",
@@ -149,9 +137,12 @@ export default async function ConectoresPage() {
             </p>
           </div>
 
-          <div className="hero-in mt-14" style={{ animationDelay: "120ms" }}>
+          <div className="mt-14 sm:mt-16">
             <ConnectorFlow />
-            <p className="mt-6 text-center text-[13.5px] text-mist-soft">
+            <p
+              className="hero-in mx-auto mt-8 max-w-[70ch] text-center text-[13.5px] leading-relaxed text-mist-soft"
+              style={{ "--d": "1100ms" } as React.CSSProperties}
+            >
               {t(
                 <>
                   <strong className="font-semibold text-white">Del ticket vendido al asiento contable:</strong>{" "}
@@ -171,8 +162,17 @@ export default async function ConectoresPage() {
         </div>
       </header>
 
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <section className="section-tint relative overflow-hidden py-28 sm:py-36">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60"
+          style={{
+            backgroundImage: "radial-gradient(rgba(42,107,165,.12) 1px, transparent 1px)",
+            backgroundSize: "22px 22px",
+            maskImage: "radial-gradient(ellipse 70% 50% at 50% 0%, black, transparent 75%)",
+          }}
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-6xl px-5 sm:px-6">
           <SectionHeading
             eyebrow={t("Los conectores", "Els connectors", "The connectors")}
             title={t("Tres conectores, un recorrido completo", "Tres connectors, un recorregut complet", "Three connectors, one complete journey")}
@@ -182,29 +182,67 @@ export default async function ConectoresPage() {
               "Use them individually or chain them together: you decide how far the automation goes.",
             )}
           />
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-            {connectors.map((connector) => (
-              <Reveal key={connector.id} className="h-full">
-                <TiltCard className="flex h-full flex-col rounded-brand border border-line bg-surface p-7">
-                  <div id={connector.id} className="mb-5 flex scroll-mt-24 items-center gap-2 font-mono text-[12.5px] font-semibold">
-                    <span className="rounded-md bg-surface-alt px-2 py-1 text-ink">{connector.from}</span>
-                    <span className="text-accent-strong" aria-hidden>
-                      ⟶
-                    </span>
-                    <span className="sr-only">{t("conectado con", "connectat amb", "connected to")}</span>
-                    <span className="rounded-md bg-surface-alt px-2 py-1 text-ink">{connector.to}</span>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {connectors.map((connector, index) => (
+              <Reveal
+                key={connector.id}
+                className={`h-full ${index === connectors.length - 1 ? "md:col-span-2 lg:col-span-1" : ""}`}
+                delay={index * 0.12}
+              >
+                <TiltCard className="card-light flex h-full flex-col overflow-hidden p-2">
+                  {/* Cabecera con la conexión animada */}
+                  <div className="relative overflow-hidden rounded-[16px] bg-surface-dark px-4 py-6 sm:px-5">
+                    <div className="stars pointer-events-none absolute inset-0" aria-hidden />
+                    <div
+                      className="pointer-events-none absolute -top-16 left-1/2 h-32 w-48 -translate-x-1/2 rounded-full"
+                      style={{ background: "radial-gradient(circle, rgba(61,143,224,.45), transparent 70%)" }}
+                      aria-hidden
+                    />
+                    <div
+                      id={connector.id}
+                      className="relative flex scroll-mt-24 items-center gap-2 font-mono text-[12px] font-semibold sm:text-[12.5px]"
+                    >
+                      <span className="shrink-0 rounded-lg border border-white/15 bg-white/[0.07] px-2.5 py-1.5 text-white">
+                        {connector.from}
+                      </span>
+                      <span className="relative h-3 min-w-6 flex-1" aria-hidden>
+                        <svg className="absolute inset-0 h-full w-full overflow-visible" viewBox="0 0 100 2" preserveAspectRatio="none" fill="none">
+                          <path d="M0,1 L100,1" stroke="rgba(140,195,239,.25)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+                          <path
+                            d="M0,1 L100,1"
+                            pathLength={100}
+                            stroke="#b5dcfb"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            vectorEffect="non-scaling-stroke"
+                            className="trace-pulse"
+                            style={{ "--td": `${index * 0.7}s`, strokeDasharray: "26 74", filter: "drop-shadow(0 0 4px #5aa9e6)" } as React.CSSProperties}
+                          />
+                        </svg>
+                        <span className="absolute top-1/2 right-0 h-2 w-2 -translate-y-1/2 rotate-45 border-t-[1.5px] border-r-[1.5px] border-ice" />
+                      </span>
+                      <span className="sr-only">{t("conectado con", "connectat amb", "connected to")}</span>
+                      <span className="shrink-0 rounded-lg border border-accent/40 bg-accent/15 px-2.5 py-1.5 text-ice shadow-[0_0_20px_-6px_rgba(90,169,230,.8)]">
+                        {connector.to}
+                      </span>
+                    </div>
                   </div>
-                  <h3 className="text-[19px]">{t(connector.title)}</h3>
-                  <p className="mt-1 text-[14px] font-semibold text-primary">{t(connector.tagline)}</p>
-                  <p className="mt-3 text-[14.5px] leading-relaxed text-ink-soft">{t(connector.body)}</p>
-                  <ul className="mt-5 flex flex-col gap-2 border-t border-line pt-5">
-                    {connector.points.map((point) => (
-                      <li key={point.es} className="flex items-start gap-2.5 text-[14px] text-ink">
-                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-strong" aria-hidden />
-                        {t(point)}
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="flex flex-1 flex-col p-5 pt-6 sm:p-6">
+                    <span className="font-mono text-[12px] text-primary" aria-hidden>
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="mt-1.5 text-[19px] text-ink sm:text-[20px]">{t(connector.title)}</h3>
+                    <p className="mt-1 text-[14px] font-semibold text-primary">{t(connector.tagline)}</p>
+                    <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-ink-soft">{t(connector.body)}</p>
+                    <ul className="mt-5 flex flex-col gap-2.5 border-t border-line pt-5">
+                      {connector.points.map((point) => (
+                        <li key={point.es} className="flex items-start gap-2.5 text-[14px] text-ink">
+                          <CheckDot />
+                          {t(point)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </TiltCard>
               </Reveal>
             ))}
@@ -212,46 +250,57 @@ export default async function ConectoresPage() {
         </div>
       </section>
 
-      <section className="bg-surface-alt py-20 sm:py-24">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
-          <Reveal>
-            <div className="inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-primary">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-              {t("Conexión completa", "Connexió completa", "End-to-end connection")}
-            </div>
-            <h2 className="mt-3 text-[30px] leading-tight text-ink">
-              {t(
+      <section className="relative overflow-hidden bg-night py-28 text-white sm:py-36">
+        <div className="hero-grid pointer-events-none absolute inset-0 opacity-70" aria-hidden />
+        <div
+          className="blob-drift pointer-events-none absolute -top-40 -left-40 h-[520px] w-[520px] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(42,107,165,.35), transparent 68%)" }}
+          aria-hidden
+        />
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-5 sm:px-6 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <Reveal direction="none">
+              <div className="eyebrow eyebrow-dark">
+                <span className="dot" aria-hidden />
+                {t("Conexión completa", "Connexió completa", "End-to-end connection")}
+              </div>
+            </Reveal>
+            <SplitText
+              delay={120}
+              text={t(
                 "Vende una entrada. Aparece en tu contabilidad. Nadie ha tocado un teclado.",
                 "Ven una entrada. Apareix en la teua comptabilitat. Ningú no ha tocat un teclat.",
                 "Sell a ticket. It appears in your accounts. Nobody has touched a keyboard.",
               )}
-            </h2>
-            <p className="mt-4 text-[15.5px] leading-relaxed text-ink-soft">
-              {t(
-                "Encadenando los conectores, la venta de una entrada en Forvenues pasa a Ágora como venta de tu TPV y, de ahí, llega a Sage cada día. Si además facturas a la Administración, la factura sale de Sage hacia FACe. Un solo registro, de principio a fin.",
-                "Encadenant els connectors, la venda d'una entrada en Forvenues passa a Ágora com a venda del teu TPV i, d'allí, arriba a Sage cada dia. Si a més factures a l'Administració, la factura ix de Sage cap a FACe. Un sol registre, de principi a fi.",
-                "With the connectors chained together, a ticket sale in Forvenues passes to Ágora as a sale on your POS and, from there, reaches Sage every day. And if you invoice public authorities, the invoice goes from Sage to FACe. A single record, from start to finish.",
-              )}
-            </p>
-            <Link
-              href="/contacto#diagnostico"
-              className="mt-7 inline-block rounded-full bg-ink px-6 py-3 text-[14px] font-semibold text-white transition hover:scale-[1.03] hover:bg-primary active:scale-[0.97]"
-            >
-              {t("Quiero automatizarlo", "Vull automatitzar-ho", "I want to automate it")}
-            </Link>
-          </Reveal>
+              className="mt-5 text-[30px] leading-[1.08] text-white sm:text-[40px]"
+            />
+            <Reveal delay={0.25}>
+              <p className="mt-5 max-w-[56ch] text-[15.5px] leading-relaxed text-mist-soft sm:text-[16.5px]">
+                {t(
+                  "Encadenando los conectores, la venta de una entrada en Forvenues pasa a Ágora como venta de tu TPV y, de ahí, llega a Sage cada día. Si además facturas a la Administración, la factura sale de Sage hacia FACe. Un solo registro, de principio a fin.",
+                  "Encadenant els connectors, la venda d'una entrada en Forvenues passa a Ágora com a venda del teu TPV i, d'allí, arriba a Sage cada dia. Si a més factures a l'Administració, la factura ix de Sage cap a FACe. Un sol registre, de principi a fi.",
+                  "With the connectors chained together, a ticket sale in Forvenues passes to Ágora as a sale on your POS and, from there, reaches Sage every day. And if you invoice public authorities, the invoice goes from Sage to FACe. A single record, from start to finish.",
+                )}
+              </p>
+            </Reveal>
+            <Reveal delay={0.35}>
+              <Link href="/contacto#diagnostico" data-magnetic className="btn btn-primary mt-8">
+                {t("Quiero automatizarlo", "Vull automatitzar-ho", "I want to automate it")}
+                <span className="btn-arrow" aria-hidden>
+                  →
+                </span>
+              </Link>
+            </Reveal>
+          </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {wins.map((win) => (
-              <Reveal key={win.title.es} className="h-full">
-                <div className="h-full rounded-brand border border-line bg-surface p-5">
-                  <span
-                    className="mb-3 flex h-7 w-7 items-center justify-center rounded-full bg-accent-strong text-sm font-bold text-white"
-                    aria-hidden
-                  >
-                    ✓
+            {wins.map((win, index) => (
+              <Reveal key={win.title.es} className="h-full" delay={0.1 + index * 0.1} direction="scale">
+                <div className="glass card-spotlight h-full rounded-panel p-6">
+                  <span className="icon-tile-dark mb-5 h-11 w-11" aria-hidden>
+                    <Icon name={winIcons[index % winIcons.length]} className="h-5 w-5" />
                   </span>
-                  <h3 className="text-[16px] text-ink">{t(win.title)}</h3>
-                  <p className="mt-1 text-[14px] leading-relaxed text-ink-soft">{t(win.body)}</p>
+                  <h3 className="text-[16.5px] text-white">{t(win.title)}</h3>
+                  <p className="mt-1.5 text-[14px] leading-relaxed text-mist-soft">{t(win.body)}</p>
                 </div>
               </Reveal>
             ))}
@@ -259,26 +308,30 @@ export default async function ConectoresPage() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-3xl px-6">
+      <section className="section-tint py-28 sm:py-36">
+        <div className="mx-auto max-w-3xl px-5 sm:px-6">
           <SectionHeading
             eyebrow={t("Preguntas frecuentes", "Preguntes freqüents", "Frequently asked questions")}
             title={t("Lo que suelen preguntarnos", "El que solen preguntar-nos", "What people usually ask us")}
           />
           <div className="flex flex-col gap-3">
-            {faqs.map((faq) => (
-              <details
-                key={faq.q.es}
-                className="group rounded-brand border border-line bg-surface p-5 open:bg-surface-alt"
-              >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[15.5px] font-semibold text-ink [&::-webkit-details-marker]:hidden">
-                  {t(faq.q)}
-                  <span className="text-xl leading-none text-primary transition-transform group-open:rotate-45" aria-hidden>
-                    +
-                  </span>
-                </summary>
-                <p className="mt-3 text-[14.5px] leading-relaxed text-ink-soft">{t(faq.a)}</p>
-              </details>
+            {faqs.map((faq, index) => (
+              <Reveal key={faq.q.es} delay={index * 0.08}>
+                <details className="group rounded-brand border border-line bg-white shadow-[0_18px_40px_-34px_rgba(11,18,32,.35)] transition-[border-color,box-shadow] duration-300 open:border-accent/40 open:shadow-[0_24px_50px_-30px_rgba(42,107,165,.45)] hover:border-primary-light/60">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-[15.5px] font-semibold text-ink sm:p-6 sm:text-[16.5px] [&::-webkit-details-marker]:hidden">
+                    {t(faq.q)}
+                    <span
+                      className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-line bg-surface-alt text-primary transition-[transform,background-color,color,border-color] duration-300 group-open:rotate-180 group-open:border-transparent group-open:bg-accent-strong group-open:text-white"
+                      aria-hidden
+                    >
+                      <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 6l4 4 4-4" />
+                      </svg>
+                    </span>
+                  </summary>
+                  <p className="px-5 pb-5 text-[14.5px] leading-relaxed text-ink-soft sm:px-6 sm:pb-6 sm:text-[15px]">{t(faq.a)}</p>
+                </details>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -294,5 +347,15 @@ export default async function ConectoresPage() {
         ctaLabel={t("Hablar con nosotros", "Parlar amb nosaltres", "Talk to us")}
       />
     </>
+  );
+}
+
+function CheckDot() {
+  return (
+    <span className="mt-0.5 grid h-4.5 w-4.5 shrink-0 place-items-center rounded-full bg-accent-strong text-white shadow-[0_4px_10px_-4px_rgba(42,107,165,.8)]" aria-hidden>
+      <svg viewBox="0 0 12 12" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2.5 6.2l2.2 2.2 4.8-4.8" />
+      </svg>
+    </span>
   );
 }

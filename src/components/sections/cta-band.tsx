@@ -1,5 +1,6 @@
 import Link from "@/components/link";
 import Reveal from "@/components/reveal";
+import SplitText from "@/components/split-text";
 import { getT } from "@/lib/i18n-server";
 
 export default async function CtaBand({
@@ -7,13 +8,12 @@ export default async function CtaBand({
   body,
   ctaLabel,
   ctaHref = "/contacto#diagnostico",
-  spaced = false,
 }: {
   title?: string;
   body?: string;
   ctaLabel?: string;
   ctaHref?: string;
-  /** Espacio también arriba: para cuando la sección anterior tiene fondo de color y la banda quedaría pegada. */
+  /** Se mantiene por compatibilidad: la banda ya es una sección completa con su propio espacio. */
   spaced?: boolean;
 }) {
   const t = await getT();
@@ -27,23 +27,41 @@ export default async function CtaBand({
   ctaLabel ??= t("Solicitar diagnóstico", "Sol·licitar diagnòstic", "Request an assessment");
 
   return (
-    <div className={`px-6 pb-20 sm:pb-24 ${spaced ? "pt-20 sm:pt-24" : ""}`}>
-      <Reveal
-        className="gradient-pan relative mx-auto max-w-6xl overflow-hidden rounded-[28px] px-8 py-14 text-center text-white sm:px-10 sm:py-[70px]"
-        style={{
-          background:
-            "linear-gradient(120deg, var(--color-primary), var(--color-secondary), var(--color-primary))",
-        }}
+    <section className="cta-band relative bg-night px-3 py-20 sm:px-6 sm:py-28">
+      <div
+        data-observe
+        className="relative mx-auto max-w-6xl overflow-hidden rounded-[32px] border border-white/10 bg-surface-dark px-6 pt-20 pb-36 text-center text-white sm:px-10 sm:pt-24 sm:pb-44"
       >
-        <h2 className="mb-4.5 text-[28px] text-white">{title}</h2>
-        <p className="mb-7 text-white/90">{body}</p>
-        <Link
-          href={ctaHref}
-          className="inline-block rounded-full bg-white px-6.5 py-3.5 text-[14.5px] font-semibold text-secondary shadow-[0_14px_30px_-12px_rgba(6,20,40,.55)] transition-transform hover:scale-[1.05] active:scale-[0.96]"
-        >
-          {ctaLabel}
-        </Link>
-      </Reveal>
-    </div>
+        <div className="stars pointer-events-none absolute inset-0" aria-hidden />
+        {/* Resplandor que sube desde abajo al entrar en pantalla */}
+        <div
+          className="cta-glow pointer-events-none absolute bottom-[-340px] left-1/2 h-[620px] w-[140%] max-w-[1400px] rounded-[50%]"
+          style={{
+            background:
+              "radial-gradient(ellipse 50% 50% at 50% 50%, #ffffff 0%, var(--color-ice) 14%, var(--color-accent) 30%, var(--color-glow) 44%, rgba(42,107,165,.35) 62%, transparent 74%)",
+            filter: "blur(6px)",
+          }}
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-ice to-transparent"
+          aria-hidden
+        />
+        <div className="relative">
+          <SplitText text={title} className="mx-auto max-w-[22ch] text-[32px] leading-[1.08] text-white sm:text-[48px]" />
+          <Reveal delay={0.25}>
+            <p className="mx-auto mt-5 max-w-[52ch] text-[16.5px] leading-relaxed text-mist-soft">{body}</p>
+          </Reveal>
+          <Reveal delay={0.4} className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <Link href={ctaHref} data-magnetic className="btn btn-light">
+              {ctaLabel}
+              <span className="btn-arrow" aria-hidden>
+                →
+              </span>
+            </Link>
+          </Reveal>
+        </div>
+      </div>
+    </section>
   );
 }

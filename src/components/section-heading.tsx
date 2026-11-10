@@ -1,33 +1,44 @@
+import SplitText from "@/components/split-text";
+import Reveal from "@/components/reveal";
+
 export default function SectionHeading({
   eyebrow,
   title,
   body,
   align = "center",
   dark = false,
+  className = "mb-14",
 }: {
   eyebrow: string;
   title: string;
   body?: string;
   align?: "center" | "left";
   dark?: boolean;
+  className?: string;
 }) {
   return (
-    <div
-      className={`mx-auto mb-13 max-w-2xl ${align === "center" ? "text-center" : "text-left"}`}
-    >
-      <div
-        className={`inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] ${
-          dark ? "text-mist-accent" : "text-primary"
-        }`}
-      >
-        <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-        {eyebrow}
-      </div>
-      <h2 className={`mt-3 mb-3.5 text-[32px] ${dark ? "text-white" : "text-ink"}`}>{title}</h2>
+    <div className={`${align === "center" ? "mx-auto max-w-3xl text-center" : "max-w-2xl text-left"} ${className}`}>
+      <Reveal direction="none">
+        <span className={`eyebrow ${dark ? "eyebrow-dark" : "eyebrow-light"}`}>
+          <span className="dot" aria-hidden />
+          {eyebrow}
+        </span>
+      </Reveal>
+      <SplitText
+        text={title}
+        delay={120}
+        className={`mt-5 text-[32px] leading-[1.08] sm:text-[44px] ${dark ? "text-white" : "text-ink"}`}
+      />
       {body && (
-        <p className={`text-base leading-relaxed ${dark ? "text-mist-soft" : "text-ink-soft"}`}>
-          {body}
-        </p>
+        <Reveal delay={0.3}>
+          <p
+            className={`mt-5 text-[16.5px] leading-relaxed ${dark ? "text-mist-soft" : "text-ink-soft"} ${
+              align === "center" ? "mx-auto max-w-[58ch]" : "max-w-[58ch]"
+            }`}
+          >
+            {body}
+          </p>
+        </Reveal>
       )}
     </div>
   );

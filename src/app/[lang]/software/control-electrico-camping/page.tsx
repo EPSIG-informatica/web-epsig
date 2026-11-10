@@ -5,9 +5,11 @@ import Reveal from "@/components/reveal";
 import SectionHeading from "@/components/section-heading";
 import TiltCard from "@/components/tilt-card";
 import CtaBand from "@/components/sections/cta-band";
-import IndexMark from "@/components/index-mark";
+import SplitText, { type Segment } from "@/components/split-text";
+import Icon from "@/components/icons";
 import CampingAppVideo from "@/components/software/camping-app-video";
 import { getT, pageMetadata } from "@/lib/i18n-server";
+import HeroBackdrop from "@/components/hero-backdrop";
 import type { Localized } from "@/lib/i18n";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -163,77 +165,91 @@ const wins: Item[] = [
     },
   },
 ];
+// Icono de cada función (por su código). "clock" se dibuja aquí: no existe en el juego común.
+const featureIcons: Record<string, string> = { IN: "pin", CL: "crm", kW: "bolt", TK: "pos", HR: "clock", GR: "chart", "€": "accounting" };
+const winIcons = ["spark", "bolt", "crm", "chart"] as const;
 
 export default async function CampingSoftwarePage() {
   const t = await getT();
   return (
     <>
       <header className="relative overflow-hidden bg-surface-dark pt-20 text-white sm:pt-24">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-            maskImage: "radial-gradient(ellipse 80% 60% at 50% 20%, black 40%, transparent 80%)",
-          }}
-          aria-hidden
-        />
-        <div
-          className="blob-drift pointer-events-none absolute -right-32 -top-40 h-[520px] w-[520px] rounded-full blur-[10px]"
-          style={{ background: "radial-gradient(circle, rgba(90,169,230,.35), transparent 70%)" }}
-          aria-hidden
-        />
-        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 pb-20 sm:pb-24 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="hero-in">
-            <Breadcrumbs path="/software/control-electrico-camping" align="left" className="mb-6" />
-            <div className="inline-flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.12em] text-mist-accent">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-              {t("Software propio · Campings", "Programari propi · Càmpings", "Our own software · Campsites")}
+        <HeroBackdrop />
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-5 pb-20 sm:px-6 sm:pb-28 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
+          <div>
+            <div className="hero-in" style={{ "--d": "0ms" } as React.CSSProperties}>
+              <Breadcrumbs path="/software/control-electrico-camping" align="left" className="mb-6" />
             </div>
-            <h1 className="mt-5 mb-5.5 text-[36px] leading-[1.12] text-white sm:text-[46px]">
-              {t(
-                <>
-                  Cada parcela, cada kWh, <em className="text-accent not-italic">bajo control.</em>
-                </>,
-                <>
-                  Cada parcel·la, cada kWh, <em className="text-accent not-italic">sota control.</em>
-                </>,
-                <>
-                  Every pitch, every kWh, <em className="text-accent not-italic">under control.</em>
-                </>,
+            <div className="hero-in" style={{ "--d": "80ms" } as React.CSSProperties}>
+              <div className="eyebrow eyebrow-dark">
+                <span className="dot" aria-hidden />
+                {t("Software propio · Campings", "Programari propi · Càmpings", "Our own software · Campsites")}
+              </div>
+            </div>
+            <SplitText
+              as="h1"
+              trigger="load"
+              delay={160}
+              text={t<Segment[]>(
+                ["Cada parcela, cada kWh,", { text: "bajo control.", className: "text-shine" }],
+                ["Cada parcel·la, cada kWh,", { text: "sota control.", className: "text-shine" }],
+                ["Every pitch, every kWh,", { text: "under control.", className: "text-shine" }],
               )}
-            </h1>
-            <p className="mb-8 max-w-[48ch] text-base leading-relaxed text-mist-soft sm:text-[17px]">
+              className="mt-6 mb-6 text-[36px] leading-[1.05] text-white sm:text-[50px] lg:text-[54px]"
+            />
+            <p
+              className="hero-in mb-9 max-w-[48ch] text-[16px] leading-relaxed text-mist-soft sm:text-[17.5px]"
+              style={{ "--d": "480ms" } as React.CSSProperties}
+            >
               {t(
                 "El software de gestión para campings que une recepción, clientes, electricidad y caja en un solo panel. Sin libretas, sin hojas de cálculo y sin luz sin cobrar.",
                 "El programari de gestió per a càmpings que unix recepció, clients, electricitat i caixa en un sol panell. Sense llibretes, sense fulls de càlcul i sense llum per cobrar.",
                 "The campsite management software that brings reception, guests, electricity and cash together in a single dashboard. No notebooks, no spreadsheets and no unbilled electricity.",
               )}
             </p>
-            <div className="flex flex-wrap gap-3.5">
-              <Link
-                href="/contacto#diagnostico"
-                className="inline-block rounded-full bg-accent-strong px-6.5 py-3.5 text-[14.5px] font-semibold text-white shadow-[0_14px_30px_-10px_rgba(90,169,230,.6)] transition-transform hover:scale-[1.04] active:scale-[0.96]"
-              >
+            <div className="hero-in flex flex-wrap gap-3" style={{ "--d": "600ms" } as React.CSSProperties}>
+              <Link href="/contacto#diagnostico" data-magnetic className="btn btn-primary">
                 {t("Solicita una demo", "Sol·licita una demo", "Request a demo")}
               </Link>
-              <a
-                href="#funciones"
-                className="inline-block rounded-full border-[1.5px] border-white/25 px-5 py-2.5 text-[13.5px] font-semibold text-white transition hover:border-white/50"
-              >
+              <a href="#funciones" data-magnetic className="btn btn-ghost">
                 {t("Ver funciones ↓", "Veure funcions ↓", "See features ↓")}
               </a>
             </div>
           </div>
-          <div className="hero-in" style={{ animationDelay: "120ms" }}>
-            <CampingAppVideo />
+
+          {/* Vídeo del producto dentro de un marco con halo de luz */}
+          <div className="hero-in relative min-w-0" style={{ "--d": "320ms" } as React.CSSProperties}>
+            <div
+              className="pointer-events-none absolute -inset-6 rounded-[40px] opacity-80 blur-3xl sm:-inset-10"
+              style={{ background: "radial-gradient(ellipse at 60% 40%, rgba(61,143,224,.45), rgba(42,107,165,.12) 55%, transparent 75%)" }}
+              aria-hidden
+            />
+            <div className="relative">
+              <CampingAppVideo />
+            </div>
+            <span
+              className="glass float pointer-events-none absolute -top-4 right-4 hidden items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-[11px] text-white backdrop-blur-md sm:flex"
+              style={{ "--fd": "0.4s" } as React.CSSProperties}
+              aria-hidden
+            >
+              <Icon name="bolt" className="h-3.5 w-3.5 text-[#f5c542]" />
+              12,4 kWh
+            </span>
           </div>
         </div>
       </header>
 
-      <section id="funciones" className="scroll-mt-20 py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <section id="funciones" className="relative scroll-mt-20 overflow-hidden bg-surface py-28 sm:py-36">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60"
+          style={{
+            backgroundImage: "radial-gradient(rgba(42,107,165,.12) 1px, transparent 1px)",
+            backgroundSize: "22px 22px",
+            maskImage: "radial-gradient(ellipse 70% 50% at 50% 0%, black, transparent 75%)",
+          }}
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-6xl px-5 sm:px-6">
           <SectionHeading
             eyebrow={t("Funciones", "Funcions", "Features")}
             title={t("Todo lo que pasa en tu camping, en un solo panel", "Tot el que passa en el teu càmping, en un sol panell", "Everything happening at your campsite, in a single dashboard")}
@@ -243,65 +259,121 @@ export default async function CampingSoftwarePage() {
               "A CRM designed for campsite reception, not generic software forced to fit.",
             )}
           />
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
             {features.map((feature, index) => (
-              <Reveal
-                key={feature.code}
-                className={`h-full ${index === features.length - 1 ? "sm:col-span-2 lg:col-span-1" : ""}`}
-              >
-                <TiltCard className="h-full rounded-brand border border-line bg-surface p-6">
-                  <IndexMark n={index + 1} className="mb-4" />
-                  <h3 className="mb-2 text-[17px]">{t(feature.title)}</h3>
+              <Reveal key={feature.code} className="h-full" delay={(index % 4) * 0.08}>
+                <TiltCard className="card-light group h-full p-6">
+                  <div className="mb-6 flex items-center justify-between">
+                    <span className="icon-tile transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6" aria-hidden>
+                      <FeatureIcon name={featureIcons[feature.code]} />
+                    </span>
+                    <span className="font-mono text-[12px] text-ink-faint" aria-hidden>
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <h3 className="mb-2 text-[17px] text-ink">{t(feature.title)}</h3>
                   <p className="text-[14px] leading-relaxed text-ink-soft">{t(feature.body)}</p>
                 </TiltCard>
               </Reveal>
             ))}
+            {/* Octava casilla: mapa de parcelas que se encienden (decorativo) */}
+            <Reveal className="h-full" delay={0.24} direction="scale">
+              <div
+                className="relative flex h-full min-h-[220px] flex-col justify-between overflow-hidden rounded-brand bg-surface-dark p-6 shadow-[0_30px_60px_-34px_rgba(11,18,32,.6)]"
+                aria-hidden
+              >
+                <div className="stars pointer-events-none absolute inset-0" />
+                <div
+                  className="pointer-events-none absolute -top-20 -right-16 h-48 w-48 rounded-full"
+                  style={{ background: "radial-gradient(circle, rgba(61,143,224,.5), transparent 70%)" }}
+                />
+                <div className="relative grid grid-cols-5 gap-1.5">
+                  {Array.from({ length: 15 }).map((_, i) => (
+                    <span
+                      key={i}
+                      className={`aspect-square rounded-md border ${
+                        [0, 2, 3, 6, 8, 11, 12, 14].includes(i)
+                          ? "animate-pulse border-accent/50 bg-accent/30 shadow-[0_0_14px_-4px_rgba(90,169,230,.9)]"
+                          : i === 9
+                            ? "border-[#f5b14c]/50 bg-[#f5b14c]/25"
+                            : "border-white/10 bg-white/[0.04]"
+                      }`}
+                      style={{ animationDelay: `${(i % 5) * 0.35}s`, animationDuration: "2.8s" }}
+                    />
+                  ))}
+                </div>
+                <div className="relative mt-5 flex items-end justify-between gap-3">
+                  <span className="flex items-center gap-1.5 font-mono text-[11px] text-mist-soft">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent shadow-[0_0_8px_#5aa9e6]" />
+                  </span>
+                  <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1 font-mono text-[11px] text-white">
+                    <Icon name="bolt" className="h-3.5 w-3.5 text-[#f5c542]" />
+                    12,4 kWh
+                  </span>
+                </div>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      <section className="bg-surface-dark py-20 text-white sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
+      <section className="relative overflow-hidden bg-night py-28 text-white sm:py-36">
+        <div
+          className="pointer-events-none absolute left-1/2 top-0 h-[520px] w-[900px] max-w-[160%] -translate-x-1/2 rounded-full"
+          style={{ background: "radial-gradient(ellipse, rgba(42,107,165,.28), transparent 65%)" }}
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-6xl px-5 sm:px-6">
           <SectionHeading
             eyebrow={t("Cómo funciona", "Com funciona", "How it works")}
             title={t("De la llegada al cierre de caja, sin perder un kWh", "De l'arribada al tancament de caixa, sense perdre ni un kWh", "From arrival to cash-up, without losing a single kWh")}
             dark
           />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((step) => (
-              <Reveal key={step.n} className="h-full">
-                <div className="relative h-full rounded-brand border border-white/10 bg-white/[0.04] p-6">
-                  <span className="font-mono text-sm font-medium text-accent">{step.n}</span>
-                  <h3 className="mt-3 mb-2 text-[17px] text-white">{t(step.title)}</h3>
-                  <p className="text-[13.5px] leading-relaxed text-mist-soft">{t(step.body)}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <Steps steps={steps.map((step) => ({ n: step.n, title: t(step.title), body: t(step.body) }))} />
         </div>
       </section>
 
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <SectionHeading
-            eyebrow={t("Resultado", "Resultat", "The result")}
-            title={t("Lo que cambia en tu día a día", "El que canvia en el teu dia a dia", "What changes in your day-to-day")}
-          />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {wins.map((win) => (
-              <Reveal key={win.title.es}>
-                <div className="flex h-full items-start gap-4 rounded-brand border border-line bg-surface-alt p-5">
-                  <span
-                    className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-strong text-sm font-bold text-white"
-                    aria-hidden
-                  >
-                    ✓
+      <section className="section-tint relative overflow-hidden py-28 sm:py-36">
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-5 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+          <div>
+            <SectionHeading
+              align="left"
+              className="mb-10"
+              eyebrow={t("Resultado", "Resultat", "The result")}
+              title={t("Lo que cambia en tu día a día", "El que canvia en el teu dia a dia", "What changes in your day-to-day")}
+            />
+            {/* Gráfico de consumo que crece al entrar (decorativo) */}
+            <Reveal direction="scale" delay={0.15}>
+              <div data-observe className="card-light relative overflow-hidden p-5 sm:p-6" aria-hidden>
+                <div className="mb-4 flex items-center justify-between font-mono text-[11px] text-ink-faint">
+                  <span className="flex items-center gap-1.5">
+                    <Icon name="bolt" className="h-3.5 w-3.5 text-[#d6a514]" />
+                    kWh
                   </span>
-                  <span>
-                    <span className="block text-[16px] font-semibold text-ink">{t(win.title)}</span>
-                    <span className="mt-0.5 block text-[14px] leading-relaxed text-ink-soft">{t(win.body)}</span>
-                  </span>
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent shadow-[0_0_8px_#5aa9e6]" />
                 </div>
+                <div className="flex h-32 items-end gap-[4%] sm:h-36">
+                  {[42, 58, 50, 66, 61, 78, 72, 92].map((h, i) => (
+                    <span
+                      key={i}
+                      className="grow-bar flex-1 rounded-t-md bg-gradient-to-t from-primary/25 to-accent"
+                      style={{ height: `${h}%`, "--bd": `${0.1 + i * 0.07}s` } as React.CSSProperties}
+                    />
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {wins.map((win, index) => (
+              <Reveal key={win.title.es} className="h-full" delay={0.1 + index * 0.1}>
+                <TiltCard className="card-light h-full p-6">
+                  <span className="icon-tile mb-5 h-11 w-11" aria-hidden>
+                    <Icon name={winIcons[index % winIcons.length]} className="h-5 w-5" />
+                  </span>
+                  <span className="block text-[16.5px] font-semibold text-ink">{t(win.title)}</span>
+                  <span className="mt-1.5 block text-[14px] leading-relaxed text-ink-soft">{t(win.body)}</span>
+                </TiltCard>
               </Reveal>
             ))}
           </div>
@@ -318,5 +390,57 @@ export default async function CampingSoftwarePage() {
         ctaLabel={t("Solicitar una demo", "Sol·licitar una demo", "Request a demo")}
       />
     </>
+  );
+}
+
+function FeatureIcon({ name }: { name: string }) {
+  if (name === "clock") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden>
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M12 7.5V12l3 2" />
+      </svg>
+    );
+  }
+  return <Icon name={name} className="h-5 w-5" />;
+}
+
+// Pasos en línea de tiempo: la línea se dibuja al entrar y un pulso de luz la recorre.
+function Steps({ steps }: { steps: { n: string; title: string; body: string }[] }) {
+  return (
+    <div data-observe className="relative">
+      <div className="pointer-events-none absolute top-[22px] right-[12.5%] left-[12.5%] hidden h-px lg:block" aria-hidden>
+        <span className="draw-line absolute inset-0 bg-gradient-to-r from-accent/10 via-accent/60 to-accent/10" />
+        <svg className="absolute inset-x-0 -top-1 h-2 w-full overflow-visible" viewBox="0 0 100 2" preserveAspectRatio="none" fill="none">
+          <path
+            d="M0,1 L100,1"
+            pathLength={100}
+            stroke="#b5dcfb"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            vectorEffect="non-scaling-stroke"
+            className="trace-pulse"
+            style={{ strokeDasharray: "14 86", animationDuration: "4.5s", filter: "drop-shadow(0 0 5px #5aa9e6)" } as React.CSSProperties}
+          />
+        </svg>
+      </div>
+      <ol className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        {steps.map((step, index) => (
+          <li key={step.n} className="h-full">
+            <Reveal className="flex h-full flex-col" delay={0.15 + index * 0.12}>
+              <span
+                className="relative z-10 mb-5 grid h-11 w-11 place-items-center rounded-full border border-accent/50 bg-surface-dark font-mono text-[13px] font-medium text-ice shadow-[0_0_30px_-4px_rgba(61,143,224,.8)] lg:mx-auto"
+              >
+                {step.n}
+              </span>
+              <div className="glass card-spotlight flex-1 rounded-panel p-6">
+                <h3 className="mb-2 text-[17px] text-white">{step.title}</h3>
+                <p className="text-[14px] leading-relaxed text-mist-soft">{step.body}</p>
+              </div>
+            </Reveal>
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }
