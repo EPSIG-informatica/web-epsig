@@ -4,13 +4,25 @@ import Link from "@/components/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { primaryNav, site } from "@/lib/site";
 import { logicalPath } from "@/lib/i18n";
 import { useT } from "@/components/lang-provider";
 import LanguageSwitcher from "@/components/language-switcher";
 import logoWhite from "@/assets/logo-epsig-white.png";
 
-export default function Nav() {
+/** Enlace del menú ya traducido (lo prepara el layout en el servidor). */
+export type NavItem = {
+  label: string;
+  href: string;
+  highlight?: boolean;
+  external?: boolean;
+  children?: { label: string; href: string; description?: string }[];
+};
+
+/**
+ * Navegación. Recibe los enlaces ya traducidos en lugar de importar `src/lib/site.ts`: así ese
+ * archivo (todos los textos de la web en tres idiomas) no se descarga en el navegador.
+ */
+export default function Nav({ items, siteName }: { items: NavItem[]; siteName: string }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -67,13 +79,13 @@ export default function Nav() {
         <Link
           href="/"
           className="flex shrink-0 items-center"
-          aria-label={`${site.name} — ${t("Inicio", "Inici", "Home")}`}
+          aria-label={`${siteName} — ${t("Inicio", "Inici", "Home")}`}
         >
-          <Image src={logoWhite} alt={site.name} preload sizes="144px" className="h-8 w-auto shrink-0 sm:h-9" />
+          <Image src={logoWhite} alt={siteName} preload sizes="144px" className="h-8 w-auto shrink-0 sm:h-9" />
         </Link>
 
         <ul className="hidden items-center text-[13.5px] xl:flex">
-          {primaryNav.map((item, index) => (
+          {items.map((item, index) => (
             <li key={item.href} className="group relative">
               {item.external ? (
                 <a
@@ -82,7 +94,7 @@ export default function Nav() {
                   rel="noopener noreferrer"
                   className="block whitespace-nowrap rounded-full px-3.5 py-2 font-medium text-mist-soft transition-colors hover:bg-white/[0.06] hover:text-white"
                 >
-                  {t(item.label)} <span aria-hidden>↗</span>
+                  {item.label} <span aria-hidden>↗</span>
                   <span className="sr-only">{t(" (se abre en una pestaña nueva)", " (s'obri en una pestanya nova)", " (opens in a new tab)")}</span>
                 </a>
               ) : (
@@ -93,7 +105,7 @@ export default function Nav() {
                     isActive(item.href) ? "bg-white/[0.08] text-white" : "text-mist-soft"
                   }`}
                 >
-                  {t(item.label)}
+                  {item.label}
                   {item.children && (
                     <svg
                       viewBox="0 0 10 6"
@@ -124,7 +136,7 @@ export default function Nav() {
                         className="group/item block rounded-2xl px-4 py-3 transition-colors hover:bg-white/[0.06]"
                       >
                         <span className="flex items-center justify-between gap-3 text-[13.5px] font-semibold text-white">
-                          {t(child.label)}
+                          {child.label}
                           <span
                             aria-hidden
                             className="text-accent opacity-0 transition-all duration-300 group-hover/item:translate-x-0.5 group-hover/item:opacity-100"
@@ -133,7 +145,7 @@ export default function Nav() {
                           </span>
                         </span>
                         {child.description && (
-                          <span className="mt-0.5 block text-xs text-mist-faint">{t(child.description)}</span>
+                          <span className="mt-0.5 block text-xs text-mist-faint">{child.description}</span>
                         )}
                       </Link>
                     ))}
@@ -190,7 +202,7 @@ export default function Nav() {
         >
           <div className="max-h-[calc(100dvh-96px)] overflow-y-auto px-4 py-4">
             <ul className="flex flex-col gap-0.5 text-[16px]">
-              {primaryNav.map((item, i) => (
+              {items.map((item, i) => (
                 <li key={item.href} className="menu-item-in" style={{ "--i": i } as React.CSSProperties}>
                   {item.external ? (
                     <a
@@ -200,7 +212,7 @@ export default function Nav() {
                       onClick={() => setOpen(false)}
                       className="block rounded-xl px-3 py-2.5 font-medium text-mist-soft"
                     >
-                      {t(item.label)} <span aria-hidden>↗</span>
+                      {item.label} <span aria-hidden>↗</span>
                       <span className="sr-only">{t(" (se abre en una pestaña nueva)", " (s'obri en una pestanya nova)", " (opens in a new tab)")}</span>
                     </a>
                   ) : (
@@ -212,7 +224,7 @@ export default function Nav() {
                         isActive(item.href) ? "bg-white/[0.07] text-white" : "text-mist"
                       }`}
                     >
-                      {t(item.label)}
+                      {item.label}
                     </Link>
                   )}
                   {item.children && (
@@ -224,7 +236,7 @@ export default function Nav() {
                             onClick={() => setOpen(false)}
                             className="block rounded-lg px-2 py-1.5 text-sm text-mist-faint transition-colors hover:text-white"
                           >
-                            {t(child.label)}
+                            {child.label}
                           </Link>
                         </li>
                       ))}

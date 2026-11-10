@@ -50,13 +50,7 @@
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  /* Retraso de las entradas de la cabecera: crece cuando se muestra la intro. */
-  --intro: 0ms;
   --nav-h: 76px;
-}
-
-html.intro {
-  --intro: 1500ms;
 }
 
 @theme inline {
@@ -100,7 +94,7 @@ html.intro {
 
   --font-display: var(--font-space-grotesk), sans-serif;
   --font-sans: var(--font-inter), sans-serif;
-  --font-mono: var(--font-jetbrains-mono), monospace;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", "Cascadia Mono", Consolas, monospace;
 }
 
 html {
@@ -142,86 +136,6 @@ h3,
 @media (min-width: 40rem) {
   #contenido > :first-child {
     padding-top: calc(var(--nav-h) + 4.5rem);
-  }
-}
-
-/* ==========================================================================
-   Intro (preloader): solo la primera visita de la sesión. Puro CSS: se oculta
-   sola aunque falle JavaScript.
-   ========================================================================== */
-.intro-screen {
-  display: none;
-}
-html.intro .intro-screen {
-  display: grid;
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  place-items: center;
-  background: radial-gradient(ellipse 70% 60% at 50% 50%, #0b1a33, var(--color-night) 70%);
-  animation: intro-out 0.75s var(--ease-in-out) 1.25s forwards;
-  pointer-events: none;
-}
-@keyframes intro-out {
-  to {
-    clip-path: inset(0 0 100% 0);
-    visibility: hidden;
-  }
-}
-.intro-screen .intro-ring {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: intro-draw 0.7s var(--ease-out) 0.1s forwards;
-}
-.intro-screen .intro-e {
-  opacity: 0;
-  transform: scale(0.6) rotate(-40deg);
-  transform-origin: 50% 50%;
-  transform-box: fill-box;
-  animation: intro-e 0.55s var(--ease-out) 0.45s forwards;
-}
-.intro-screen .intro-mark {
-  animation: intro-mark 0.5s var(--ease-in-out) 0.85s forwards;
-}
-.intro-screen .intro-logo {
-  opacity: 0;
-  clip-path: inset(0 100% 0 0);
-  animation: intro-logo 0.55s var(--ease-out) 0.9s forwards;
-}
-.intro-screen .intro-glow {
-  animation: intro-glow 1.4s ease-out forwards;
-}
-@keyframes intro-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes intro-e {
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@keyframes intro-mark {
-  to {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-}
-@keyframes intro-logo {
-  to {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-  }
-}
-@keyframes intro-glow {
-  from {
-    opacity: 0;
-    transform: scale(0.4);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
   }
 }
 
@@ -308,10 +222,12 @@ html.intro .intro-screen {
   transform: none;
 }
 
-/* Entrada de las cabeceras: por tiempo (no por scroll), tras la intro si la hay. */
+/* Entrada de las cabeceras: por tiempo (no por scroll), al cargar. */
+/* Parte de una opacidad mínima (no 0): así el navegador cuenta el contenido como pintado
+   desde el primer fotograma y no penaliza la velocidad de carga (LCP). */
 @keyframes rise-in {
   from {
-    opacity: 0;
+    opacity: 0.02;
     filter: blur(10px);
     transform: translate3d(0, 24px, 0);
   }
@@ -323,13 +239,25 @@ html.intro .intro-screen {
 }
 .hero-in {
   animation: rise-in 1s var(--ease-out) both;
-  animation-delay: calc(var(--intro) + var(--d, 0ms));
+  animation-delay: var(--d, 0ms);
+}
+/* El titular principal es el elemento más grande de cada cabecera (LCP): entra sin desenfoque y
+   sin partir de opacidad 0, para que el navegador lo cuente como pintado desde el primer momento. */
+@keyframes word-in {
+  from {
+    opacity: 0.02;
+    transform: translate3d(0, 0.45em, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 .hero-split .w {
   display: inline-block;
   white-space: nowrap;
-  animation: rise-in 1s var(--ease-out) both;
-  animation-delay: calc(var(--intro) + var(--d, 0ms) + var(--i, 0) * 60ms);
+  animation: word-in 0.9s var(--ease-out) both;
+  animation-delay: calc(var(--d, 0ms) + var(--i, 0) * 55ms);
 }
 
 /* ==========================================================================
@@ -364,7 +292,7 @@ html.intro .intro-screen {
   animation:
     beam-in 1.6s var(--ease-out) both,
     beam-breathe 7s ease-in-out infinite;
-  animation-delay: calc(var(--intro) + 0.1s), calc(var(--intro) + 1.7s);
+  animation-delay: 0.1s, 1.7s;
   mix-blend-mode: screen;
 }
 .beam--thin {
@@ -372,7 +300,7 @@ html.intro .intro-screen {
   right: 22%;
   filter: blur(10px);
   opacity: 0.55;
-  animation-delay: calc(var(--intro) + 0.3s), calc(var(--intro) + 2.4s);
+  animation-delay: 0.3s, 2.4s;
 }
 @keyframes beam-in {
   from {
@@ -423,7 +351,7 @@ html.intro .intro-screen {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
   animation: trace-draw 1.6s var(--ease-out) forwards;
-  animation-delay: calc(var(--intro) + var(--td, 0s));
+  animation-delay: var(--td, 0s);
 }
 @keyframes trace-draw {
   to {
@@ -904,7 +832,7 @@ html.intro .intro-screen {
 }
 .site-nav {
   animation: nav-in 0.9s var(--ease-out) backwards;
-  animation-delay: var(--intro);
+  animation-delay: 0s;
 }
 
 /* El menú móvil entra con las opciones escalonadas. */
@@ -947,9 +875,6 @@ html:not(.js) .cta-glow {
     opacity: 1;
     filter: none;
     transform: none;
-  }
-  html.intro .intro-screen {
-    display: none;
   }
 }
 
@@ -1051,4 +976,42 @@ html:not(.js) .cta-glow {
 .prose-epsig > h2:first-child,
 .prose-epsig > :first-child {
   margin-top: 0;
+}
+
+/* ==========================================================================
+   Rendimiento
+   ========================================================================== */
+/* Secciones fuera de pantalla: el navegador no las procesa hasta que se acercan. */
+#contenido > section:not(:first-child),
+#contenido > div > section,
+footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+/* Animaciones continuas pausadas mientras su sección no está en pantalla (`Motion`). */
+.anim-paused *,
+.anim-paused *::before,
+.anim-paused *::after {
+  animation-play-state: paused !important;
+}
+/* Móviles y tabletas: sin desenfoques animados ni brillos que obligan a repintar cada fotograma;
+   se mantienen los desplazamientos y fundidos, que van por la tarjeta gráfica. */
+@media (max-width: 1023px), (hover: none) {
+  .js [data-reveal],
+  .js .split .w,
+  .js .auto-reveal,
+  .hero-in {
+    filter: none !important;
+  }
+  .text-shine {
+    animation: none;
+    background-position: 30% 0;
+  }
+  .trace-pulse,
+  svg [style*="drop-shadow"] {
+    filter: none !important;
+  }
+  .float {
+    animation: none;
+  }
 }

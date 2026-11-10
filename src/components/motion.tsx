@@ -59,6 +59,22 @@ export default function Motion() {
       if (reduced) return;
       const limit = window.innerHeight;
       const perParent = new Map<Element, number>();
+      // Se mide la sección (no cada elemento): las secciones lejanas no se procesan hasta que
+      // se acercan (`content-visibility`) y medir su contenido obligaría a hacerlo de golpe.
+      const blockTop = new Map<Element, number>();
+      const isBelow = (el: HTMLElement) => {
+        const block = el.closest("#contenido > *, #contenido > div > section");
+        if (block) {
+          let top = blockTop.get(block);
+          if (top === undefined) {
+            top = block.getBoundingClientRect().top;
+            blockTop.set(block, top);
+          }
+          if (top >= limit) return true;
+        }
+        const rect = el.getBoundingClientRect();
+        return rect.top >= limit && rect.height > 0;
+      };
       document.querySelectorAll<HTMLElement>(AUTO_SELECTOR).forEach((el) => {
         if (autoSeen.has(el)) return;
         autoSeen.add(el);
@@ -70,8 +86,7 @@ export default function Motion() {
         // elementos (rejillas, listas, textos), estos entran en cascada uno tras otro.
         const parent0 = el.parentElement;
         if (parent0?.matches("[data-reveal]") && parent0.children.length === 1) return;
-        const rect = el.getBoundingClientRect();
-        if (rect.top < limit || rect.height === 0) return;
+        if (!isBelow(el)) return;
         const parent = el.parentElement ?? document.body;
         const i = perParent.get(parent) ?? 0;
         perParent.set(parent, i + 1);
@@ -82,6 +97,15 @@ export default function Motion() {
       });
     }
 
+    // ---- Animaciones continuas (pulsos, brillos, flotación...) pausadas fuera de pantalla.
+    const pauseSeen = new WeakSet<Element>();
+    const pauseIo = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) entry.target.classList.toggle("anim-paused", !entry.isIntersecting);
+      },
+      { rootMargin: "200px 0px" },
+    );
+
     const progressEls = new Set<HTMLElement>();
     function scan() {
       document.querySelectorAll(SELECTOR).forEach((el) => {
@@ -91,6 +115,11 @@ export default function Motion() {
         else io.observe(el);
       });
       autoTag();
+      document.querySelectorAll("#contenido > *, footer").forEach((el) => {
+        if (pauseSeen.has(el)) return;
+        pauseSeen.add(el);
+        pauseIo.observe(el);
+      });
       document.querySelectorAll<HTMLElement>("[data-scroll-progress]").forEach((el) => progressEls.add(el));
     }
     scan();
@@ -153,6 +182,7 @@ export default function Motion() {
 
     return () => {
       io.disconnect();
+      pauseIo.disconnect();
       mo.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);

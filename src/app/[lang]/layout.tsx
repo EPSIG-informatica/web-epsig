@@ -13,8 +13,8 @@ import StructuredData from "@/components/structured-data";
 import CardEffects from "@/components/card-effects";
 import LangProvider from "@/components/lang-provider";
 import Motion from "@/components/motion";
-import Intro, { introScript } from "@/components/intro";
-import { site } from "@/lib/site";
+import { jsFlagScript } from "@/components/js-flag";
+import { primaryNav, site } from "@/lib/site";
 import { isLocale, locales, translator } from "@/lib/i18n";
 
 // Fuentes variables: un único archivo por familia en lugar de uno por grosor.
@@ -30,11 +30,12 @@ const inter = Inter({
   display: "swap",
 });
 
-// Solo para etiquetas y precios: no se precarga para no competir con lo principal.
+// Solo para etiquetas y precios: no se precarga para no competir con lo principal, y con
+// "optional" se usa solo si llega a tiempo (si no, la monoespaciada del sistema, sin repintar).
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
-  display: "swap",
+  display: "optional",
   preload: false,
 });
 
@@ -78,11 +79,10 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="flex min-h-screen flex-col bg-surface text-ink">
-        {/* Antes de pintar: activa las animaciones y decide si se muestra la intro. */}
-        <Script id="epsig-intro" strategy="beforeInteractive">
-          {introScript}
+        {/* Antes de pintar: activa las animaciones de entrada. */}
+        <Script id="epsig-js" strategy="beforeInteractive">
+          {jsFlagScript}
         </Script>
-        <Intro />
         <LangProvider lang={lang}>
           <a
             href="#contenido"
@@ -91,7 +91,20 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
             {t("Saltar al contenido", "Salta al contingut", "Skip to content")}
           </a>
           <ScrollProgress />
-          <Nav />
+          <Nav
+            siteName={site.name}
+            items={primaryNav.map((item) => ({
+              label: t(item.label),
+              href: item.href,
+              highlight: item.highlight,
+              external: item.external,
+              children: item.children?.map((child) => ({
+                label: t(child.label),
+                href: child.href,
+                description: child.description ? t(child.description) : undefined,
+              })),
+            }))}
+          />
           <main id="contenido" className="flex-1">
             {children}
           </main>

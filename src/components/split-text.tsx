@@ -8,7 +8,7 @@ const OFFSETS = [0, 1.4, 0.4, 2, 0.8, 1.6, 0.2, 1.1];
 /**
  * Titular que aparece palabra a palabra, con desenfoque y desplazamiento.
  * - `trigger="view"` (por defecto): se anima al entrar en pantalla (`Motion` añade `.is-in`).
- * - `trigger="load"`: se anima al cargar (cabeceras), tras la intro si se muestra.
+ * - `trigger="load"`: se anima al cargar (cabeceras).
  * El texto sigue siendo texto normal para buscadores y lectores de pantalla.
  */
 export default function SplitText({
