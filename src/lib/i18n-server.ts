@@ -66,9 +66,18 @@ export async function pageMetadata(
       locale: ogLocales[current],
       alternateLocale: locales.filter((locale) => locale !== current).map((locale) => ogLocales[locale]),
       type: "website",
-      // `app/opengraph-image.png` queda por encima del layout raíz (`app/[lang]`), así que Next no
-      // la añade sola: se enlaza aquí.
-      images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: site.name }],
+      // Imagen al compartir en redes y WhatsApp (public/compartir/). JPG ligero (<300 KB, límite
+      // de WhatsApp). Si se cambia, conviene cambiar también el nombre: las redes guardan en
+      // caché la vista previa por dirección.
+      images: [
+        {
+          url: "/compartir/epsig-consultores.jpg",
+          width: 1200,
+          height: 630,
+          type: "image/jpeg",
+          alt: `${site.name} — Odoo, consultoría, digitalización y ciberseguridad`,
+        },
+      ],
     },
     ...rest,
   };
