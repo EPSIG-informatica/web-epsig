@@ -13,7 +13,7 @@ export default async function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/[0.06] bg-night pt-20 text-mist-soft">
+    <footer className="relative overflow-hidden border-t border-white/[0.06] bg-night pt-20 pb-10 text-mist-soft">
       <div
         className="pointer-events-none absolute -top-64 right-[-10%] h-[560px] w-[760px] rounded-full"
         style={{ background: "radial-gradient(ellipse, rgba(42,107,165,.28), transparent 65%)" }}
@@ -119,18 +119,6 @@ export default async function Footer() {
             <CookieSettingsButton className="hover:text-white" />
           </div>
         </div>
-      </div>
-      {/* Marca gigante que asoma al final de la página */}
-      <div
-        data-reveal="up"
-        className="pointer-events-none relative mt-10 select-none overflow-hidden text-center font-display text-[27vw] leading-[0.78] font-bold tracking-[-0.06em] lg:text-[300px]"
-        aria-hidden
-      >
-        <span
-          className="block translate-y-[18%] bg-gradient-to-b from-white/[0.14] via-white/[0.05] to-transparent bg-clip-text text-transparent"
-        >
-          EPSIG
-        </span>
       </div>
     </footer>
   );
