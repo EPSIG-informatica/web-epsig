@@ -100,6 +100,13 @@ export default async function PoliticaDePrivacidadPage() {
                 "We also measure visits to the website in aggregate form using Plausible Analytics, installed on our own server (analitica.epsigconsultores.com). It does not use cookies, does not store your IP address or any identifier and cannot be used to recognise you: we only obtain overall statistics, such as the most visited pages, the referring website, the country or the type of device. This data is not disclosed to anyone.",
               )}
             </p>
+            <p className="mt-3">
+              {t(
+                "Para proteger el formulario de contacto frente al spam y los envíos automáticos usamos Google reCAPTCHA. En la página de contacto, la casilla «No soy un robot» de reCAPTCHA recoge datos técnicos de tu visita (dirección IP, navegador, dispositivo e interacción con la página) para comprobar que lo envía una persona y, si hace falta, te pide resolver una prueba. Ese análisis solo se usa para aceptar o rechazar el envío.",
+                "Per a protegir el formulari de contacte davant del correu brossa i els enviaments automàtics usem Google reCAPTCHA. En la pàgina de contacte, la casella «No sóc un robot» de reCAPTCHA recull dades tècniques de la teua visita (adreça IP, navegador, dispositiu i interacció amb la pàgina) per a comprovar que l'envia una persona i, si cal, et demana resoldre una prova. Eixa anàlisi només s'usa per a acceptar o rebutjar l'enviament.",
+                "To protect the contact form against spam and automated submissions we use Google reCAPTCHA. On the contact page, the reCAPTCHA “I'm not a robot” box collects technical data about your visit (IP address, browser, device and interaction with the page) to check that the form is being sent by a person and, if necessary, asks you to complete a challenge. This analysis is only used to accept or reject the submission.",
+              )}
+            </p>
 
             <h2 id={sections[2].id}>{sections[2].label}</h2>
             <p>
@@ -114,6 +121,13 @@ export default async function PoliticaDePrivacidadPage() {
                 "Las estadísticas de visitas se basan en nuestro interés legítimo en conocer cómo se usa la web para mejorarla (artículo 6.1.f del RGPD). Al no utilizar cookies ni datos que te identifiquen, no requieren tu consentimiento.",
                 "Les estadístiques de visites es basen en el nostre interés legítim a conéixer com s'usa la web per a millorar-la (article 6.1.f del RGPD). Com que no utilitzen cookies ni dades que t'identifiquen, no requerixen el teu consentiment.",
                 "Visit statistics are based on our legitimate interest in understanding how the website is used in order to improve it (Article 6(1)(f) GDPR). As they do not use cookies or any data that identifies you, they do not require your consent.",
+              )}
+            </p>
+            <p className="mt-3">
+              {t(
+                "La protección del formulario con reCAPTCHA se basa en nuestro interés legítimo en mantener la seguridad de la web y evitar el spam (artículo 6.1.f del RGPD).",
+                "La protecció del formulari amb reCAPTCHA es basa en el nostre interés legítim a mantindre la seguretat de la web i evitar el correu brossa (article 6.1.f del RGPD).",
+                "Protecting the form with reCAPTCHA is based on our legitimate interest in keeping the website secure and preventing spam (Article 6(1)(f) GDPR).",
               )}
             </p>
 
@@ -172,6 +186,13 @@ export default async function PoliticaDePrivacidadPage() {
                   "Cloudflare, para la seguridad y la distribución del sitio web.",
                   "Cloudflare, per a la seguretat i la distribució del lloc web.",
                   "Cloudflare, for website security and content delivery.",
+                )}
+              </li>
+              <li>
+                {t(
+                  "Google (reCAPTCHA), para proteger el formulario de contacto frente a bots y spam.",
+                  "Google (reCAPTCHA), per a protegir el formulari de contacte davant de bots i correu brossa.",
+                  "Google (reCAPTCHA), to protect the contact form against bots and spam.",
                 )}
               </li>
             </ul>

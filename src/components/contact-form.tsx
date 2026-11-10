@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { contactInterests, site } from "@/lib/site";
 import { originForSubmit } from "@/lib/attribution";
 import { trackEvent } from "@/lib/analytics";
+import RecaptchaCheckbox, { recaptchaEnabled } from "@/components/recaptcha-checkbox";
 import { useLang, useT } from "@/components/lang-provider";
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -14,6 +15,8 @@ export default function ContactForm() {
   const lang = useLang();
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  // Al cambiar, se vacía la casilla de reCAPTCHA (cada respuesta de Google vale para un envío).
+  const [captchaReset, setCaptchaReset] = useState(0);
   const successRef = useRef<HTMLHeadingElement>(null);
   // Momento en que se carga el formulario (trampa de tiempo anti-bots).
   const startedAt = useRef<number | null>(null);
@@ -28,10 +31,23 @@ export default function ContactForm() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
+
+    // Casilla "No soy un robot" sin marcar: se avisa sin llamar al servidor.
+    if (recaptchaEnabled() && !new FormData(form).get("g-recaptcha-response")) {
+      setStatus("error");
+      setErrorMsg(
+        t(
+          "Marca la casilla «No soy un robot» antes de enviar el formulario.",
+          "Marca la casella «No sóc un robot» abans d'enviar el formulari.",
+          "Please tick the “I'm not a robot” box before sending the form.",
+        ),
+      );
+      return;
+    }
+
     setStatus("loading");
     setErrorMsg("");
-
-    const form = event.currentTarget;
     const data = {
       ...Object.fromEntries(new FormData(form).entries()),
       elapsed: startedAt.current ? Date.now() - startedAt.current : 0,
@@ -62,6 +78,7 @@ export default function ContactForm() {
       form.reset();
     } catch (err) {
       setStatus("error");
+      setCaptchaReset((n) => n + 1);
       setErrorMsg(err instanceof Error ? err.message : t("Ha ocurrido un error inesperado.", "Hi ha hagut un error inesperat.", "An unexpected error occurred."));
     }
   }
@@ -155,6 +172,8 @@ export default function ContactForm() {
           .<RequiredMark />
         </span>
       </label>
+
+      <RecaptchaCheckbox lang={lang} resetKey={captchaReset} />
 
       {/* Siempre presente para que los lectores de pantalla anuncien el error. */}
       <p role="alert" className="text-sm font-medium text-red-700 empty:hidden">
