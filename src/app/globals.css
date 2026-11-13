@@ -1015,3 +1015,18 @@ footer {
     animation: none;
   }
 }
+
+/* Portada: cabecera a pantalla completa en escritorio. Menos hueco arriba que el resto de
+   páginas y el circuito de Odoo escalado para caber entero en el espacio libre. */
+@media (min-width: 64rem) {
+  #contenido > .hero-home {
+    padding-top: calc(var(--nav-h) + 1.75rem);
+  }
+  .hero-circuit {
+    container-type: size;
+  }
+  .hero-circuit-fit {
+    /* Ancho máximo según el alto disponible (proporción del lienzo 1200 × 420). */
+    width: min(100%, 1200px, calc(100cqh * 1200 / 420));
+  }
+}

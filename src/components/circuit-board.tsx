@@ -115,10 +115,7 @@ export default async function CircuitBoard() {
       >
         <div className="relative grid h-full w-full place-items-center rounded-[14%] border border-accent/40 bg-gradient-to-b from-[#123058] to-[#0a1830] shadow-[0_0_0_1px_rgba(181,220,251,.08)_inset,0_0_60px_-6px_rgba(61,143,224,.7)]">
           <div className="absolute inset-[7%] rounded-[12%] border border-white/[0.07]" />
-          <div className="text-center leading-none">
-            <span className="block font-display text-[clamp(11px,2vw,24px)] font-bold tracking-tight text-white">Odoo</span>
-            <span className="mt-[0.3em] block font-mono text-[clamp(6px,0.9vw,10.5px)] tracking-[0.2em] text-mist-accent">ERP · EPSIG</span>
-          </div>
+          <span className="font-display text-[clamp(12px,2.3vw,28px)] leading-none font-bold tracking-tight text-white">Odoo</span>
         </div>
       </div>
 

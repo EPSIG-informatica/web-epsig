@@ -7,10 +7,12 @@ import { getT } from "@/lib/i18n-server";
 export default async function Hero() {
   const t = await getT();
   return (
-    <header className="relative overflow-hidden bg-surface-dark pb-10 text-white sm:pb-16">
+    // En pantallas grandes la cabecera ocupa exactamente la pantalla: texto arriba y el circuito
+    // de Odoo debajo, que se escala para caber entero en el espacio que queda (ver `.hero-home`).
+    <header className="hero-home relative overflow-hidden bg-surface-dark pb-10 text-white sm:pb-16 lg:flex lg:h-svh lg:min-h-[640px] lg:flex-col lg:pb-6">
       <HeroBackdrop />
 
-      <div className="relative mx-auto max-w-5xl px-6 text-center">
+      <div className="relative mx-auto max-w-5xl shrink-0 px-6 text-center">
         <div className="hero-in" style={{ "--d": "0ms" } as React.CSSProperties}>
           <span className="eyebrow eyebrow-dark">
             <span className="dot" aria-hidden />
@@ -22,7 +24,7 @@ export default async function Hero() {
           as="h1"
           trigger="load"
           delay={120}
-          className="mx-auto mt-7 max-w-[17ch] text-[40px] leading-[1.02] tracking-[-0.035em] text-white sm:text-[64px] lg:text-[76px]"
+          className="mx-auto mt-7 max-w-[17ch] text-[40px] leading-[1.02] tracking-[-0.035em] text-white sm:text-[64px] lg:mt-5 lg:max-w-[20ch] lg:text-[clamp(42px,6.6vh,68px)]"
           text={t(
             ["El sistema que ayuda a tu empresa a", { text: "funcionar mejor.", className: "text-shine" }],
             ["El sistema que ajuda la teua empresa a", { text: "funcionar millor.", className: "text-shine" }],
@@ -31,7 +33,7 @@ export default async function Hero() {
         />
 
         <p
-          className="hero-in mx-auto mt-7 max-w-[58ch] text-[16px] leading-relaxed text-mist-soft sm:text-[18px]"
+          className="hero-in mx-auto mt-7 max-w-[58ch] text-[16px] leading-relaxed text-mist-soft sm:text-[18px] lg:mt-4 lg:max-w-[70ch] lg:text-[17px]"
           style={{ "--d": "650ms" } as React.CSSProperties}
         >
           {t(
@@ -42,7 +44,7 @@ export default async function Hero() {
         </p>
 
         <div
-          className="hero-in mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row"
+          className="hero-in mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row lg:mt-6"
           style={{ "--d": "800ms" } as React.CSSProperties}
         >
           <Link href="/contacto#diagnostico" data-magnetic className="btn btn-primary">
@@ -57,8 +59,10 @@ export default async function Hero() {
         </div>
       </div>
 
-      <div className="relative mt-12 px-3 sm:mt-16 sm:px-6">
-        <CircuitBoard />
+      <div className="hero-circuit relative mt-12 px-3 sm:mt-16 sm:px-6 lg:mt-4 lg:flex lg:min-h-0 lg:flex-1 lg:items-center">
+        <div className="hero-circuit-fit mx-auto">
+          <CircuitBoard />
+        </div>
       </div>
     </header>
   );
