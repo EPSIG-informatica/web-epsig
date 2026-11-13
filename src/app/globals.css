@@ -1030,3 +1030,14 @@ footer {
     width: min(100%, 1200px, calc(100cqh * 1200 / 420));
   }
 }
+/* Barras de progreso de las pantallas de ejemplo de Odoo. */
+.explorer-grow {
+  transform-origin: left;
+  animation: explorer-grow 1s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 200ms);
+}
+@keyframes explorer-grow {
+  from {
+    transform: scaleX(0);
+  }
+}

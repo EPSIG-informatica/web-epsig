@@ -120,12 +120,12 @@ export default function Nav({ items, siteName }: { items: NavItem[]; siteName: s
 
               {item.children && (
                 <div
-                  className={`invisible absolute top-full z-50 pt-3 opacity-0 transition-all duration-300 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 ${
+                  className={`invisible absolute top-full z-50 pt-3 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 ${
                     index >= 3 ? "right-0" : "left-0"
                   } translate-y-2`}
                 >
                   <div
-                    className={`max-h-[70vh] overflow-y-auto rounded-[22px] border border-white/10 bg-surface-dark/95 p-2 shadow-[0_30px_60px_-24px_rgba(0,0,0,.8)] backdrop-blur-xl ${
+                    className={`max-h-[70vh] overflow-y-auto rounded-[22px] border border-white/10 bg-surface-dark p-2 shadow-[0_30px_60px_-24px_rgba(0,0,0,.8)] ${
                       item.children.length > 5 ? "grid w-[580px] grid-cols-2 gap-1" : "w-80"
                     }`}
                   >

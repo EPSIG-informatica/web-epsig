@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Icon, { moduleIcons } from "@/components/icons";
+import OdooScreen from "@/components/odoo-screens";
+import { useLang } from "@/components/lang-provider";
 
 type Module = { label: string; body: string };
 
@@ -118,105 +120,20 @@ export default function OdooExplorer({ modules, hint }: { modules: Module[]; hin
   );
 }
 
-// Vista simulada de cada módulo: kanban, líneas de pedido, gráfico o fichas.
+// Pantalla de ejemplo del módulo, con datos inventados (ver odoo-screens.tsx).
 function Screen({ index, label }: { index: number; label: string }) {
-  const kind = index % 4;
+  const lang = useLang();
   return (
-    <div className="pop-in rounded-[22px] border border-line bg-surface-alt p-4 shadow-[0_20px_50px_-36px_rgba(11,18,32,.5)]" aria-hidden>
+    <div className="pop-in rounded-[22px] border border-line bg-surface-alt p-3 shadow-[0_20px_50px_-36px_rgba(11,18,32,.5)] sm:p-4" aria-hidden>
       <div className="mb-3 flex items-center justify-between">
         <div className="flex gap-1.5">
-          <i className="h-2.5 w-2.5 rounded-full bg-[#e4e9f2]" />
-          <i className="h-2.5 w-2.5 rounded-full bg-[#e4e9f2]" />
-          <i className="h-2.5 w-2.5 rounded-full bg-[#e4e9f2]" />
+          <i className="h-2.5 w-2.5 rounded-full bg-[#ff8a80]/70" />
+          <i className="h-2.5 w-2.5 rounded-full bg-[#f5b14c]/70" />
+          <i className="h-2.5 w-2.5 rounded-full bg-[#3fb27f]/70" />
         </div>
         <span className="font-mono text-[10.5px] text-ink-faint">odoo / {label.toLowerCase()}</span>
       </div>
-
-      {kind === 0 && (
-        <div className="grid grid-cols-3 gap-2.5">
-          {[3, 2, 2].map((count, col) => (
-            <div key={col} className="rounded-xl bg-white p-2.5">
-              <div className="mb-2 h-1.5 w-12 rounded-full bg-primary/30" />
-              <div className="flex flex-col gap-2">
-                {Array.from({ length: count }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="explorer-item rounded-lg border border-line bg-white p-2"
-                    style={{ "--i": col * 3 + i } as React.CSSProperties}
-                  >
-                    <div className="h-1.5 w-[80%] rounded-full bg-ink/15" />
-                    <div className="mt-1.5 h-1.5 w-[50%] rounded-full bg-ink/10" />
-                    <div className="mt-2 flex items-center justify-between">
-                      <span className="h-3.5 w-3.5 rounded-full bg-primary-light/60" />
-                      <span className="h-1.5 w-8 rounded-full bg-accent/50" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {kind === 1 && (
-        <div className="rounded-xl bg-white p-3">
-          {[72, 54, 88, 40, 66].map((w, i) => (
-            <div
-              key={i}
-              className="explorer-item flex items-center gap-3 border-b border-line py-2.5 last:border-0"
-              style={{ "--i": i } as React.CSSProperties}
-            >
-              <span className="h-6 w-6 shrink-0 rounded-md bg-primary-pale" />
-              <span className="h-1.5 rounded-full bg-ink/15" style={{ width: `${w * 0.5}%` }} />
-              <span className="ml-auto h-1.5 w-10 rounded-full bg-ink/10" />
-              <span className="h-5 w-14 rounded-full bg-accent/20" />
-            </div>
-          ))}
-          <div className="mt-3 flex justify-end">
-            <span className="rounded-lg bg-ink px-3 py-1.5 font-mono text-[10.5px] text-white">Σ 12.480,00 €</span>
-          </div>
-        </div>
-      )}
-
-      {kind === 2 && (
-        <div className="rounded-xl bg-white p-4">
-          <div className="flex h-40 items-end gap-2">
-            {[30, 46, 38, 60, 52, 74, 66, 90, 80].map((h, i) => (
-              <span
-                key={i}
-                className="explorer-bar flex-1 rounded-t-md bg-gradient-to-t from-primary to-accent"
-                style={{ height: `${h}%`, "--i": i } as React.CSSProperties}
-              />
-            ))}
-          </div>
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {["+18%", "1.204", "98%"].map((v, i) => (
-              <div key={v} className="explorer-item rounded-lg bg-surface-alt p-2 text-center" style={{ "--i": 9 + i } as React.CSSProperties}>
-                <span className="font-mono text-[12px] font-semibold text-ink">{v}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {kind === 3 && (
-        <div className="grid grid-cols-2 gap-2.5">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="explorer-item flex items-center gap-2.5 rounded-xl bg-white p-3"
-              style={{ "--i": i } as React.CSSProperties}
-            >
-              <span className={`h-9 w-9 shrink-0 rounded-full ${i % 3 === 0 ? "bg-primary/25" : i % 3 === 1 ? "bg-accent/30" : "bg-primary-pale"}`} />
-              <span className="flex-1">
-                <span className="block h-1.5 w-[80%] rounded-full bg-ink/15" />
-                <span className="mt-1.5 block h-1.5 w-[50%] rounded-full bg-ink/10" />
-              </span>
-              <span className={`h-2 w-2 rounded-full ${i === 2 ? "bg-[#f5b14c]" : "bg-accent"}`} />
-            </div>
-          ))}
-        </div>
-      )}
+      <OdooScreen index={index} lang={lang} />
     </div>
   );
 }
