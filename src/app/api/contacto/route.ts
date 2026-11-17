@@ -95,13 +95,29 @@ function looksLikeBot(data: Record<string, unknown>, fromScript: boolean) {
   return !Number.isFinite(elapsed) || elapsed < MIN_FILL_MS;
 }
 
+// Quita caracteres de control (y, salvo que se permitan, los saltos de línea) del texto libre.
+function clean(value: unknown, keepNewlines = false) {
+  if (typeof value !== "string") return "";
+  const text = keepNewlines
+    ? value.replace(/\r\n?/g, "\n").replace(/[\u0000-\u0009\u000B-\u001F\u007F\u2028\u2029]/g, "")
+    : value.replace(/[\u0000-\u001F\u007F\u2028\u2029]+/g, " ");
+  return text.trim();
+}
+
 function optionalField(value: unknown, max: number) {
-  if (typeof value !== "string") return undefined;
-  const trimmed = value.trim();
+  const trimmed = clean(value);
   return trimmed ? trimmed.slice(0, max) : undefined;
 }
 
+// Teléfono: solo dígitos, espacios y + ( ) . - ; con al menos 6 dígitos.
+const phonePattern = /^[+()0-9 .-]+$/;
+
 const ORIGIN_FIELDS = ["source", "medium", "campaign", "term", "content", "gclid", "referrer", "landing", "firstVisit", "formPage"] as const;
+// Estos tres crean registros en Odoo (utm.source / utm.medium / utm.campaign) si no existen:
+// solo se aceptan valores cortos y con caracteres habituales en UTMs, para que nadie pueda
+// llenar el CRM de registros basura con texto arbitrario.
+const UTM_RECORD_FIELDS = new Set<string>(["source", "medium", "campaign"]);
+const utmPattern = /^[\p{L}\p{N} ._+:/-]{1,80}$/u;
 
 // Origen de la visita enviado por el formulario: solo cadenas cortas de los campos conocidos.
 function parseOrigin(value: unknown): LeadOrigin {
@@ -109,8 +125,10 @@ function parseOrigin(value: unknown): LeadOrigin {
   const data = value as Record<string, unknown>;
   const origin: LeadOrigin = {};
   for (const field of ORIGIN_FIELDS) {
-    const v = data[field];
-    if (typeof v === "string" && v.trim()) origin[field] = v.trim().replace(/[\r\n]+/g, " ").slice(0, 300);
+    const v = clean(data[field]).slice(0, 300);
+    if (!v) continue;
+    if (UTM_RECORD_FIELDS.has(field) && !utmPattern.test(v)) continue;
+    origin[field] = v;
   }
   return origin;
 }
@@ -120,9 +138,9 @@ function parseRequest(body: unknown, t: Translate): ContactRequest | string {
   if (!body || typeof body !== "object") return missing;
   const data = body as Record<string, unknown>;
 
-  const name = typeof data.name === "string" ? data.name.trim() : "";
-  const email = typeof data.email === "string" ? data.email.trim() : "";
-  const message = typeof data.message === "string" ? data.message.trim() : "";
+  const name = clean(data.name);
+  const email = clean(data.email);
+  const message = clean(data.message, true);
 
   if (!name || !email || !message) return missing;
   if (data.privacy !== "on" && data.privacy !== true) {
@@ -137,11 +155,16 @@ function parseRequest(body: unknown, t: Translate): ContactRequest | string {
   }
   if (!emailPattern.test(email)) return t("El correo electrónico no es válido.", "El correu electrònic no és vàlid.", "The email address is not valid.");
 
+  const phone = optionalField(data.phone, limits.phone);
+  if (phone && (!phonePattern.test(phone) || phone.replace(/\D/g, "").length < 6)) {
+    return t("El teléfono no es válido.", "El telèfon no és vàlid.", "The phone number is not valid.");
+  }
+
   return {
     name,
     email,
     message,
-    phone: optionalField(data.phone, limits.phone),
+    phone,
     company: optionalField(data.company, limits.company),
     // Solo una de las opciones del desplegable; cualquier otro valor se ignora.
     interest: contactInterests.find((interest) => interest.id === data.interest)?.label.es,
