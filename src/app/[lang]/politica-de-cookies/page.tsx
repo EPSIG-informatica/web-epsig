@@ -3,6 +3,7 @@ import PageHero from "@/components/page-hero";
 import Link from "@/components/link";
 import CookieSettingsButton from "@/components/cookie-settings-button";
 import { site } from "@/lib/site";
+import { gtmId } from "@/lib/google-tag";
 import type { Localized, Translate } from "@/lib/i18n";
 import { getT, pageMetadata } from "@/lib/i18n-server";
 
@@ -96,7 +97,7 @@ const marketingCookies: CookieRow[] = [
 ];
 
 // La tabla de analítica solo aparece cuando Google Analytics está configurado.
-const analyticsEnabled = Boolean(process.env.NEXT_PUBLIC_GA_ID);
+const analyticsEnabled = Boolean(process.env.NEXT_PUBLIC_GA_ID) || Boolean(gtmId);
 
 export default async function PoliticaDeCookiesPage() {
   const t = await getT();
@@ -214,6 +215,15 @@ export default async function PoliticaDeCookiesPage() {
                   )}
                 </h3>
                 <CookieTable rows={analyticsCookies} t={t} />
+                {gtmId && (
+                  <p className="mt-3">
+                    {t(
+                      "Usamos Google Tag Manager para gestionar las etiquetas de medición. Solo se carga si aceptas las cookies analíticas o de marketing, y las etiquetas que active respetan tu elección. Las cookies que instale cada etiqueta dependen de su configuración y se limitan a las categorías que hayas aceptado.",
+                      "Usem Google Tag Manager per a gestionar les etiquetes de mesurament. Només es carrega si acceptes les cookies analítiques o de màrqueting, i les etiquetes que active respecten la teua elecció. Les cookies que instal·le cada etiqueta depenen de la seua configuració i es limiten a les categories que hages acceptat.",
+                      "We use Google Tag Manager to manage measurement tags. It is only loaded if you accept analytics or marketing cookies, and the tags it activates respect your choice. The cookies each tag installs depend on its configuration and are limited to the categories you have accepted.",
+                    )}
+                  </p>
+                )}
                 <p className="mt-3">
                   {t(
                     "Google Analytics puede implicar transferencias internacionales de datos a Estados Unidos, amparadas en el Marco de Privacidad de Datos UE-EE. UU. Más información en la ",

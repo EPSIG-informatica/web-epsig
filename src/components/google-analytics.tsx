@@ -4,21 +4,14 @@ import { useEffect } from "react";
 import Script from "next/script";
 import { useConsent, type Consent } from "@/lib/consent";
 import { trackEvent } from "@/lib/analytics";
+import { advancedConsentMode, gtmId } from "@/lib/google-tag";
 
 // Solo se acepta un ID de medición válido (G-XXXXXXX), ya que se inserta en la URL del script.
 const rawGaId = process.env.NEXT_PUBLIC_GA_ID?.trim();
 const gaId = rawGaId && /^G-[A-Z0-9]+$/.test(rawGaId) ? rawGaId : undefined;
 
-// Consent Mode v2 de Google, en uno de sus dos modos:
-// - Básico (por defecto): GA no se carga hasta que se aceptan las cookies analíticas.
-// - Avanzado (NEXT_PUBLIC_GA_CONSENT_MODE=advanced): GA se carga siempre, pero sin cookies ni
-//   identificadores hasta que se aceptan; mientras tanto envía avisos sin cookies que Google usa
-//   para estimar las visitas y conversiones de quien no acepta. Antes de activarlo, revisa la
-//   política de cookies: GA recibe datos técnicos de la visita (IP, navegador) sin consentimiento.
-const advancedConsentMode = process.env.NEXT_PUBLIC_GA_CONSENT_MODE === "advanced";
-
 // Permisos de Consent Mode v2 según las categorías aceptadas en el banner de cookies.
-function consentState(consent: Consent | null) {
+export function consentState(consent: Consent | null) {
   const state = (granted: boolean | undefined) => (granted ? "granted" : "denied");
   return {
     analytics_storage: state(consent?.analytics),
@@ -46,7 +39,7 @@ function initGtag(id: string) {
 }
 
 // Clics en los teléfonos y correos de cualquier página (enlaces tel: y mailto:).
-function trackContactClick(event: MouseEvent) {
+export function trackContactClick(event: MouseEvent) {
   if (!(event.target instanceof Element)) return;
   const link = event.target.closest("a[href^='tel:'], a[href^='mailto:']");
   const href = link?.getAttribute("href");
@@ -58,10 +51,13 @@ function trackContactClick(event: MouseEvent) {
 }
 
 // Google Analytics 4 con Consent Mode v2 y eventos de contacto.
+// Si hay un contenedor de Tag Manager (NEXT_PUBLIC_GTM_ID), GA4 se configura dentro de Tag Manager
+// y este componente no carga gtag.js, para no contar cada visita dos veces.
 export default function GoogleAnalytics() {
   const consent = useConsent();
   // `consent` es `undefined` hasta leer la elección guardada en el navegador.
-  const enabled = Boolean(gaId) && consent !== undefined && (advancedConsentMode || Boolean(consent?.analytics));
+  const enabled =
+    Boolean(gaId) && !gtmId && consent !== undefined && (advancedConsentMode || Boolean(consent?.analytics));
 
   useEffect(() => {
     if (enabled) initGtag(gaId!)("consent", "update", consentState(consent ?? null));

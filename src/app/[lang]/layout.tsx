@@ -8,6 +8,7 @@ import Footer from "@/components/footer";
 import ScrollProgress from "@/components/scroll-progress";
 import CookieBanner from "@/components/cookie-banner";
 import GoogleAnalytics from "@/components/google-analytics";
+import GoogleTagManager from "@/components/google-tag-manager";
 import AttributionTracker from "@/components/attribution-tracker";
 import StructuredData from "@/components/structured-data";
 import CardEffects from "@/components/card-effects";
@@ -113,6 +114,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
           <CardEffects />
           <Motion />
           <GoogleAnalytics />
+          <GoogleTagManager />
           {/* Plausible (servidor propio): sin cookies ni datos personales, no necesita consentimiento. */}
           <Script
             defer
