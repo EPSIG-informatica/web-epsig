@@ -3,24 +3,20 @@
 import { useEffect } from "react";
 import Script from "next/script";
 import { useConsent } from "@/lib/consent";
-import { advancedConsentMode, gtmId } from "@/lib/google-tag";
-import { consentState, trackContactClick } from "@/components/google-analytics";
+import { advancedConsentMode, consentState, ensureGtag, gaId, gtmId } from "@/lib/google-tag";
+import { trackContactClick } from "@/components/google-analytics";
 
-// Prepara `dataLayer` y `gtag` una sola vez, con todo denegado por defecto antes de que Tag Manager
-// cargue ninguna etiqueta. Define `window.gtag` para que `trackEvent` siga enviando los eventos de
-// contacto (generate_lead, phone_click, email_click) al contenedor.
+let started = false;
+
+// Prepara `dataLayer` y `gtag` (con todo denegado por defecto) y marca el arranque del contenedor
+// antes de que Tag Manager cargue ninguna etiqueta. `window.gtag` hace que `trackEvent` siga
+// enviando los eventos de contacto (generate_lead, phone_click, email_click) al contenedor.
 function initDataLayer() {
-  if (window.gtag) return window.gtag;
-  const dataLayer = (window.dataLayer ??= []);
-  const gtag: NonNullable<Window["gtag"]> = function () {
-    // Tag Manager espera el objeto `arguments` tal cual, no un array.
-    // eslint-disable-next-line prefer-rest-params
-    dataLayer.push(arguments);
-  };
-  window.gtag = gtag;
-  gtag("consent", "default", { ...consentState(null), wait_for_update: 500 });
-  gtag("set", "ads_data_redaction", true);
-  dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
+  const gtag = ensureGtag();
+  if (!started) {
+    started = true;
+    window.dataLayer!.push({ "gtm.start": Date.now(), event: "gtm.js" });
+  }
   return gtag;
 }
 
@@ -39,8 +35,10 @@ export default function GoogleTagManager() {
     if (enabled) initDataLayer()("consent", "update", consentState(consent ?? null));
   }, [enabled, consent]);
 
+  // Los clics de contacto los registra el componente de Analytics si hay un ID de GA4 propio;
+  // aquí solo cuando no lo hay, para no enviar cada evento dos veces.
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || gaId) return;
     document.addEventListener("click", trackContactClick, { capture: true });
     return () => document.removeEventListener("click", trackContactClick, { capture: true });
   }, [enabled]);

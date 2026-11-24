@@ -2,39 +2,20 @@
 
 import { useEffect } from "react";
 import Script from "next/script";
-import { useConsent, type Consent } from "@/lib/consent";
+import { useConsent } from "@/lib/consent";
 import { trackEvent } from "@/lib/analytics";
-import { advancedConsentMode, gtmId } from "@/lib/google-tag";
+import { advancedConsentMode, consentState, ensureGtag, gaId } from "@/lib/google-tag";
 
-// Solo se acepta un ID de medición válido (G-XXXXXXX), ya que se inserta en la URL del script.
-const rawGaId = process.env.NEXT_PUBLIC_GA_ID?.trim();
-const gaId = rawGaId && /^G-[A-Z0-9]+$/.test(rawGaId) ? rawGaId : undefined;
+let configured = false;
 
-// Permisos de Consent Mode v2 según las categorías aceptadas en el banner de cookies.
-export function consentState(consent: Consent | null) {
-  const state = (granted: boolean | undefined) => (granted ? "granted" : "denied");
-  return {
-    analytics_storage: state(consent?.analytics),
-    ad_storage: state(consent?.marketing),
-    ad_user_data: state(consent?.marketing),
-    ad_personalization: state(consent?.marketing),
-  };
-}
-
-// Prepara `gtag` una sola vez, con todo denegado por defecto antes de cualquier medición.
+// Prepara `gtag` y configura la medición de la propiedad de GA4 una sola vez.
 function initGtag(id: string) {
-  if (window.gtag) return window.gtag;
-  const dataLayer = (window.dataLayer ??= []);
-  const gtag: NonNullable<Window["gtag"]> = function () {
-    // gtag.js espera el objeto `arguments` tal cual, no un array.
-    // eslint-disable-next-line prefer-rest-params
-    dataLayer.push(arguments);
-  };
-  window.gtag = gtag;
-  gtag("consent", "default", { ...consentState(null), wait_for_update: 500 });
-  gtag("set", "ads_data_redaction", true);
-  gtag("js", new Date());
-  gtag("config", id);
+  const gtag = ensureGtag();
+  if (!configured) {
+    configured = true;
+    gtag("js", new Date());
+    gtag("config", id);
+  }
   return gtag;
 }
 
@@ -50,14 +31,13 @@ export function trackContactClick(event: MouseEvent) {
   });
 }
 
-// Google Analytics 4 con Consent Mode v2 y eventos de contacto.
-// Si hay un contenedor de Tag Manager (NEXT_PUBLIC_GTM_ID), GA4 se configura dentro de Tag Manager
-// y este componente no carga gtag.js, para no contar cada visita dos veces.
+// Google Analytics 4 (NEXT_PUBLIC_GA_ID) con Consent Mode v2 y eventos de contacto.
+// Puede convivir con Tag Manager (NEXT_PUBLIC_GTM_ID); si ambos miden la misma propiedad de GA4,
+// cada visita se contaría dos veces: en ese caso deja solo uno de los dos.
 export default function GoogleAnalytics() {
   const consent = useConsent();
   // `consent` es `undefined` hasta leer la elección guardada en el navegador.
-  const enabled =
-    Boolean(gaId) && !gtmId && consent !== undefined && (advancedConsentMode || Boolean(consent?.analytics));
+  const enabled = Boolean(gaId) && consent !== undefined && (advancedConsentMode || Boolean(consent?.analytics));
 
   useEffect(() => {
     if (enabled) initGtag(gaId!)("consent", "update", consentState(consent ?? null));
