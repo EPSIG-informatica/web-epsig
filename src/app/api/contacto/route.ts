@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { sendContactConfirmation, sendContactEmail, type ContactRequest } from "@/lib/mailer";
 import { createLead, odooConfigured, type LeadOrigin } from "@/lib/odoo";
 import { clientIp, hit } from "@/lib/rate-limit";
-import { verifyRecaptcha } from "@/lib/recaptcha";
+import { verifyTurnstile } from "@/lib/turnstile";
 import { contactInterests, site } from "@/lib/site";
 import { defaultLocale, isLocale, localizePath, splitLocale, translator, type Locale, type Translate } from "@/lib/i18n";
 
@@ -29,9 +29,9 @@ const tooMany = (t: Translate) =>
   );
 const captchaMissing = (t: Translate) =>
   t(
-    "Marca la casilla «No soy un robot» antes de enviar el formulario.",
-    "Marca la casella «No sóc un robot» abans d'enviar el formulari.",
-    "Please tick the “I'm not a robot” box before sending the form.",
+    "Espera a que termine la verificación de seguridad antes de enviar el formulario.",
+    "Espera que acabe la verificació de seguretat abans d'enviar el formulari.",
+    "Please wait for the security check to finish before sending the form.",
   );
 const captchaFailed = (t: Translate) =>
   t(
@@ -234,10 +234,9 @@ export async function POST(request: Request) {
   const parsed = parseRequest(body, t);
   if (typeof parsed === "string") return reply(400, parsed);
 
-  // Google reCAPTCHA v2 (casilla): el formulario envía la respuesta en `captcha`, o en
-  // `g-recaptcha-response` si se envía sin JavaScript propio. Solo si está configurado.
+  // Cloudflare Turnstile: el widget envía el token en `cf-turnstile-response`. Solo si está configurado.
   const fields = body as Record<string, unknown>;
-  const captcha = await verifyRecaptcha(fields.captcha ?? fields["g-recaptcha-response"], clientIp(request));
+  const captcha = await verifyTurnstile(fields["cf-turnstile-response"] ?? fields.captcha, clientIp(request));
   if (!captcha.ok) return reply(400, captcha.reason === "missing" ? captchaMissing(t) : captchaFailed(t));
 
   if (!hit("notifications", NOTIFICATIONS_GLOBAL.limit, NOTIFICATIONS_GLOBAL.windowMs)) {

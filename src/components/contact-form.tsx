@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "@/components/link";
-import { useEffect, useRef, useState, type FormEvent } from "react";
-import { contactInterests, site } from "@/lib/site";
+import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from "react";
+import { contactInterestGroups, contactInterests, site } from "@/lib/site";
+import CustomSelect from "@/components/custom-select";
 import { originForSubmit } from "@/lib/attribution";
 import { trackEvent } from "@/lib/analytics";
-import RecaptchaCheckbox, { recaptchaEnabled } from "@/components/recaptcha-checkbox";
+import TurnstileWidget, { turnstileEnabled } from "@/components/turnstile-widget";
 import { useLang, useT } from "@/components/lang-provider";
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -15,8 +16,16 @@ export default function ContactForm() {
   const lang = useLang();
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
-  // Al cambiar, se vacía la casilla de reCAPTCHA (cada respuesta de Google vale para un envío).
+  // Al cambiar, se reinicia el widget de Turnstile (cada token vale para un envío).
   const [captchaReset, setCaptchaReset] = useState(0);
+  // Enlaces con la opción preseleccionada: /contacto/?interes=eset-advanced
+  const preset = useSyncExternalStore(
+    () => () => {},
+    () => new URLSearchParams(window.location.search).get("interes") ?? "",
+    () => "",
+  );
+  const [picked, setPicked] = useState<string | null>(null);
+  const interest = picked ?? (contactInterests.some((item) => item.id === preset) ? preset : "");
   const successRef = useRef<HTMLHeadingElement>(null);
   // Momento en que se carga el formulario (trampa de tiempo anti-bots).
   const startedAt = useRef<number | null>(null);
@@ -33,14 +42,14 @@ export default function ContactForm() {
     event.preventDefault();
     const form = event.currentTarget;
 
-    // Casilla "No soy un robot" sin marcar: se avisa sin llamar al servidor.
-    if (recaptchaEnabled() && !new FormData(form).get("g-recaptcha-response")) {
+    // Verificación de Cloudflare sin completar: se avisa sin llamar al servidor.
+    if (turnstileEnabled() && !new FormData(form).get("cf-turnstile-response")) {
       setStatus("error");
       setErrorMsg(
         t(
-          "Marca la casilla «No soy un robot» antes de enviar el formulario.",
-          "Marca la casella «No sóc un robot» abans d'enviar el formulari.",
-          "Please tick the “I'm not a robot” box before sending the form.",
+          "Espera a que termine la verificación de seguridad antes de enviar el formulario.",
+          "Espera que acabe la verificació de seguretat abans d'enviar el formulari.",
+          "Please wait for the security check to finish before sending the form.",
         ),
       );
       return;
@@ -127,21 +136,21 @@ export default function ContactForm() {
         <Field label={t("Teléfono", "Telèfon", "Phone")} name="phone" type="tel" autoComplete="tel" />
         <Field label={t("Empresa", "Empresa", "Company")} name="company" autoComplete="organization" />
       </div>
-      <label className="flex flex-col gap-1.5 text-sm font-medium text-ink">
-        <span>{t("¿Qué te interesa?", "Què t'interessa?", "What are you interested in?")}</span>
-        <select
+      <div className="flex flex-col gap-1.5 text-sm font-medium text-ink">
+        <span id="interest-label">{t("¿Qué te interesa?", "Què t'interessa?", "What are you interested in?")}</span>
+        <CustomSelect
           name="interest"
-          defaultValue=""
-          className="rounded-2xl border border-line bg-surface-alt/60 px-4 py-3.5 text-[15px] text-ink outline-none transition-all duration-300 placeholder:text-ink-faint hover:border-primary-light focus:border-primary focus:bg-white focus:shadow-[0_0_0_4px_rgba(90,169,230,.18)]"
-        >
-          <option value="">{t("Selecciona una opción", "Tria una opció", "Choose an option")}</option>
-          {contactInterests.map((interest) => (
-            <option key={interest.id} value={interest.id}>
-              {t(interest.label)}
-            </option>
-          ))}
-        </select>
-      </label>
+          labelledBy="interest-label"
+          placeholder={t("Selecciona una opción", "Tria una opció", "Choose an option")}
+          groups={contactInterestGroups.map((group) => ({
+            id: group.id,
+            label: t(group.label),
+            items: group.items.map((item) => ({ id: item.id, label: t(item.label) })),
+          }))}
+          value={interest}
+          onChange={setPicked}
+        />
+      </div>
       <label className="flex flex-col gap-1.5 text-sm font-medium text-ink">
         <span>
           {t("Cuéntanos qué necesitas", "Conta'ns què necessites", "Tell us what you need")}
@@ -173,7 +182,7 @@ export default function ContactForm() {
         </span>
       </label>
 
-      <RecaptchaCheckbox lang={lang} resetKey={captchaReset} />
+      <TurnstileWidget lang={lang} resetKey={captchaReset} />
 
       {/* Siempre presente para que los lectores de pantalla anuncien el error. */}
       <p role="alert" className="text-sm font-medium text-red-700 empty:hidden">

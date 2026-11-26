@@ -102,9 +102,9 @@ export default async function PoliticaDePrivacidadPage() {
             </p>
             <p className="mt-3">
               {t(
-                "Para proteger el formulario de contacto frente al spam y los envíos automáticos usamos Google reCAPTCHA. En la página de contacto, la casilla «No soy un robot» de reCAPTCHA recoge datos técnicos de tu visita (dirección IP, navegador, dispositivo e interacción con la página) para comprobar que lo envía una persona y, si hace falta, te pide resolver una prueba. Ese análisis solo se usa para aceptar o rechazar el envío.",
-                "Per a protegir el formulari de contacte davant del correu brossa i els enviaments automàtics usem Google reCAPTCHA. En la pàgina de contacte, la casella «No sóc un robot» de reCAPTCHA recull dades tècniques de la teua visita (adreça IP, navegador, dispositiu i interacció amb la pàgina) per a comprovar que l'envia una persona i, si cal, et demana resoldre una prova. Eixa anàlisi només s'usa per a acceptar o rebutjar l'enviament.",
-                "To protect the contact form against spam and automated submissions we use Google reCAPTCHA. On the contact page, the reCAPTCHA “I'm not a robot” box collects technical data about your visit (IP address, browser, device and interaction with the page) to check that the form is being sent by a person and, if necessary, asks you to complete a challenge. This analysis is only used to accept or reject the submission.",
+                "Para proteger el formulario de contacto frente al spam y los envíos automáticos usamos Cloudflare Turnstile. En la página de contacto, esta verificación recoge datos técnicos de tu visita (dirección IP, navegador, dispositivo e interacción con la página) para comprobar que lo envía una persona, sin cookies ni pruebas visuales. Ese análisis solo se usa para aceptar o rechazar el envío.",
+                "Per a protegir el formulari de contacte davant del correu brossa i els enviaments automàtics usem Cloudflare Turnstile. En la pàgina de contacte, aquesta verificació recull dades tècniques de la teua visita (adreça IP, navegador, dispositiu i interacció amb la pàgina) per a comprovar que l'envia una persona, sense galetes ni proves visuals. Eixa anàlisi només s'usa per a acceptar o rebutjar l'enviament.",
+                "To protect the contact form against spam and automated submissions we use Cloudflare Turnstile. On the contact page, this check collects technical data about your visit (IP address, browser, device and interaction with the page) to confirm that the form is being sent by a person, without cookies or visual puzzles. This analysis is only used to accept or reject the submission.",
               )}
             </p>
 
@@ -125,9 +125,9 @@ export default async function PoliticaDePrivacidadPage() {
             </p>
             <p className="mt-3">
               {t(
-                "La protección del formulario con reCAPTCHA se basa en nuestro interés legítimo en mantener la seguridad de la web y evitar el spam (artículo 6.1.f del RGPD).",
-                "La protecció del formulari amb reCAPTCHA es basa en el nostre interés legítim a mantindre la seguretat de la web i evitar el correu brossa (article 6.1.f del RGPD).",
-                "Protecting the form with reCAPTCHA is based on our legitimate interest in keeping the website secure and preventing spam (Article 6(1)(f) GDPR).",
+                "La protección del formulario con Turnstile se basa en nuestro interés legítimo en mantener la seguridad de la web y evitar el spam (artículo 6.1.f del RGPD).",
+                "La protecció del formulari amb Turnstile es basa en el nostre interés legítim a mantindre la seguretat de la web i evitar el correu brossa (article 6.1.f del RGPD).",
+                "Protecting the form with Turnstile is based on our legitimate interest in keeping the website secure and preventing spam (Article 6(1)(f) GDPR).",
               )}
             </p>
 
@@ -190,9 +190,9 @@ export default async function PoliticaDePrivacidadPage() {
               </li>
               <li>
                 {t(
-                  "Google (reCAPTCHA), para proteger el formulario de contacto frente a bots y spam.",
-                  "Google (reCAPTCHA), per a protegir el formulari de contacte davant de bots i correu brossa.",
-                  "Google (reCAPTCHA), to protect the contact form against bots and spam.",
+                  "Cloudflare (Turnstile), para proteger el formulario de contacto frente a bots y spam.",
+                  "Cloudflare (Turnstile), per a protegir el formulari de contacte davant de bots i correu brossa.",
+                  "Cloudflare (Turnstile), to protect the contact form against bots and spam.",
                 )}
               </li>
             </ul>

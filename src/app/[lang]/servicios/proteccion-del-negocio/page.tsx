@@ -5,6 +5,7 @@ import Reveal from "@/components/reveal";
 import SectionHeading from "@/components/section-heading";
 import Icon from "@/components/icons";
 import CtaBand from "@/components/sections/cta-band";
+import EsetPlans from "@/components/eset-plans";
 import type { Localized } from "@/lib/i18n";
 import { getT, pageMetadata } from "@/lib/i18n-server";
 
@@ -769,6 +770,9 @@ export default async function ProteccionDelNegocioPage() {
           </div>
         </div>
       </section>
+
+      {/* Planes de ESET */}
+      <EsetPlans />
 
       {/* Servicios complementarios */}
       <section className="relative overflow-hidden bg-surface-dark py-28 text-white sm:py-36">

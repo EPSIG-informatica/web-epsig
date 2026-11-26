@@ -635,18 +635,59 @@ export const kitDigitalCategories = [
   },
 ] as const;
 
-// Opciones del desplegable "¿Qué te interesa?" del formulario de contacto. Se envía el `id`; la
-// etiqueta en castellano llega al correo y a Odoo (como etiqueta de la oportunidad).
-export const contactInterests = [
-  { id: "odoo", label: { es: "Implantación de Odoo ERP", ca: "Implantació d'Odoo ERP", en: "Odoo ERP implementation" } },
-  { id: "asesoria", label: { es: "Asesoría fiscal, contable o laboral", ca: "Assessoria fiscal, comptable o laboral", en: "Tax, accounting or payroll advisory" } },
-  { id: "financiero", label: { es: "Asesoría económico-financiera", ca: "Assessoria economicofinancera", en: "Financial advisory" } },
-  { id: "digitalizacion", label: { es: "Digitalización, automatización e IA", ca: "Digitalització, automatització i IA", en: "Digitalisation, automation and AI" } },
-  { id: "ciberseguridad", label: { es: "Ciberseguridad", ca: "Ciberseguretat", en: "Cybersecurity" } },
-  { id: "software", label: { es: "Software a medida o conectores", ca: "Programari a mida o connectors", en: "Custom software or connectors" } },
-  { id: "ayudas", label: { es: "Kit Digital o Kit Consulting", ca: "Kit Digital o Kit Consulting", en: "Kit Digital or Kit Consulting" } },
-  { id: "otro", label: { es: "Otro", ca: "Altre", en: "Other" } },
+// Opciones del desplegable "¿Qué te interesa?" del formulario de contacto, agrupadas por tipo. Se envía el `id`;
+// la etiqueta en castellano llega al correo y a Odoo (como etiqueta de la oportunidad).
+export const contactInterestGroups = [
+  {
+    id: "servicios",
+    label: { es: "Servicios", ca: "Serveis", en: "Services" },
+    items: [
+      { id: "odoo", label: { es: "Implantación de Odoo ERP", ca: "Implantació d'Odoo ERP", en: "Odoo ERP implementation" } },
+      { id: "asesoria", label: { es: "Asesoría fiscal, contable o laboral", ca: "Assessoria fiscal, comptable o laboral", en: "Tax, accounting or payroll advisory" } },
+      { id: "financiero", label: { es: "Asesoría económico-financiera", ca: "Assessoria economicofinancera", en: "Financial advisory" } },
+      { id: "digitalizacion", label: { es: "Digitalización, automatización e IA", ca: "Digitalització, automatització i IA", en: "Digitalisation, automation and AI" } },
+      { id: "ciberseguridad", label: { es: "Ciberseguridad gestionada", ca: "Ciberseguretat gestionada", en: "Managed cybersecurity" } },
+      { id: "ayudas", label: { es: "Kit Digital o Kit Consulting", ca: "Kit Digital o Kit Consulting", en: "Kit Digital or Kit Consulting" } },
+    ],
+  },
+  {
+    id: "aplicaciones",
+    label: { es: "Aplicaciones propias", ca: "Aplicacions pròpies", en: "Our applications" },
+    items: [
+      { id: "app-camping", label: { es: "App de control eléctrico para campings", ca: "App de control elèctric per a càmpings", en: "Electrical control app for campsites" } },
+      { id: "app-viviendas", label: { es: "App de gestión de viviendas tuteladas", ca: "App de gestió d'habitatges tutelats", en: "Supported housing management app" } },
+      { id: "software", label: { es: "Software a medida", ca: "Programari a mida", en: "Custom software" } },
+    ],
+  },
+  {
+    id: "conectores",
+    label: { es: "Conectores", ca: "Connectors", en: "Connectors" },
+    items: [
+      { id: "conector-forvenues-agora", label: { es: "Conector Forvenues → Ágora", ca: "Connector Forvenues → Ágora", en: "Forvenues → Ágora connector" } },
+      { id: "conector-agora-sage", label: { es: "Conector Ágora → Sage", ca: "Connector Ágora → Sage", en: "Ágora → Sage connector" } },
+      { id: "conector-sage-face", label: { es: "Conector Sage → FACe", ca: "Connector Sage → FACe", en: "Sage → FACe connector" } },
+    ],
+  },
+  {
+    id: "eset",
+    label: { es: "Antivirus ESET", ca: "Antivirus ESET", en: "ESET antivirus" },
+    items: [
+      { id: "eset-entry", label: { es: "ESET PROTECT Entry", ca: "ESET PROTECT Entry", en: "ESET PROTECT Entry" } },
+      { id: "eset-advanced", label: { es: "ESET PROTECT Advanced", ca: "ESET PROTECT Advanced", en: "ESET PROTECT Advanced" } },
+      { id: "eset-complete", label: { es: "ESET PROTECT Complete", ca: "ESET PROTECT Complete", en: "ESET PROTECT Complete" } },
+      { id: "eset-elite", label: { es: "ESET PROTECT Elite", ca: "ESET PROTECT Elite", en: "ESET PROTECT Elite" } },
+    ],
+  },
+  {
+    id: "otro",
+    label: { es: "Otros", ca: "Altres", en: "Other" },
+    items: [
+      { id: "otro", label: { es: "Otro", ca: "Altre", en: "Other" } },
+    ],
+  },
 ] as const;
+
+export const contactInterests: { id: string; label: Localized }[] = contactInterestGroups.flatMap((group) => [...group.items]);
 
 /** Enlace tel: con prefijo internacional y sin espacios. */
 export function telHref(phone: string) {
